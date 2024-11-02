@@ -4,9 +4,11 @@ import { LoginContextProvider } from '../../../context/PassengerContext/Auth/Log
 
 const Components = () => {
   return (
-      <LoginContextProvider>
-          <Login/>
-      </LoginContextProvider>
+
+    <LoginContextProvider>
+      <Login />
+    </LoginContextProvider>
+
   )
 }
 

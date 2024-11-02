@@ -1,2 +1,2 @@
 import HomeContents from './Components'
-export {HomeContents}
+export { HomeContents }

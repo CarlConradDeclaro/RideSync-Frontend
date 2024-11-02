@@ -8,17 +8,20 @@ import { ViewRide } from '../../components/pages/Passenger/ViewRide';
 
 const RootNavigators = () => {
   return (
-    <BrowserRouter>
-        <Routes>
-            <Route>
-                <Route path="/ridesync/register" element={<Register/>} />
-                <Route path="/ridesync/login" element={<Login/>} />
 
-                <Route path="/ridesync/homecontents" element={<Home/>} />
-                <Route path="/ridesync/viewRideContents" element={<ViewRide/>} />
-            </Route>
-        </Routes>
-  </BrowserRouter>
+    <BrowserRouter>
+      <Routes>
+        <Route>
+
+          <Route path="/ridesync/register" element={<Register />} />
+          <Route path="/ridesync/login" element={<Login />} />
+
+          <Route path="/ridesync/homecontents" element={<Home />} />
+          <Route path="/ridesync/viewRideContents" element={<ViewRide />} />
+
+        </Route>
+      </Routes>
+    </BrowserRouter>
   )
 }
 
