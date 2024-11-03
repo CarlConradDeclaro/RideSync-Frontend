@@ -35,11 +35,21 @@ export const FindRouteContextProvider = ({ children }) => {
       setOnlineUsers(users);
     });
 
+    newSocket.on("yourDriver", (driverId) => {
+      console.log("Received driver ID:", driverId);
+      // You can add additional logic here to handle the received driver ID
+    });
+
 
     return () => {
+      // newSocket.off("yourDriver"); // Clean up listener
       newSocket.disconnect();
     };
   }, [userInfo])
+
+
+
+
 
 
 

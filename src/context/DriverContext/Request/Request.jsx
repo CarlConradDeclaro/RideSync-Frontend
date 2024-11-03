@@ -9,6 +9,9 @@ import { io } from 'socket.io-client';
 
 export const RequestContext = createContext();
 export const RequestContextProvider = ({ children }) => {
+
+    const [driverInfo, setDriverInfo] = useState(null);
+
     const [socket, setSocket] = useState(null);
     const driverMap = useRef();
     const routingControlRef = useRef();
@@ -23,16 +26,42 @@ export const RequestContextProvider = ({ children }) => {
         distance: 0.00,
         duration: 0.00
     });
+    const [onlineUsers, setOnlineUsers] = useState([])
+
+
+    useEffect(() => {
+        const storedUserInfo = localStorage.getItem('User');
+        if (storedUserInfo) {
+            try {
+                const parsedUserInfo = JSON.parse(storedUserInfo);
+                setDriverInfo(parsedUserInfo);
+            } catch (error) {
+                console.error("Error parsing user info:", error);
+            }
+        }
+    }, [])
 
     useEffect(() => {
         const newSocket = io("http://localhost:8000");
         setSocket(newSocket);
 
+        newSocket.on("connect", () => {
+            console.log("from frontend driver: " + newSocket.id);
+
+            if (driverInfo?.user?.id) {
+                newSocket.emit("addNewUser", driverInfo.user.id, newSocket.id);
+            }
+        });
+
+        newSocket.on("getOnlineUsers", (users) => {
+            setOnlineUsers(users);
+        });
+
         // Cleanup socket on component unmount
         return () => {
             newSocket.disconnect();
         };
-    }, []);
+    }, [driverInfo]);
 
     const fetchRequestData = async () => {
         try {
@@ -71,6 +100,10 @@ export const RequestContextProvider = ({ children }) => {
     }, [request])
 
     const handleOfferRide = () => {
+        const userId = requestInfo.passengerId;
+        const driverId = driverInfo?.user?.id;
+        socket.emit("offerRide", userId, driverId)
+        console.log("offering ", userId, driverId);
 
     }
 
@@ -128,7 +161,8 @@ export const RequestContextProvider = ({ children }) => {
                 selectedPositionDest,
                 customIcon,
                 handleRequestInfo,
-                requestInfo
+                requestInfo,
+                handleOfferRide
             }}
         >
             {children}

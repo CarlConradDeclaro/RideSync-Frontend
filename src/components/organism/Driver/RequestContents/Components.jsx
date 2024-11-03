@@ -10,7 +10,7 @@ import DefaultProfile from '../../../../assets/DefaultProfile.png';
 import { RequestContext } from '../../../../context/DriverContext/Request/Request';
 
 const Components = () => {
-    const { driverMap, request, selectedPosition, selectedPositionDest, requestInfo, customIcon } = useContext(RequestContext);
+    const { driverMap, request, selectedPosition, selectedPositionDest, requestInfo, customIcon, handleOfferRide } = useContext(RequestContext);
     console.log("Request Data:", request);
 
     return (
@@ -91,7 +91,7 @@ const Components = () => {
                         </div>
                         <div className="flex justify-center gap-4 mt-auto p-3">
                             <div className="bg-colorBlue rounded-lg">
-                                <Button name="Offer Ride" variant="contained" size="large" />
+                                <Button name="Offer Ride" variant="contained" size="large" onClick={handleOfferRide} />
                             </div>
                             <div className="bg-red-500 rounded-lg">
                                 <Button name="Reject" variant="contained" size="large" />
