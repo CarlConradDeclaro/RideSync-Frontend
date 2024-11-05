@@ -1,28 +1,42 @@
-import React from 'react'
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { Register } from '../../components/pages/Register';
-import { Login } from '../../components/pages/Login';
+import React from 'react';
+import { Routes, Route, Navigate } from "react-router-dom";
+import { Register } from '../../components/pages/Passenger/Auth/Register';
+import { Login } from '../../components/pages/Passenger/Auth/Login';
 import { Home } from '../../components/pages/Passenger/Home';
 import { ViewRide } from '../../components/pages/Passenger/ViewRide';
+import { LoginContext, LoginContextProvider } from '../../context/PassengerContext/Auth/LoginContext';
+
+
+const routes = [
+  { path: '/register', element: <Register />, isProtected: false },
+  { path: '/login', element: <Login />, isProtected: false },
+  { path: '/homeContents', element: <Home />, isProtected: true },
+  { path: '/viewRideContents', element: <ViewRide />, isProtected: true }
+]
 
 
 const RootNavigators = () => {
   return (
-
-    <BrowserRouter>
+    <LoginContextProvider>
       <Routes>
-        <Route>
-
-          <Route path="/ridesync/register" element={<Register />} />
-          <Route path="/ridesync/login" element={<Login />} />
-
-          <Route path="/ridesync/homecontents" element={<Home />} />
-          <Route path="/ridesync/viewRideContents" element={<ViewRide />} />
-
-        </Route>
+        {routes.map(({ path, element, isProtected }) => (
+          <Route
+            key={path}
+            path={path}
+            element={isProtected ? <PrivateRoute>{element}</PrivateRoute> : element}
+          />
+        ))}
+        <Route path="*" element={<Navigate to="/passenger/login" />} />
       </Routes>
-    </BrowserRouter>
+    </LoginContextProvider>
   )
-}
+};
 
-export default RootNavigators
+const PrivateRoute = ({ children }) => {
+  const storedUserInfo = localStorage.getItem('User');
+  const parsedUserInfo = JSON.parse(storedUserInfo);
+  console.log("not login", parsedUserInfo?.userType);
+  return storedUserInfo && parsedUserInfo?.userType == 'P' ? children : <Navigate to="/passenger/login" />;
+};
+
+export default RootNavigators;

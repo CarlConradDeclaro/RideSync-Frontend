@@ -6,6 +6,7 @@ import 'leaflet-routing-machine';
 import 'leaflet-control-geocoder/dist/Control.Geocoder.css'; // Geocoder CSS
 import 'leaflet-control-geocoder'; // Geocoder JS
 import { io } from 'socket.io-client';
+import { BASEURL, BASEURLDrivers, postRequest } from "../../../utils/Service";
 
 export const RequestContext = createContext();
 export const RequestContextProvider = ({ children }) => {
@@ -27,7 +28,7 @@ export const RequestContextProvider = ({ children }) => {
         duration: 0.00
     });
     const [onlineUsers, setOnlineUsers] = useState([])
-
+    const [openInfoModal, setOpenInfoModal] = useState(false)
 
     useEffect(() => {
         const storedUserInfo = localStorage.getItem('User');
@@ -48,8 +49,8 @@ export const RequestContextProvider = ({ children }) => {
         newSocket.on("connect", () => {
             console.log("from frontend driver: " + newSocket.id);
 
-            if (driverInfo?.user?.id) {
-                newSocket.emit("addNewUser", driverInfo.user.id, newSocket.id);
+            if (driverInfo?.id) {
+                newSocket.emit("addNewUser", driverInfo.id, newSocket.id);
             }
         });
 
@@ -89,6 +90,18 @@ export const RequestContextProvider = ({ children }) => {
 
         socket.on("getCancelledRequest", (id) => {
             setRequest((prevRequests) => prevRequests.filter(req => req.userId !== id));
+            setOpenInfoModal(false)
+            const map = driverMap.current;
+            if (routingControlRef.current) {
+                map.removeControl(routingControlRef.current);
+            }
+            if (map) {
+                map.eachLayer((layer) => {
+                    if (layer instanceof L.Marker || layer instanceof L.LayerGroup) {
+                        map.removeLayer(layer); // Remove each marker or layer group
+                    }
+                });
+            }
 
         })
         // Cleanup socket listener on component unmount
@@ -99,12 +112,24 @@ export const RequestContextProvider = ({ children }) => {
         };
     }, [request])
 
-    const handleOfferRide = () => {
-        const userId = requestInfo.passengerId;
-        const driverId = driverInfo?.user?.id;
+
+    const handleOfferRide = async () => {
+        const userId = Number(requestInfo.passengerId);
+        const driverId = Number(driverInfo?.id);
         socket.emit("offerRide", userId, driverId)
         console.log("offering ", userId, driverId);
 
+        const potentialDriversInfo = {
+            "driverId": driverId,
+            "passengerId": userId
+        }
+        const response = await postRequest(`${BASEURLDrivers}/potentialRide`, JSON.stringify(potentialDriversInfo))
+        if (response.status) {
+            console.log("Success");
+        } else {
+            console.log("Failed @potentialRide ");
+
+        }
     }
 
     const handleRouteDirection = (startLatitude, startLongitude, endLatitude, endLongitude) => {
@@ -129,6 +154,8 @@ export const RequestContextProvider = ({ children }) => {
             }
         }).addTo(map);
 
+
+
         setSelectedPosition({ lat: startLatitude, lon: startLongitude });
         setSelectedPositionDest({ lat: endLatitude, lon: endLongitude });
     };
@@ -149,6 +176,7 @@ export const RequestContextProvider = ({ children }) => {
             distance,
             duration
         });
+        setOpenInfoModal(true)
     };
 
     return (
@@ -162,7 +190,8 @@ export const RequestContextProvider = ({ children }) => {
                 customIcon,
                 handleRequestInfo,
                 requestInfo,
-                handleOfferRide
+                handleOfferRide,
+                openInfoModal
             }}
         >
             {children}

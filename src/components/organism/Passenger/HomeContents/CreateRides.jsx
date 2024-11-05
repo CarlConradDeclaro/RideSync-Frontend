@@ -30,7 +30,6 @@ const CreateRides = () => {
 
     return (
         <div className="flex flex-col items-center justify-center ">
-            {/* Card with responsive width and padding */}
             <Card className="flex flex-col gap-5  items-center w-full md:w-[400px] h-[300px] md:h-[400px] rounded-2xl p-5">
 
                 <div className="flex items-center mb-5 space-x-4">

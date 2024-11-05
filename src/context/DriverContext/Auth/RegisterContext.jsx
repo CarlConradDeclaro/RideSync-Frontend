@@ -1,11 +1,11 @@
-import { createContext, useCallback, useState } from "react";
-import { nameRegex, emailRegex, phoneRegex } from "../../../constant/regexConstants.JSX";
-import { BASEURL, postRequest } from "../../../utils/Service";
+import React, { createContext, useState } from 'react'
+import { BASEURLDrivers, postRequest } from '../../../utils/Service/index.jsx'
+import { nameRegex, emailRegex, phoneRegex } from "../../../constant/regexConstants.jsx";
+
+
 
 export const RegisterContext = createContext()
-
 export const RegisterContextProvider = ({ children }) => {
-
     const [firstname, setFirstname] = useState('')
     const [lastname, setLastname] = useState('')
     const [email, setEmail] = useState('')
@@ -39,9 +39,8 @@ export const RegisterContextProvider = ({ children }) => {
 
     const [errors, setErrors] = useState({});
 
-
-
     const handleRegister = async () => {
+
         const newErrors = {};
 
         if (typeof firstname !== 'string' || firstname.trim() === '') newErrors.firstname = "Firstname is required.";
@@ -64,7 +63,7 @@ export const RegisterContextProvider = ({ children }) => {
 
         if (!country) newErrors.country = "Country is required";
 
-        if (!demographStat) newErrors.demographStat = "Demographic Status is required"
+        // if (!demographStat) newErrors.demographStat = "Demographic Status is required"
 
         if (!password) newErrors.password = "Password is required";
         else if (password.length < 8) newErrors.password = "Password must be at least 8 characters long";
@@ -86,19 +85,17 @@ export const RegisterContextProvider = ({ children }) => {
             "userEmail": email,
             "userPhone": phone,
             "userPassword": password,
-            "userType": "P",
+            "userType": "D",
             "userRating": 5,
             "gender": gender.charAt(0).toUpperCase(),
             "country": country,
-            "demoStat": demographStat
-
         };
         console.log("User Info:", userInfo);
 
 
 
 
-        const response = await postRequest(`${BASEURL}/register`, JSON.stringify(userInfo));
+        const response = await postRequest(`${BASEURLDrivers}/register`, JSON.stringify(userInfo));
 
 
 
@@ -106,13 +103,12 @@ export const RegisterContextProvider = ({ children }) => {
             console.log(response.error);
         } else {
             console.log("Succesfully registered");
+
         }
 
 
         setErrors({});
     };
-
-
 
     return (
         <RegisterContext.Provider

@@ -38,10 +38,21 @@ export default {
             transform: 'translateX(0)',
           },
         },
+        slideDown: {
+          '0%': {
+            opacity: '0',
+            transform: 'translateY(-10%)',
+          },
+          '100%': {
+            opacity: '1',
+            transform: 'translateY(0)',
+          },
+        },
       },
       animation: {
         fadeIn: 'fadeIn 0.4s ease-in-out',
         slideInFromRight: 'slideInFromRight 0.5s ease-out',
+        slideDown: 'slideDown 0.5s ease-out', // New slide-down animation
       },
       screens: {
         'sm-500': '500px',

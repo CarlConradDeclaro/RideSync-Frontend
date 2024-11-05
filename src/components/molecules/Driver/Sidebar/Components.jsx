@@ -1,5 +1,5 @@
 import { Card } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import MenuIcon from '@mui/icons-material/Menu';
 import CloseIcon from '@mui/icons-material/Close';
 import RequestRide from '../../../../assets/RequestRide.png';
@@ -9,6 +9,7 @@ import Message from '../../../../assets/Message.png';
 import Profile from '../../../../assets/Profile.png';
 import Logout from '../../../../assets/Logout.png';
 import { useNavigate } from 'react-router-dom';
+import { LoginDriverContext } from '../../../../context/DriverContext/Auth/LoginContext';
 
 const Components = ({ active }) => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -16,6 +17,7 @@ const Components = ({ active }) => {
     const toggleSidebar = () => setIsSidebarOpen(prev => !prev);
     const handleOutsideClick = () => setIsSidebarOpen(false);
 
+    const { logoutUser } = useContext(LoginDriverContext)
 
     const navigate = useNavigate();
     const handleNavigation = (route) => {
@@ -63,7 +65,7 @@ const Components = ({ active }) => {
                         <h1 className="text-sidebarTxtOff font-bold">MAIN MENU</h1>
                     </div>
 
-                    {[{ name: 'Request', icon: RequestRide, key: 'request', route: '/ridesync/requestContents' },
+                    {[{ name: 'Request', icon: RequestRide, key: 'request', route: '/driver/requestContents' },
                     { name: 'Booking', icon: ViewRides, key: 'booking', route: '' },
                     { name: 'View Rides', icon: BookRide, key: 'viewrides', route: '' },
                     { name: 'Message', icon: Message, key: 'message', route: '' },
@@ -92,7 +94,7 @@ const Components = ({ active }) => {
                 <div className={`flex gap-5 p-3 mb-2 rounded-xl cursor-pointer 
             ${active === 'logout' ? 'bg-sidebarBg shadow-2xl font-bold' : 'hover:bg-sidebarBg hover:shadow-2xl'} 
             transition-all duration-300 transform hover:scale-105 mt-auto`}
-                    onClick={() => handleNavigation('/ridesync/login')}
+                    onClick={logoutUser}
                 >
                     <img src={Logout} className="w-[25px] h-[25px]" alt="Logout icon" />
                     <h1 className={`text-sidebarTxtOff hover:font-bold hover:text-black ${active === 'logout' ? 'text-black' : 'group-hover:text-black'} font-semibold`}>

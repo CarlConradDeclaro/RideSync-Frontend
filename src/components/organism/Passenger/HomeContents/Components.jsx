@@ -9,6 +9,7 @@ const Components = () => {
 
   const { step1, step2 } = useContext(FindRouteContext)
 
+
   return (
     <div className="p-5 ">
       <h1 className="text-xl font-bold mb-5">Main Content</h1>
@@ -17,6 +18,7 @@ const Components = () => {
         {
           !step1 ? <CreateRides /> : <DriverList />
         }
+
 
         <MapView />
 

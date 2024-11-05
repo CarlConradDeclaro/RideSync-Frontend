@@ -14,7 +14,8 @@ const MapView = () => {
         customIcon,
         amount,
         totalDistance,
-        totalDuration
+        totalDuration,
+
     } = useContext(FindRouteContext)
 
     return (
@@ -31,8 +32,8 @@ const MapView = () => {
                 {/* Estimated Time and Distance */}
                 <div className="flex items-center m-2 rounded-2xl">
                     <h1 className="p-2 text-sm md:text-[17px]">
-                        (EST: {totalDuration ? totalDuration + 's' : '0 min'} )
-                        <span className="font-bold text-kmColor md:text-[20px]"> {totalDistance ? totalDistance : '0 km'}</span>
+                        (EST: {totalDuration ? totalDuration + ' mins' : '0 min'} )
+                        <span className="font-bold text-kmColor md:text-[20px]"> {totalDistance ? totalDistance + 'km' : '0 km'}</span>
                     </h1>
                 </div>
             </div>

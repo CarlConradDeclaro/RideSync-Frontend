@@ -5,29 +5,93 @@ import L from 'leaflet';
 import 'leaflet-routing-machine';
 import 'leaflet-control-geocoder/dist/Control.Geocoder.css'; // Geocoder CSS
 import 'leaflet-control-geocoder'; // Geocoder JS
-import { BASEURL, postRequest, updateRequest } from "../../../utils/Service";
+import { BASEURL, getRequest, postRequest, updateRequest } from "../../../utils/Service";
 import { io } from 'socket.io-client'
 
 
 export const FindRouteContext = createContext()
 export const FindRouteContextProvider = ({ children }) => {
 
+
+  const [searchInput, setSearchInput] = useState('');
+  const [suggestions, setSuggestions] = useState([]);
+  const [searchInputDest, setSearchInputDest] = useState('');
+  const [suggestionsDest, setSuggestionsDest] = useState([]);
+  const mapRef = useRef();
+  const routingControlRef = useRef();
+  const routeDetails = [];// this is just the routeDirections
+  const [selectedPosition, setSelectedPosition] = useState(null);
+  const [selectedPositionDest, setSelectedPositionDest] = useState(null);
+  const [amount, setAmout] = useState(0.00)
+  const [totalDistance, setTotalDistance] = useState(0.0)
+  const [totalDuration, setTotalDuration] = useState(0)
+  const [step1, setStep1] = useState(() => JSON.parse(localStorage.getItem('step1')) || false)
+  const [step2, setStep2] = useState(() => JSON.parse(localStorage.getItem('step2')) || false)
   const [userInfo, setUserInfo] = useState(null);
   const [socket, setSocket] = useState(null)
   const [onlineUsers, setOnlineUsers] = useState([])
   const [socketID, setSocketID] = useState()
+  const [drivers, setDrivers] = useState([]);
+  const [routeInfo, setRouteInfo] = useState();
+
+
+  const fetchRoute = async () => {
+    if (userInfo && userInfo.id) {
+      const userId = userInfo.id;
+      try {
+        const data = await postRequest(`${BASEURL}/getRouteRequest`, JSON.stringify({ userId }));
+        console.log("Fetched route data:", data); // Check the structure here
+        if (data.error) {
+          console.error('Error fetching route:', data.message);
+          return;
+        }
+
+        // Update amounts and distances
+        setAmout(data[0].totalAmount);
+        setTotalDistance(data[0].distance);
+        setTotalDuration(data[0].estimatedDuration);
+
+        // Set selected positions
+        const startPosition = { lat: data[0].startLatitude, lon: data[0].startLongitude };
+        const endPosition = { lat: data[0].endLatitude, lon: data[0].endLongitude };
+
+        setSelectedPosition(startPosition);
+        setSelectedPositionDest(endPosition);
+
+        console.log("Selected Position:", startPosition);
+        console.log("Selected Position Destination:", endPosition);
+
+
+
+      } catch (error) {
+        console.error('Error fetching route:', error);
+      }
+    } else {
+      console.warn('UserInfo is not available or invalid.');
+    }
+  };
+
+  useEffect(() => {
+    console.log("Selected Position:", selectedPosition);
+    console.log("Selected Position Destination:", selectedPositionDest);
+
+  }, [selectedPosition, selectedPositionDest]);
+
+  useEffect(() => {
+    fetchRoute();
+  }, [userInfo]);
+
 
   useEffect(() => {
     const newSocket = io("http://localhost:8000")
     setSocket(newSocket)
 
-
     newSocket.on("connect", () => {
       console.log("from frontend: " + newSocket.id);
       setSocketID(newSocket.id)
 
-      if (userInfo?.user?.id) {
-        newSocket.emit("addNewUser", userInfo.user.id, newSocket.id);
+      if (userInfo && userInfo.id) {
+        newSocket.emit("addNewUser", userInfo.id, newSocket.id);
       }
     });
 
@@ -37,23 +101,38 @@ export const FindRouteContextProvider = ({ children }) => {
 
     newSocket.on("yourDriver", (driverId) => {
       console.log("Received driver ID:", driverId);
-      // You can add additional logic here to handle the received driver ID
+      setDrivers(prev => [...prev, driverId])
     });
 
-
     return () => {
-      // newSocket.off("yourDriver"); // Clean up listener
       newSocket.disconnect();
     };
   }, [userInfo])
 
 
+  useEffect(() => {
+    if (userInfo && userInfo.id) {
+      const userId = userInfo.id;
+      const fetchDrivers = async () => {
+        const body = JSON.stringify({ userId });
+        const response = await getRequest(`${BASEURL}/getPotentialRide`, body);
+
+        if (response.error) {
+          console.error('Error fetching drivers:', response.message);
+        } else {
+          const ids = response.map(driver => driver.driverId);
+          console.log("Fetched driver IDs:", ids);
+          setDrivers(ids);
+        }
+      };
+      fetchDrivers();
+    }
+  }, [userInfo]);
 
 
-
-
-
-
+  useEffect(() => {
+    console.log("Updated drivers: ", drivers);
+  }, [drivers]);
 
   useEffect(() => {
     const storedUserInfo = localStorage.getItem('User');
@@ -61,50 +140,16 @@ export const FindRouteContextProvider = ({ children }) => {
       try {
         const parsedUserInfo = JSON.parse(storedUserInfo);
         setUserInfo(parsedUserInfo);
+        console.log("User info set:", parsedUserInfo);
       } catch (error) {
         console.error("Error parsing user info:", error);
       }
+    } else {
+      console.log("No user info found in localStorage");
     }
   }, []);
 
-  const [searchInput, setSearchInput] = useState('');
-  const [suggestions, setSuggestions] = useState([]);
-  const [searchInputDest, setSearchInputDest] = useState('');
-  const [suggestionsDest, setSuggestionsDest] = useState([]);
-  const mapRef = useRef();
-  const routingControlRef = useRef();
-  const routeDetails = [];
-  const [selectedPosition, setSelectedPosition] = useState(null);
-  const [selectedPositionDest, setSelectedPositionDest] = useState(null);
-  const [amount, setAmout] = useState(0.00)
-  const [totalDistance, setTotalDistance] = useState(0.0)
-  const [totalDuration, setTotalDuration] = useState(0)
 
-
-  const [step1, setStep1] = useState(false)
-  const [step2, setStep2] = useState(false)
-
-
-  useEffect(() => {
-    const map = mapRef.current;
-
-    if (map) {
-      if (selectedPosition) {
-        map.flyTo([selectedPosition.lat, selectedPosition.lon], 17, { animate: true, duration: 1.5 })
-      }
-    }
-
-
-  }, [selectedPosition])
-
-  useEffect(() => {
-    const map = mapRef.current;
-    if (map) {
-      if (selectedPositionDest) {
-        map.flyTo([selectedPositionDest.lat, selectedPositionDest.lon], 17, { animate: true, duration: 1.5 });
-      }
-    }
-  }, [selectedPositionDest]);
 
   const handleSearchInput = async (e) => {
     const query = e.target.value;
@@ -130,14 +175,15 @@ export const FindRouteContextProvider = ({ children }) => {
   };
   const handleSelectSuggestion = (lat, lon, display_name) => {
     console.log("Selecting suggestion with lat:", lat, "lon:", lon, "display_name:", display_name);
+
     setSelectedPosition({ lat, lon, display_name });
+    const map = mapRef.current;
+    map.flyTo([lat, lon], 17, { animate: true, duration: 1.5 })
+
     setSearchInput(display_name);
     setSuggestions([]);
     clearRoute()
   };
-
-
-
 
   const handleSearchInputDest = async (e) => {
     const query = e.target.value;
@@ -164,6 +210,8 @@ export const FindRouteContextProvider = ({ children }) => {
   const handleSelectSuggestionDest = (lat, lon, display_name) => {
     console.log("Selecting suggestion with lat:", lat, "lon:", lon, "display_name:", display_name);
     setSelectedPositionDest({ lat, lon, display_name });
+    const map = mapRef.current;
+    map.flyTo([lat, lon], 17, { animate: true, duration: 1.5 })
     setSearchInputDest(display_name);
     setSuggestionsDest([]);
     clearRoute()
@@ -182,15 +230,13 @@ export const FindRouteContextProvider = ({ children }) => {
       map.removeControl(routingControlRef.current);
     }
 
-
-
     routingControlRef.current = L.Routing.control({
       waypoints: [
         L.latLng(selectedPosition.lat, selectedPosition.lon),
         L.latLng(selectedPositionDest.lat, selectedPositionDest.lon)
       ],
       createMarker: function () {
-        return null; // Prevent the creation of default markers
+        return null;
       },
       show: false,
       routeWhileDragging: true,
@@ -261,7 +307,6 @@ export const FindRouteContextProvider = ({ children }) => {
     let totalAmt = flagdown + (numericKm * AmtPerKPH);
     totalAmt = totalAmt.toFixed(2)
     console.log("km: " + km + "Total amount:" + totalAmt);
-
     setTotalDuration(duration)
     setTotalDistance(km)
     setAmout(totalAmt)
@@ -269,7 +314,6 @@ export const FindRouteContextProvider = ({ children }) => {
 
 
   const handleProceed = useCallback(async (v) => {
-
     if (!userInfo || !searchInput || !searchInputDest || !totalDuration || !totalDistance || !amount) {
       console.error("All fields must be filled out.");
       alert("All fields must be filled out.");
@@ -277,7 +321,7 @@ export const FindRouteContextProvider = ({ children }) => {
     }
 
     const routeInfo = {
-      userId: userInfo.user.id,
+      userId: userInfo.id,
       startLocation: searchInput,//location name
       startLatitude: selectedPosition.lat,
       startLongitude: selectedPosition.lon,
@@ -291,11 +335,12 @@ export const FindRouteContextProvider = ({ children }) => {
 
     console.log("Route Info:", JSON.stringify(routeInfo));
 
-
     try {
       const response = await postRequest(`${BASEURL}/routeRequest`, JSON.stringify(routeInfo));
       console.log("Response from routeRequest:", response);
+
       setStep1(v)
+      fetchRoute()
       socket.emit("newRouteData", routeInfo)
     } catch (error) {
       console.error("Error during post request:", error);
@@ -303,11 +348,29 @@ export const FindRouteContextProvider = ({ children }) => {
   }, [userInfo, searchInput, searchInputDest, totalDuration, totalDistance, amount]);
 
   const handleCancel = useCallback(async (v) => {
-    const userId = userInfo.user.id
+
+    const userId = userInfo?.id
+
     try {
       const response = await updateRequest(`${BASEURL}/routeCancelled`, JSON.stringify({ userId }))
+
+      const response2 = await updateRequest(
+        `${BASEURL}/cancelAllPotentialDrivers`,
+        JSON.stringify({ driversIds: drivers })
+      );
+
+
       console.log("Response from routeRequest:", response);
+      setDrivers([])
+      setRouteInfo([])
+      setAmout()
+      setTotalDistance()
+      setTotalDuration()
+
       setStep1(v)
+
+
+
     } catch (err) {
       console.log(err);
     }
@@ -317,6 +380,14 @@ export const FindRouteContextProvider = ({ children }) => {
 
 
 
+
+  useEffect(() => {
+    localStorage.setItem('step1', JSON.stringify(step1))
+  }, [step1])
+
+  useEffect(() => {
+    localStorage.setItem('step2', JSON.stringify(step2))
+  }, [step2])
 
   return (
     <FindRouteContext.Provider
@@ -332,23 +403,21 @@ export const FindRouteContextProvider = ({ children }) => {
         suggestionsDest,
         handleSearchInputDest,
         handleSelectSuggestionDest,
-
         selectedPosition,
         selectedPositionDest,
-
         handleRouteDirection,
         customIcon,
-
         amount,
         totalDistance,
         totalDuration,
-
         setStep1,
         setStep2,
         step1,
         step2,
         handleProceed,
-        handleCancel
+        handleCancel,
+        drivers,
+
       }}
     >
       {children}

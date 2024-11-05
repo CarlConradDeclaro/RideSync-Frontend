@@ -1,9 +1,9 @@
 import React, { createContext, useCallback, useContext, useState, useEffect } from 'react';
-import { BASEURL, postRequest } from '../../../utils/Service'; // Adjust path as necessary
+import { BASEURLDrivers, postRequest } from '../../../utils/Service'; // Adjust path as necessary
 import { useNavigate } from 'react-router-dom';
 
-export const LoginContext = createContext();
-export const LoginContextProvider = ({ children }) => {
+export const LoginDriverContext = createContext();
+export const LoginDriverContextProvider = ({ children }) => {
     const navigate = useNavigate();
 
     const [loginInfo, setLogInInfo] = useState({
@@ -21,14 +21,14 @@ export const LoginContextProvider = ({ children }) => {
         setIsError(false);
         setErrorMsg('');
         try {
-            const response = await postRequest(`${BASEURL}/login`, JSON.stringify(loginInfo));
-            if (response && response.user && response.token && response.user.userType == "P") {
+            const response = await postRequest(`${BASEURLDrivers}/login`, JSON.stringify(loginInfo));
+            if (response && response.user && response.token && response.user.userType == "D") {
                 localStorage.setItem("User", JSON.stringify(response.user));
                 localStorage.setItem("Token", response.token);
-                navigate('/passenger/homeContents');
-                console.log("Login successful, navigating to homeContents");
+                navigate('/driver/requestContents');
+                console.log("Login successful, navigating to requestContents");
 
-            } else if (response.user.userTyp != "P") {
+            } else if (response.user.userType != "D") {
                 throw new Error(response.message || "You have no access to this page");
             }
             else {
@@ -41,23 +41,19 @@ export const LoginContextProvider = ({ children }) => {
         } finally {
             setLoading(false);
         }
-
-
-
-
     };
 
 
     const logoutUser = useCallback(() => {
         localStorage.removeItem("User");
         localStorage.removeItem("Token");
-        navigate('/passenger/login');
+        navigate('/driver/login');
     }, [navigate]);
 
 
 
     return (
-        <LoginContext.Provider value={{
+        <LoginDriverContext.Provider value={{
             loginInfo,
             setLogInInfo,
             loginUser,
@@ -68,7 +64,7 @@ export const LoginContextProvider = ({ children }) => {
 
         }}>
             {children}
-        </LoginContext.Provider>
+        </LoginDriverContext.Provider>
     );
 };
 

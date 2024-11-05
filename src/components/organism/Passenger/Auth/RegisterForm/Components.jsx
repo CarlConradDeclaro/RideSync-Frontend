@@ -1,16 +1,16 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Card } from '../../molecules/Card';
-import { TextInput } from '../../atoms/TextInput';
-import { Checkbox } from '../../atoms/Checkbox';
-import { Button } from '../../atoms/Button';
-import RideSyncImage from '../../../assets/RideSync.png';
+import { Card } from '../../../../molecules/Card';
+import { TextInput } from '../../../../atoms/TextInput';
+import { Checkbox } from '../../../../atoms/Checkbox';
+import { Button } from '../../../../atoms/Button';
+import RideSyncImage from '../../../../../assets/RideSync.png';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
-import { RegisterContext } from '../../../context/PassengerContext/Auth/RegisterContext';
-import { DemoStat, SelectCountries } from '../../atoms/Select';
+import { RegisterContext } from '../../../../../context/PassengerContext/Auth/RegisterContext';
+import { DemoStat, SelectCountries } from '../../../../atoms/Select';
 import IconButton from '@mui/material/IconButton';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import InputLabel from '@mui/material/InputLabel';
@@ -56,11 +56,11 @@ const Components = () => {
   const navigate = useNavigate();
 
   const handleSignin = () => {
-    navigate('/ridesync/login');  
+    navigate('/passenger/login');
   };
 
-  
-  
+
+
 
   return (
     <div className='flex justify-center mt-4'>
