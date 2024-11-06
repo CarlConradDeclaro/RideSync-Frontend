@@ -27,6 +27,8 @@ export const FindRouteContextProvider = ({ children }) => {
   const [totalDuration, setTotalDuration] = useState(0)
   const [step1, setStep1] = useState(() => JSON.parse(localStorage.getItem('step1')) || false)
   const [step2, setStep2] = useState(() => JSON.parse(localStorage.getItem('step2')) || false)
+  const [step3, setStep3] = useState(() => JSON.parse(localStorage.getItem('step3')) || false)
+
   const [userInfo, setUserInfo] = useState(null);
   const [socket, setSocket] = useState(null)
   const [onlineUsers, setOnlineUsers] = useState([])
@@ -347,6 +349,20 @@ export const FindRouteContextProvider = ({ children }) => {
     }
   }, [userInfo, searchInput, searchInputDest, totalDuration, totalDistance, amount]);
 
+  const handelSelectDriver = useCallback((v, driverId) => {
+    setStep3(v)
+    setStep1(true)
+    setStep2(true)
+    console.log("steps1:", step1, "steps2:", step2, "steps3:", step3);
+    //  console.log("passenger", driverId, userInfo.id);
+
+    socket.emit("passenger", userInfo.id, driverId)
+
+
+
+  })
+
+
   const handleCancel = useCallback(async (v) => {
 
     const userId = userInfo?.id
@@ -368,6 +384,8 @@ export const FindRouteContextProvider = ({ children }) => {
       setTotalDuration()
 
       setStep1(v)
+      setStep2(v)
+      setStep3(v)
 
 
 
@@ -378,6 +396,10 @@ export const FindRouteContextProvider = ({ children }) => {
     socket.emit("cancelled", userId)
   })
 
+  const handleCancelRide = useCallback((v) => {
+    setStep3(v)
+    setStep2(v)
+  }, [])
 
 
 
@@ -387,6 +409,9 @@ export const FindRouteContextProvider = ({ children }) => {
 
   useEffect(() => {
     localStorage.setItem('step2', JSON.stringify(step2))
+  }, [step2])
+  useEffect(() => {
+    localStorage.setItem('step3', JSON.stringify(step3))
   }, [step2])
 
   return (
@@ -414,9 +439,12 @@ export const FindRouteContextProvider = ({ children }) => {
         setStep2,
         step1,
         step2,
+        step3,
         handleProceed,
         handleCancel,
         drivers,
+        handelSelectDriver,
+        handleCancelRide
 
       }}
     >

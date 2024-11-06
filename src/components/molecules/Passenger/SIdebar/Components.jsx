@@ -25,7 +25,7 @@ const Sidebar = ({ active }) => {
     navigate(route);
   };
   return (
-    <div className="relative h-screen">
+    <div className="relative max-h-svh">
       {/* Sidebar Toggle Icon */}
       <button
         onClick={toggleSidebar}
