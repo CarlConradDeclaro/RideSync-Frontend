@@ -1,2 +1,2 @@
 import TextInput from './Components'
- export {TextInput}
+export { TextInput }

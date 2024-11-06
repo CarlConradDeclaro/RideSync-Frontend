@@ -2,7 +2,7 @@ import * as React from 'react';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 
-const BasicButtons = ({ name, variant, size, onClick, bgColor, fontColor }) => {
+const BasicButtons = ({ name, variant, size, onClick, bgColor, fontColor, height }) => {
   return (
     <Stack spacing={2} direction="row">
       <Button
@@ -12,6 +12,7 @@ const BasicButtons = ({ name, variant, size, onClick, bgColor, fontColor }) => {
         sx={{
           backgroundColor: bgColor,
           color: fontColor,
+          height: height,
           ':hover': {
             backgroundColor: bgColor,
           },

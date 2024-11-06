@@ -19,6 +19,7 @@ export default {
         'kmColor': '#DE1A1A',
         'dRouteBG': '#F3F4F6',
         'dRequest': '#F0FAFB'
+
       },
       boxShadow: {
         'customShadow': '0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08)',

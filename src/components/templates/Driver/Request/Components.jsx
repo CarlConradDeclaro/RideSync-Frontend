@@ -19,7 +19,7 @@ const Components = () => {
 
     return (
         <div className='flex h-full'>
-            <div className='h-screen '>
+            <div className='max-h-screen '>
                 <Sidebar active="request" />
             </div>
             <div className='w-full '>

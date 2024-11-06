@@ -19,7 +19,7 @@ const MapView = () => {
     } = useContext(FindRouteContext)
 
     return (
-        <Card className=" max-w-[700px]">
+        <Card className="w-full">
             <div className="flex flex-col md:flex-row justify-between ">
 
                 {/* Amount Information */}
@@ -46,6 +46,7 @@ const MapView = () => {
                         selectedPosition={selectedPosition}
                         selectedPositionDest={selectedPositionDest}
                         customIcon={customIcon}
+                        height="65vh"
                     />
                 </div>
             </div>

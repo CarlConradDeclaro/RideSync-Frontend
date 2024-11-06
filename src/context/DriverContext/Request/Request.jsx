@@ -11,8 +11,8 @@ import { BASEURL, BASEURLDrivers, postRequest } from "../../../utils/Service";
 export const RequestContext = createContext();
 export const RequestContextProvider = ({ children }) => {
 
-    const [driverInfo, setDriverInfo] = useState(null);
 
+    const [driverInfo, setDriverInfo] = useState(null);
     const [socket, setSocket] = useState(null);
     const driverMap = useRef();
     const routingControlRef = useRef();
@@ -29,6 +29,19 @@ export const RequestContextProvider = ({ children }) => {
     });
     const [onlineUsers, setOnlineUsers] = useState([])
     const [openInfoModal, setOpenInfoModal] = useState(false)
+
+
+    const [step1, setStep1] = useState(() => JSON.parse(localStorage.getItem('step1')) || false);
+    const [step2, setStep2] = useState(() => JSON.parse(localStorage.getItem('step2')) || false);
+
+    useEffect(() => {
+        localStorage.setItem('step1', JSON.stringify(step1))
+    }, [step1])
+
+    useEffect(() => {
+        localStorage.setItem('step2', JSON.stringify(step2))
+    }, [step2])
+
 
     useEffect(() => {
         const storedUserInfo = localStorage.getItem('User');
@@ -57,6 +70,8 @@ export const RequestContextProvider = ({ children }) => {
         newSocket.on("getOnlineUsers", (users) => {
             setOnlineUsers(users);
         });
+
+
 
         // Cleanup socket on component unmount
         return () => {
@@ -104,6 +119,12 @@ export const RequestContextProvider = ({ children }) => {
             }
 
         })
+
+
+        socket.on("yourPassenger", (passengerId) => {
+            console.log("your passenger is", passengerId, "your id is: ");
+
+        })
         // Cleanup socket listener on component unmount
         return () => {
             if (socket) {
@@ -126,6 +147,7 @@ export const RequestContextProvider = ({ children }) => {
         const response = await postRequest(`${BASEURLDrivers}/potentialRide`, JSON.stringify(potentialDriversInfo))
         if (response.status) {
             console.log("Success");
+            setStep1(true)
         } else {
             console.log("Failed @potentialRide ");
 
@@ -191,7 +213,9 @@ export const RequestContextProvider = ({ children }) => {
                 handleRequestInfo,
                 requestInfo,
                 handleOfferRide,
-                openInfoModal
+                openInfoModal,
+                step1,
+                step2
             }}
         >
             {children}
