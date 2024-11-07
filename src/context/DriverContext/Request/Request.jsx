@@ -33,13 +33,21 @@ export const RequestContextProvider = ({ children }) => {
 
     const [step1, setStep1] = useState(() => JSON.parse(localStorage.getItem('step1')) || false);
     const [step2, setStep2] = useState(() => JSON.parse(localStorage.getItem('step2')) || false);
+    const [passengerApproval, setPassengerApproval] = useState(false);
+    const [passengerInfo, setPassengerInfo] = useState([])
+    const [isRideCancelled, setIsRideCancelled] = useState(false)
 
     useEffect(() => {
         localStorage.setItem('step1', JSON.stringify(step1))
+        clearPassengerInfo()
+
     }, [step1])
+
 
     useEffect(() => {
         localStorage.setItem('step2', JSON.stringify(step2))
+
+
     }, [step2])
 
 
@@ -53,6 +61,9 @@ export const RequestContextProvider = ({ children }) => {
                 console.error("Error parsing user info:", error);
             }
         }
+        clearPassengerInfo()
+        setStep1(false)
+        setStep2(false)
     }, [])
 
     useEffect(() => {
@@ -84,7 +95,7 @@ export const RequestContextProvider = ({ children }) => {
             const response = await fetch("http://localhost:8000/api/drivers/passengerRequest");
             const data = await response.json();
             setRequest(data);
-            console.log(data);
+            console.log("reeequest: ", data);
         } catch (error) {
             console.error("Error fetching request data:", error);
         }
@@ -100,12 +111,17 @@ export const RequestContextProvider = ({ children }) => {
         socket.on("getNewRouteData", (newRoute) => {
             setRequest((prevRequests) => [...prevRequests, newRoute]);
             console.log("New route added:", newRoute);
+            fetchRequestData();
         });
 
 
         socket.on("getCancelledRequest", (id) => {
             setRequest((prevRequests) => prevRequests.filter(req => req.userId !== id));
-            setOpenInfoModal(false)
+            setOpenInfoModal(true)
+            setStep1(false)
+            setStep2(false)
+
+            setPassengerApproval({})
             const map = driverMap.current;
             if (routingControlRef.current) {
                 map.removeControl(routingControlRef.current);
@@ -123,6 +139,22 @@ export const RequestContextProvider = ({ children }) => {
 
         socket.on("yourPassenger", (passengerId) => {
             console.log("your passenger is", passengerId, "your id is: ");
+            setPassengerApproval(true)
+            getPassengerInfo(passengerId)
+            console.log("passenger infor: ", passengerInfo);
+
+        })
+
+
+        socket.on("cancelledRide", (userId) => {
+            console.log("user: ", userId, "Cancelled the ride");
+            setIsRideCancelled(true)
+            setPassengerApproval(false)
+            clearPassengerInfo()
+            setStep1(false)
+            setStep2(false)
+            setSelectedPosition(null)
+            setSelectedPositionDest(null)
 
         })
         // Cleanup socket listener on component unmount
@@ -132,6 +164,21 @@ export const RequestContextProvider = ({ children }) => {
             }
         };
     }, [request])
+
+    const getPassengerInfo = async (passengerId) => {
+        try {
+            const response = await fetch('http://localhost:8000/api/users')
+            const data = await response.json()
+            const passenger = data.find((p) => p.userId == passengerId)
+            setPassengerInfo(passenger)
+        } catch (error) {
+            console.error("Error fetching passenger information:", error);
+        }
+    }
+    const clearPassengerInfo = () => {
+        setPassengerInfo(null); // or setPassengerInfo([]) if it was initially an empty array
+    };
+
 
 
     const handleOfferRide = async () => {
@@ -144,13 +191,32 @@ export const RequestContextProvider = ({ children }) => {
             "driverId": driverId,
             "passengerId": userId
         }
+
+        let routeId
+        if (Array.isArray(request) && request.length > 0) {
+            routeId = request[0].routeId
+        } else if (request && request.routeId) {
+            routeId = request.routeId
+        } else {
+            console.error("Request is undefined or has an unexpected structure:", request);
+        }
+
+        console.log("routeId:", routeId);
+
+        const ridesInfo = {
+            "driverId": driverId,
+            "routeId": routeId
+        }
+
         const response = await postRequest(`${BASEURLDrivers}/potentialRide`, JSON.stringify(potentialDriversInfo))
+        const response2 = await postRequest(`${BASEURLDrivers}/rides`, JSON.stringify(ridesInfo))
+
+
         if (response.status) {
             console.log("Success");
             setStep1(true)
         } else {
             console.log("Failed @potentialRide ");
-
         }
     }
 
@@ -215,7 +281,10 @@ export const RequestContextProvider = ({ children }) => {
                 handleOfferRide,
                 openInfoModal,
                 step1,
-                step2
+                step2,
+                passengerApproval,
+                isRideCancelled,
+                passengerInfo
             }}
         >
             {children}
