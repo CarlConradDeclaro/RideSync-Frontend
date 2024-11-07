@@ -10,10 +10,10 @@ const Components = () => {
     return (
         <div >
 
-            {/* {
-                !step1 ? <RequestRides /> : <PassengerApproval />
-            } */}
-            <RequestRides />
+            {
+                !step1 ? <RequestRides /> : !step2 ? <PassengerApproval /> : <RequestRides />
+            }
+            {/* <PassengerApproval /> */}
 
 
 

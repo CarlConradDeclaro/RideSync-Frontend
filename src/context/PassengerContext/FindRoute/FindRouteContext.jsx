@@ -25,23 +25,29 @@ export const FindRouteContextProvider = ({ children }) => {
   const [amount, setAmout] = useState(0.00)
   const [totalDistance, setTotalDistance] = useState(0.0)
   const [totalDuration, setTotalDuration] = useState(0)
-  const [step1, setStep1] = useState(() => JSON.parse(localStorage.getItem('step1')) || false)
-  const [step2, setStep2] = useState(() => JSON.parse(localStorage.getItem('step2')) || false)
-  const [step3, setStep3] = useState(() => JSON.parse(localStorage.getItem('step3')) || false)
+  const [step1, setStep1] = useState(false)
+  const [step2, setStep2] = useState(false)
+  const [step3, setStep3] = useState(false)
 
   const [userInfo, setUserInfo] = useState(null);
   const [socket, setSocket] = useState(null)
   const [onlineUsers, setOnlineUsers] = useState([])
   const [socketID, setSocketID] = useState()
-  const [drivers, setDrivers] = useState([]);
+  const [drivers, setDrivers] = useState([]);// list of potential drivers
+  const [yourDriver, setYourDriver] = useState();// this is your selected driver
   const [routeInfo, setRouteInfo] = useState();
+
+
+
+
 
 
   const fetchRoute = async () => {
     if (userInfo && userInfo.id) {
       const userId = userInfo.id;
+      const status = 'pending'
       try {
-        const data = await postRequest(`${BASEURL}/getRouteRequest`, JSON.stringify({ userId }));
+        const data = await postRequest(`${BASEURL}/getRouteRequest`, JSON.stringify({ userId, status }));
         console.log("Fetched route data:", data); // Check the structure here
         if (data.error) {
           console.error('Error fetching route:', data.message);
@@ -78,6 +84,7 @@ export const FindRouteContextProvider = ({ children }) => {
     console.log("Selected Position Destination:", selectedPositionDest);
 
   }, [selectedPosition, selectedPositionDest]);
+
 
   useEffect(() => {
     fetchRoute();
@@ -116,7 +123,7 @@ export const FindRouteContextProvider = ({ children }) => {
     if (userInfo && userInfo.id) {
       const userId = userInfo.id;
       const fetchDrivers = async () => {
-        const body = JSON.stringify({ userId });
+        const body = JSON.stringify({ userId, status: 'waiting' });
         const response = await getRequest(`${BASEURL}/getPotentialRide`, body);
 
         if (response.error) {
@@ -342,6 +349,7 @@ export const FindRouteContextProvider = ({ children }) => {
       console.log("Response from routeRequest:", response);
 
       setStep1(v)
+
       fetchRoute()
       socket.emit("newRouteData", routeInfo)
     } catch (error) {
@@ -349,21 +357,41 @@ export const FindRouteContextProvider = ({ children }) => {
     }
   }, [userInfo, searchInput, searchInputDest, totalDuration, totalDistance, amount]);
 
-  const handelSelectDriver = useCallback((v, driverId) => {
-    setStep3(v)
-    setStep1(true)
-    setStep2(true)
-    console.log("steps1:", step1, "steps2:", step2, "steps3:", step3);
-    //  console.log("passenger", driverId, userInfo.id);
-
-    socket.emit("passenger", userInfo.id, driverId)
 
 
+  const handelSelectDriver = async (v, driverId) => {
 
-  })
+
+    if (userInfo && userInfo.id) {
+      const userId = userInfo.id;
+
+      try {
+        const data = await updateRequest(`${BASEURL}/selectedDriver`, JSON.stringify({ userId, driverId }));
+
+        console.log("Fetched route data:", data); // Check the structure here
+        if (data.error) {
+          console.error('Error fetching route:', data.message);
+          return;
+        }
 
 
-  const handleCancel = useCallback(async (v) => {
+        setStep3(v)
+        setStep1(true)
+        setStep2(true)
+        console.log("steps1:", step1, "steps2:", step2, "steps3:", step3);
+
+        //console.log("passenger", driverId, userInfo.id);
+        setYourDriver(driverId)
+        socket.emit("passenger", userInfo.id, driverId)
+      } catch {
+
+      }
+    }
+
+  }
+
+
+  const handleCancel = async (v) => {
 
     const userId = userInfo?.id
 
@@ -394,29 +422,33 @@ export const FindRouteContextProvider = ({ children }) => {
     }
 
     socket.emit("cancelled", userId)
-  })
+  }
 
-  const handleCancelRide = useCallback((v) => {
-    setStep3(v)
-    setStep2(v)
-  }, [])
+  const handleCancelRide = async (v) => {
+    const userId = userInfo?.id
+
+    try {
+      const response = await updateRequest(`${BASEURL}/routeCancelled`, JSON.stringify({ userId, yourDriver }))
+
+      handleCancel(v)
+      setDrivers([])
+      setStep3(v)
+      setStep2(v)
+      socket.emit("cancelledRide", userId, yourDriver),
+        console.log("ABout to cancelled:", userId, "and", yourDriver);
+    } catch (error) {
+
+    }
 
 
+  }
 
-  useEffect(() => {
-    localStorage.setItem('step1', JSON.stringify(step1))
-  }, [step1])
 
-  useEffect(() => {
-    localStorage.setItem('step2', JSON.stringify(step2))
-  }, [step2])
-  useEffect(() => {
-    localStorage.setItem('step3', JSON.stringify(step3))
-  }, [step2])
 
   return (
     <FindRouteContext.Provider
       value={{
+        userInfo,
         mapRef,
         searchInput,
         setSearchInput,
@@ -437,6 +469,7 @@ export const FindRouteContextProvider = ({ children }) => {
         totalDuration,
         setStep1,
         setStep2,
+        setStep3,
         step1,
         step2,
         step3,
@@ -444,7 +477,9 @@ export const FindRouteContextProvider = ({ children }) => {
         handleCancel,
         drivers,
         handelSelectDriver,
-        handleCancelRide
+        handleCancelRide,
+        setYourDriver,
+
 
       }}
     >

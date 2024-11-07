@@ -50,7 +50,9 @@ const MapView = () => {
                     />
                 </div>
             </div>
+
         </Card>
+
     )
 }
 

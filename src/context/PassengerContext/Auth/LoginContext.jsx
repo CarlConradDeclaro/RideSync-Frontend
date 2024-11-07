@@ -28,7 +28,7 @@ export const LoginContextProvider = ({ children }) => {
                 navigate('/passenger/homeContents');
                 console.log("Login successful, navigating to homeContents");
 
-            } else if (response.user.userTyp != "P") {
+            } else if (response.user.userType != "P") {
                 throw new Error(response.message || "You have no access to this page");
             }
             else {

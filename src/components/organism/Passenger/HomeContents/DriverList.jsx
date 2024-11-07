@@ -88,7 +88,7 @@ const DriverCard = ({ driverId, handelSelectDriver }) => {
                     </div>
                 </div>
                 <Button
-                    name="Ridee"
+                    name="Ride"
                     variant="contained"
                     size="small"
                     className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 "
