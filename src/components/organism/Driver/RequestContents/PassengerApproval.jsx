@@ -1,7 +1,7 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { Card } from '../../../molecules/Card';
 import { RequestContext } from '../../../../context/DriverContext/Request/Request';
-import { Map } from '../../../molecules/Map';
+// import { Map } from '../../../molecules/Map';
 import { TextInput } from '../../../atoms/TextInput';
 import { Button } from '../../../atoms/Button';
 import CircleBlue from '../../../../assets/CircleBlue.png';
@@ -11,17 +11,173 @@ import DefaultProfile from '../../../../assets/DefaultProfile.png';
 import Location from '../../../../assets/location.png';
 import { Skeleton } from '../../../atoms/Skeleton';
 import { Ratings } from '../../../atoms/Ratings';
+import 'leaflet/dist/leaflet.css';
+import 'leaflet-routing-machine/dist/leaflet-routing-machine.css';
+import L from 'leaflet';
+import 'leaflet-routing-machine';
+import 'leaflet-control-geocoder/dist/Control.Geocoder.css'; // Geocoder CSS
+import 'leaflet-control-geocoder'; // Geocoder JS
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import DestMarker from '../../../../assets/location.png'
+
 
 const PassengerApproval = ({
 
 
 }) => {
-    const { isRideCancelled, passengerInfo, passengerApproval, driverMap, selectedPosition, selectedPositionDest, customIcon } = useContext(RequestContext);
+    const { isRideCancelled, passengerInfo, passengerApproval, driverMap, selectedPosition, selectedPositionDest, setSelectedPosition, customIcon, routingControlRef } = useContext(RequestContext);
+
+
+    const [driverToPassenger, setDriverToPassenger] = useState(false)
+    const [initialPosition, setInitialPosition] = useState(selectedPosition);
+    const [hasRendered, setHasRendered] = useState(false); // To track if it has already rendered
+
+    const [startLocaiton, setStartLocation] = useState(null)
+    const [pickUpLoc, setPickUpLoc] = useState({ lat: selectedPosition.lat, lon: selectedPosition.lon })
+    const [destLoc, setDestLoc] = useState({ lat: selectedPositionDest.lat, lon: selectedPositionDest.lon })
+
+    useEffect(() => {
+        // Ensure selectedPosition and selectedPositionDest are available and that it hasn't rendered before
+        if (selectedPosition && selectedPositionDest && !hasRendered) {
+            // Set up timeout to call handleRouteDirection after 2 seconds
+            const timeoutId = setTimeout(() => {
+                // setSelectedPosition({ lat: selectedPosition.lat, lon: selectedPosition.lon });
+                handleRouteDirection();
+                setHasRendered(true); // Mark as rendered after running the function once
+            }, 2000);
+
+            // Clean up the timeout when selectedPosition or selectedPositionDest changes
+            return () => clearTimeout(timeoutId);
+        }
+        console.log("Pick up loc", pickUpLoc);
+        console.log("destLoc loc", destLoc);
+        console.log(" loc", selectedPosition);
+
+
+    }, [selectedPosition, selectedPositionDest, hasRendered]); // Effect runs only when selectedPosition or selectedPositionDest changes
+
+    const handleRouteDirection = async () => {
+        const map = driverMap.current;
+
+        setStartLocation(null)
+        setSelectedPosition({ lat: selectedPosition.lat, lon: selectedPosition.lon });
+        // Ensure map and positions are ready
+        if (map && selectedPosition && selectedPositionDest) {
+            // Remove any existing route control
+            if (routingControlRef.current) {
+                map.removeControl(routingControlRef.current);
+            }
+
+            try {
+                // Create new route control
+                routingControlRef.current = L.Routing.control({
+                    waypoints: [
+                        L.latLng(selectedPosition.lat, selectedPosition.lon),
+                        L.latLng(selectedPositionDest.lat, selectedPositionDest.lon),
+                    ],
+                    createMarker: () => null, // Prevent default marker creation
+                    show: false,
+                    routeWhileDragging: true,
+                    lineOptions: {
+                        styles: [{ color: '#00A6CE', opacity: 1, weight: 5 }],
+                    },
+                }).addTo(map);
+            } catch (error) {
+                console.error("Routing error:", error);
+                alert("Failed to calculate route. Please try again later.");
+            }
+        } else {
+            console.log("Waiting for map and positions to be ready");
+        }
+
+
+        if (map) {
+            if (selectedPositionDest) {
+                map.flyTo([selectedPosition.lat, selectedPosition.lon], 17, { animate: true, duration: 1.5 });
+            }
+        }
+    };
+
+
+    const handleFindMyLocation = () => {
+
+        const map = driverMap.current;
+
+        // Ensure map and positions are ready
+        if (map && selectedPosition && selectedPositionDest) {
+            // Remove any existing route control
+            if (routingControlRef.current) {
+                map.removeControl(routingControlRef.current);
+            }
+        }
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    const { latitude, longitude } = position.coords;
+                    console.log("My location:", latitude, longitude);
+                    setStartLocation({ lat: latitude, lon: longitude });
+                    setDriverToPassenger(true)
+                    const map = driverMap.current;
+
+
+                    // Ensure map and positions are ready
+                    if (map && selectedPosition && selectedPositionDest) {
+                        // Remove any existing route control
+                        if (routingControlRef.current) {
+                            map.removeControl(routingControlRef.current);
+                        }
+
+                        try {
+                            // Create new route control
+                            routingControlRef.current = L.Routing.control({
+                                waypoints: [
+                                    L.latLng(latitude, longitude),
+                                    L.latLng(selectedPosition.lat, selectedPosition.lon)
+                                ],
+                                createMarker: () => null, // Prevent default marker creation
+                                show: false,
+                                routeWhileDragging: true,
+                                lineOptions: {
+                                    styles: [{ color: '#00A6CE', opacity: 1, weight: 5 }]
+                                }
+                            }).addTo(map);
+                        } catch (error) {
+                            console.error("Routing error:", error);
+                            alert("Failed to calculate route. Please try again later.");
+                        }
+                    } else {
+                        console.log("Waiting for map and positions to be ready");
+                    }
+
+
+                },
+                (error) => {
+                    console.error("Error getting location:", error);
+                    alert("Unable to retrieve your location. Please ensure location services are enabled.");
+                }
+            );
+        } else {
+            alert("Geolocation is not supported by this browser.");
+        }
+
+
+    };
+
+
+    const flyToDriverPosition = () => {
+        const map = driverMap.current;
+        if (map) {
+            if (startLocaiton) {
+                map.flyTo([startLocaiton.lat, startLocaiton.lon], 18, { animate: true, duration: 1.5 });
+            }
+        }
+    }
 
 
     return (
-        <div className="flex flex-col  md:flex-row justify-around p-4 md:w-full  gap-5 ">
-            <Card className="md:max-w-[570px] w-full rounded-lg shadow-lg bg-white">
+        <div className="flex flex-col  md:flex-row justify-around p-4 md:w-full  gap-5 bg-white ">
+
+            <Card className="md:max-w-[800px] w-full rounded-lg shadow-lg ">
                 <div className="px-3 py-2 border-b border-gray-200">
                     <h1 className="text-base font-semibold text-gray-800">
                         {selectedPosition ? "Passenger Approved!" : "Waiting for the passenger confirmation...."}
@@ -62,27 +218,34 @@ const PassengerApproval = ({
 
                     {/* Go Buttons */}
                     <div className="flex flex-col gap-2 items-center">
-                        <Button name="Go" variant="contained" size="small" fontColor="#fff" />
-                        <Button name="Go" variant="contained" size="small" fontColor="#fff" />
+                        <Button name="Go" variant="contained" size="small" fontColor="#fff" onClick={handleFindMyLocation} />
+                        <Button name="Go" variant="contained" size="small" fontColor="#fff" onClick={handleRouteDirection} />
                     </div>
                 </div>
 
                 {/* Route and ETA Information */}
                 <div className="flex justify-between items-center px-3 py-1 bg-gray-100 rounded-b-lg border-t border-gray-200">
-                    <div className="text-gray-700 text-sm font-medium">Route:</div>
+                    <div className="flex  gap-3 text-gray-700 text-sm font-medium">
+                        <h2> Route:</h2>
+
+                    </div>
+                    <h2 onClick={flyToDriverPosition}>Center</h2>
                     <div className="text-gray-500 text-xs">
                         <span className="mr-2">Est: 45 mins</span>
                         <span>4.4 km</span>
+
+
                     </div>
                 </div>
 
                 {/* Map */}
                 <div className='relative z-0 '>
-                    <Map mapRef={driverMap} height="55vh" selectedPosition={selectedPosition} selectedPositionDest={selectedPositionDest} customIcon={customIcon} />
+                    <Map startLocaiton={startLocaiton} pickUpLoc={pickUpLoc} destLoc={destLoc} mapRef={driverMap} height="55vh" selectedPosition={driverToPassenger ? startLocaiton : selectedPosition} selectedPositionDest={selectedPositionDest} customIcon={customIcon} />
                 </div>
             </Card>
 
-            <div className='h-[500px] w-full'>
+
+            <div className='h-[500px] '>
                 <Card className="flex flex-col p-8 rounded-2xl  shadow-md bg-gradient-to-br from-gray-50 to-gray-100 w-full max-w-md mx-auto">
                     {/* Header with Profile and Basic Info */}
                     {/* {
@@ -228,5 +391,63 @@ const PassengerApproval = ({
         </div>
     );
 };
+
+
+
+const Map = ({
+    selectedPositionDest,
+    mapRef,
+    selectedPosition,
+    startLocaiton,
+    pickUpLoc,
+    destLoc,
+    customIcon,
+    height
+}) => {
+    return (
+        <div className='flex flex-col  w-full    '>
+
+            <div className='ml-3 mr-3 mt-3'>
+                <MapContainer
+                    center={selectedPosition ? [selectedPosition.lat, selectedPosition.lon] : [51.505, -0.09]} // Default center
+                    zoom={13}
+                    scrollWheelZoom={true}
+                    style={{ height }}
+                    ref={mapRef}
+                >
+                    <TileLayer
+                        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                        url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png"
+                    />
+
+                    {pickUpLoc && (
+                        <Marker
+                            position={[pickUpLoc.lat, pickUpLoc.lon]}
+                        >
+
+                        </Marker>
+                    )}
+
+                    {startLocaiton && (
+                        <Marker
+                            position={[startLocaiton.lat, startLocaiton.lon]}
+                            icon={customIcon(DestMarker)}
+                        >
+                        </Marker>
+                    )}
+                    {selectedPositionDest && (
+                        <Marker
+                            position={[destLoc.lat, destLoc.lon]}
+                            icon={customIcon(DestMarker)}
+                        >
+                            <Popup>Your Location</Popup>
+                        </Marker>
+                    )}
+                </MapContainer>
+            </div>
+        </div>
+    )
+}
+
 
 export default PassengerApproval;

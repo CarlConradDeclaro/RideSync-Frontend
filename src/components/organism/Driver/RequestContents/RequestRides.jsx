@@ -67,6 +67,7 @@ const RequestRides = () => {
                                     <div className="flex flex-col justify-center">
                                         <h1 className="text-lg font-semibold">{requestInfo.startLocation}</h1>
                                         <h2 className="text-sm text-gray-600">{requestInfo.endLocation}</h2>
+                                        <h2 className="text-sm text-gray-600">LATttt{selectedPosition?.lat}</h2>
                                     </div>
                                 </div>
                                 <div className="flex items-center h-[120px] shadow-xl p-4 rounded-lg bg-white">
