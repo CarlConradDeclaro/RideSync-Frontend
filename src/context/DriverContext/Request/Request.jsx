@@ -37,6 +37,9 @@ export const RequestContextProvider = ({ children }) => {
     const [passengerInfo, setPassengerInfo] = useState([])
     const [isRideCancelled, setIsRideCancelled] = useState(false)
 
+
+    const [offerRide, setOfferRide] = useState(false);
+
     useEffect(() => {
         localStorage.setItem('step1', JSON.stringify(step1))
         clearPassengerInfo()
@@ -210,10 +213,11 @@ export const RequestContextProvider = ({ children }) => {
 
         const response = await postRequest(`${BASEURLDrivers}/potentialRide`, JSON.stringify(potentialDriversInfo))
         const response2 = await postRequest(`${BASEURLDrivers}/rides`, JSON.stringify(ridesInfo))
-
+        setOfferRide(false)
 
         if (response.status) {
             console.log("Success");
+
             setStep1(true)
         } else {
             console.log("Failed @potentialRide ");
@@ -272,6 +276,7 @@ export const RequestContextProvider = ({ children }) => {
             value={{
                 request,
                 driverMap,
+                routingControlRef,
                 handleRouteDirection,
                 selectedPosition,
                 selectedPositionDest,
@@ -284,7 +289,9 @@ export const RequestContextProvider = ({ children }) => {
                 step2,
                 passengerApproval,
                 isRideCancelled,
-                passengerInfo
+                passengerInfo,
+                offerRide,
+                setSelectedPosition
             }}
         >
             {children}

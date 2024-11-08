@@ -79,9 +79,38 @@ export const FindRouteContextProvider = ({ children }) => {
     }
   };
 
+
+  useEffect(() => {
+    const fetchRequestRide = async () => {
+      if (userInfo && userInfo.id) {
+        const userId = userInfo.id;
+        const body = JSON.stringify({ userId });
+        const potentialDrivers2 = await postRequest(`${BASEURL}/getRequestRide`, body);
+        if (potentialDrivers2 && potentialDrivers2.length > 0) {
+          //  potentialDrivers2[0].startLatitude;
+          const startPosition = { lat: potentialDrivers2[0].startLatitude, lon: potentialDrivers2[0].startLongitude }
+          const endPosition = { lat: potentialDrivers2[0].endLatitude, lon: potentialDrivers2[0].endLongitude }
+          setSelectedPosition(startPosition)
+          setSelectedPositionDest(endPosition)
+
+
+        }
+
+
+      }
+
+
+    };
+
+    fetchRequestRide();
+  }, [userInfo]);
+
+
+
   useEffect(() => {
     console.log("Selected Position:", selectedPosition);
     console.log("Selected Position Destination:", selectedPositionDest);
+
 
   }, [selectedPosition, selectedPositionDest]);
 
