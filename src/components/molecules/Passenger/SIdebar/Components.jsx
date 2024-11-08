@@ -19,7 +19,6 @@ const Sidebar = ({ active }) => {
 
 
   const { logoutUser } = useContext(LoginContext)
-
   const navigate = useNavigate();
   const handleNavigation = (route) => {
     navigate(route);
