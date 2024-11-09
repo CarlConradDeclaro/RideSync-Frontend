@@ -49,11 +49,17 @@ export default {
             transform: 'translateY(0)',
           },
         },
+        slideRight: {
+          '0%': { transform: 'translateX(100%)' },  // Start from off-screen
+          '100%': { transform: 'translateX(0)' },    // End at its original position
+        },
+
       },
       animation: {
         fadeIn: 'fadeIn 0.4s ease-in-out',
         slideInFromRight: 'slideInFromRight 0.5s ease-out',
         slideDown: 'slideDown 0.5s ease-out', // New slide-down animation
+        slideRight: 'slideRight 0.5s ease-out',
       },
       screens: {
         'sm-500': '500px',

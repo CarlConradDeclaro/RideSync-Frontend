@@ -12,6 +12,8 @@ export const RequestContext = createContext();
 export const RequestContextProvider = ({ children }) => {
 
 
+
+
     const [driverInfo, setDriverInfo] = useState(null);
     const [socket, setSocket] = useState(null);
     const driverMap = useRef();
@@ -29,29 +31,83 @@ export const RequestContextProvider = ({ children }) => {
     });
     const [onlineUsers, setOnlineUsers] = useState([])
     const [openInfoModal, setOpenInfoModal] = useState(false)
-
-
-    const [step1, setStep1] = useState(() => JSON.parse(localStorage.getItem('step1')) || false);
-    const [step2, setStep2] = useState(() => JSON.parse(localStorage.getItem('step2')) || false);
+    const [step1, setStep1] = useState(false);
+    const [step2, setStep2] = useState(false);
     const [passengerApproval, setPassengerApproval] = useState(false);
     const [passengerInfo, setPassengerInfo] = useState([])
     const [isRideCancelled, setIsRideCancelled] = useState(false)
-
-
+    const [isOfferingRide, setIsOfferingRide] = useState(false)
     const [offerRide, setOfferRide] = useState(false);
+    const [routeId, setRouteId] = useState()
+    const [currentRide, setCurrentRide] = useState()
+
+    const fetchRequest = async () => {
+        if (driverInfo && driverInfo.id) {
+            console.log("idDriver", driverInfo?.id);
+
+            try {
+                const driverId = driverInfo.id;
+                const body = JSON.stringify({ driverId: Number(driverId), status: 'onGoing' });
+                const routeRequest = await postRequest(`${BASEURLDrivers}/getRides`, body);
+
+                if (routeRequest && routeRequest[0]?.routeId) {
+                    setRouteId(routeRequest[0].routeId); // Set the routeId if it exists
+                    console.log("Fetched Ride Info FROM REQUESTTTTTT:", routeRequest);
+                } else {
+                    console.log("No routeId found in the response.");
+                }
+            } catch (error) {
+                console.error("Error fetching ride info:", error);
+            }
+        }
+    };
 
     useEffect(() => {
-        localStorage.setItem('step1', JSON.stringify(step1))
-        clearPassengerInfo()
+        fetchRequest();
+    }, [driverInfo]); // Trigger fetchRequest when driverInfo changes
 
-    }, [step1])
-
-
+    // Only call fetchOnGoingRoute when routeId has a value
     useEffect(() => {
-        localStorage.setItem('step2', JSON.stringify(step2))
+        if (routeId) {
+            fetchOnGoingRoute();
+        }
+    }, [routeId]); // Trigger fetchOnGoingRoute when routeId is updated
 
+    const fetchOnGoingRoute = async () => {
+        try {
+            const body = JSON.stringify({ routeId });
+            const routeRequest = await postRequest(`${BASEURLDrivers}/getOnGoingRoute`, body);
 
-    }, [step2])
+            if (routeRequest && routeRequest.length > 0) {
+                setCurrentRide(routeRequest);
+                setRequest(routeRequest)
+                // Only set selectedPosition and selectedPositionDest if the coordinates are present
+                const startLatitude = routeRequest[0]?.startLatitude;
+                const startLongitude = routeRequest[0]?.startLongitude;
+                const endLatitude = routeRequest[0]?.endLatitude;
+                const endLongitude = routeRequest[0]?.endLongitude;
+
+                if (startLatitude && startLongitude && endLatitude && endLongitude) {
+                    getPassengerInfo(routeRequest[0]?.userId)
+                    setSelectedPosition({ lat: startLatitude, lon: startLongitude });
+                    setSelectedPositionDest({ lat: endLatitude, lon: endLongitude });
+                    setPassengerApproval(true)
+
+                    console.log("selectedPosition:", { lat: startLatitude, lon: startLongitude });
+                    console.log("selectedPositionDest:", { lat: endLatitude, lon: endLongitude });
+
+                } else {
+                    console.log("Coordinates missing in response.");
+                }
+
+                console.log("Request data from fetchOnGoingRoute:", routeRequest);
+            } else {
+                console.log("No data returned for current ride.");
+            }
+        } catch (error) {
+            console.error("Error fetching ongoing route data:", error);
+        }
+    };
 
 
     useEffect(() => {
@@ -65,8 +121,7 @@ export const RequestContextProvider = ({ children }) => {
             }
         }
         clearPassengerInfo()
-        setStep1(false)
-        setStep2(false)
+
     }, [])
 
     useEffect(() => {
@@ -85,8 +140,6 @@ export const RequestContextProvider = ({ children }) => {
             setOnlineUsers(users);
         });
 
-
-
         // Cleanup socket on component unmount
         return () => {
             newSocket.disconnect();
@@ -103,6 +156,8 @@ export const RequestContextProvider = ({ children }) => {
             console.error("Error fetching request data:", error);
         }
     };
+
+
 
     useEffect(() => {
         fetchRequestData();
@@ -124,7 +179,7 @@ export const RequestContextProvider = ({ children }) => {
             setStep1(false)
             setStep2(false)
 
-            setPassengerApproval({})
+
             const map = driverMap.current;
             if (routingControlRef.current) {
                 map.removeControl(routingControlRef.current);
@@ -144,9 +199,8 @@ export const RequestContextProvider = ({ children }) => {
             console.log("your passenger is", passengerId, "your id is: ");
             setPassengerApproval(true)
             getPassengerInfo(passengerId)
-            console.log("passenger infor: ", passengerInfo);
-
         })
+
 
 
         socket.on("cancelledRide", (userId) => {
@@ -182,10 +236,14 @@ export const RequestContextProvider = ({ children }) => {
         setPassengerInfo(null); // or setPassengerInfo([]) if it was initially an empty array
     };
 
+    useEffect(() => {
+        console.log("passengerInfouserFn: ", passengerInfo);
+    }, [passengerInfo])
+
 
 
     const handleOfferRide = async () => {
-        const userId = Number(requestInfo.passengerId);
+        const userId = Number(requestInfo?.passengerId);
         const driverId = Number(driverInfo?.id);
         socket.emit("offerRide", userId, driverId)
         console.log("offering ", userId, driverId);
@@ -217,8 +275,9 @@ export const RequestContextProvider = ({ children }) => {
 
         if (response.status) {
             console.log("Success");
+            setIsOfferingRide(true)
 
-            setStep1(true)
+
         } else {
             console.log("Failed @potentialRide ");
         }
@@ -271,9 +330,12 @@ export const RequestContextProvider = ({ children }) => {
         setOpenInfoModal(true)
     };
 
+
+
     return (
         <RequestContext.Provider
             value={{
+                driverInfo,
                 request,
                 driverMap,
                 routingControlRef,
@@ -291,7 +353,12 @@ export const RequestContextProvider = ({ children }) => {
                 isRideCancelled,
                 passengerInfo,
                 offerRide,
-                setSelectedPosition
+                setSelectedPosition,
+                setOpenInfoModal,
+                isOfferingRide,
+                setIsOfferingRide,
+                setStep1,
+                currentRide
             }}
         >
             {children}

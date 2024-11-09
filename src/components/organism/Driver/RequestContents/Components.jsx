@@ -1,30 +1,61 @@
-import React, { useContext, useState, useEffect } from 'react';
-import RequestRides from './RequestRides';
-import PassengerApproval from './PassengerApproval';
-import { RequestContext } from '../../../../context/DriverContext/Request/Request';
+import React, { useContext, useEffect, useState } from 'react'
+import RequestRides from './RequestRides'
+import PassengerApproval from './PassengerApproval'
+import { RequestContext } from '../../../../context/DriverContext/Request/Request'
+import { BASEURL, BASEURLDrivers, postRequest } from '../../../../utils/Service'
 
 const Components = () => {
-    const { step1, step2 } = useContext(RequestContext);
+    const { driverInfo, step1, step2, setStep1, request } = useContext(RequestContext);
+    const [ride, setRide] = useState(null);
 
-    // Use a state to track which component to render
-    const [renderStep, setRenderStep] = useState(null);
+    const fetchRequest = async () => {
+        if (driverInfo && driverInfo.id) {
+            console.log("idDriver", driverInfo?.id);
+
+            try {
+                const driverId = driverInfo.id;
+                const body = JSON.stringify({ driverId: Number(driverId), status: 'onGoing' });
+                const routeRequest = await postRequest(`${BASEURLDrivers}/getRides`, body);
+                // Set the fetched data to state
+                if (routeRequest && routeRequest[0].length > 0) {
+
+                    setStep1(true)
+                    setRide(routeRequest);
+                    console.log("THERE IS VALUE");
+
+                }
+                console.log("Fetched Ride Info:", routeRequest);
+            } catch (error) {
+                console.error("Error fetching ride info:", error);
+            }
+        }
+    };
 
     useEffect(() => {
-        if (!step1) {
-            setRenderStep('requestRides');
-        } else if (!step2) {
-            setRenderStep('passengerApproval');
+        fetchRequest();
+        if (request) {
+
+            console.log("THERE IS VALUE1");
         } else {
-            setRenderStep('requestRides');
+            console.log("THERE IS NO VALUE YET");
         }
-    }, [step1, step2]); // Re-run when step1 or step2 changes
+    }, [driverInfo]); // Trigger fetchRequest when driverInfo changes
+
 
     return (
-        <div>
-            {renderStep === 'requestRides' ? <RequestRides /> : null}
-            {renderStep === 'passengerApproval' ? <PassengerApproval /> : null}
-        </div>
-    );
-};
+        <div >
 
-export default Components;
+            {
+                !step1 ? <RequestRides /> : !step2 ? <PassengerApproval /> : <RequestRides />
+            }
+            {/* <PassengerApproval /> */}
+
+
+
+
+
+        </div>
+    )
+}
+
+export default Components
