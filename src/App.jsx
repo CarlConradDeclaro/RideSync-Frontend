@@ -10,7 +10,7 @@ function App() {
   return (
 
     <BrowserRouter>
-
+  
       <Routes>
         {/* Define Passenger Routes */}
         <Route path="/passenger/*" element={<PassengerRoutes />} />
