@@ -25,7 +25,8 @@ const PassengerApproval = ({
 
 
 }) => {
-    const { isRideCancelled, passengerInfo, passengerApproval, driverMap, selectedPosition, selectedPositionDest, setSelectedPosition, customIcon, routingControlRef } = useContext(RequestContext);
+    const { isRideCancelled, currentRide, passengerInfo, passengerApproval, driverMap, selectedPosition, selectedPositionDest,
+        setSelectedPosition, customIcon, routingControlRef, request } = useContext(RequestContext);
 
 
     const [driverToPassenger, setDriverToPassenger] = useState(false)
@@ -33,34 +34,67 @@ const PassengerApproval = ({
     const [hasRendered, setHasRendered] = useState(false); // To track if it has already rendered
 
     const [startLocaiton, setStartLocation] = useState(null)
-    const [pickUpLoc, setPickUpLoc] = useState({ lat: selectedPosition.lat, lon: selectedPosition.lon })
-    const [destLoc, setDestLoc] = useState({ lat: selectedPositionDest.lat, lon: selectedPositionDest.lon })
+    const [pickUpLoc, setPickUpLoc] = useState({ lat: selectedPosition?.lat, lon: selectedPosition?.lon })
+    const [destLoc, setDestLoc] = useState({ lat: selectedPositionDest?.lat, lon: selectedPositionDest?.lon })
+    const [passenger, setPassenger] = useState(passengerInfo)
+    const [routeRequest, setRouteRequest] = useState(request)
+
+
+
+    // Update passenger and routeRequest when passengerInfo and request become available
+    useEffect(() => {
+        if (passengerInfo) {
+            setPassenger(passengerInfo);
+            console.log("Updated passenger info:", passengerInfo);
+        }
+    }, [passengerInfo]);
 
     useEffect(() => {
-        // Ensure selectedPosition and selectedPositionDest are available and that it hasn't rendered before
+        if (request) {
+            setRouteRequest(request);
+            console.log("Updated route request:", request);
+        }
+    }, [request]);
+
+    // Check if positions are set and handle route direction
+    useEffect(() => {
         if (selectedPosition && selectedPositionDest && !hasRendered) {
-            // Set up timeout to call handleRouteDirection after 2 seconds
             const timeoutId = setTimeout(() => {
-                // setSelectedPosition({ lat: selectedPosition.lat, lon: selectedPosition.lon });
                 handleRouteDirection();
-                setHasRendered(true); // Mark as rendered after running the function once
-            }, 2000);
+                setHasRendered(true);
+            }, 1000);
 
             // Clean up the timeout when selectedPosition or selectedPositionDest changes
             return () => clearTimeout(timeoutId);
         }
-        console.log("Pick up loc", pickUpLoc);
-        console.log("destLoc loc", destLoc);
-        console.log(" loc", selectedPosition);
+        console.log("Pick up location:", pickUpLoc);
+        console.log("Destination location:", destLoc);
+        console.log("Selected position:", selectedPosition);
+        console.log("Passenger info:", passenger);
+        console.log("Route request:", routeRequest);
+
+        console.log("Current Ride:", currentRide);
 
 
-    }, [selectedPosition, selectedPositionDest, hasRendered]); // Effect runs only when selectedPosition or selectedPositionDest changes
+    }, [selectedPosition, selectedPositionDest, hasRendered]);
+
+
+
+
+
+
+
+
+
+
+
+
 
     const handleRouteDirection = async () => {
         const map = driverMap.current;
 
         setStartLocation(null)
-        setSelectedPosition({ lat: selectedPosition.lat, lon: selectedPosition.lon });
+        setSelectedPosition({ lat: selectedPosition?.lat, lon: selectedPosition?.lon });
         // Ensure map and positions are ready
         if (map && selectedPosition && selectedPositionDest) {
             // Remove any existing route control
@@ -72,8 +106,8 @@ const PassengerApproval = ({
                 // Create new route control
                 routingControlRef.current = L.Routing.control({
                     waypoints: [
-                        L.latLng(selectedPosition.lat, selectedPosition.lon),
-                        L.latLng(selectedPositionDest.lat, selectedPositionDest.lon),
+                        L.latLng(selectedPosition?.lat, selectedPosition?.lon),
+                        L.latLng(selectedPositionDest?.lat, selectedPositionDest?.lon),
                     ],
                     createMarker: () => null, // Prevent default marker creation
                     show: false,
@@ -93,11 +127,10 @@ const PassengerApproval = ({
 
         if (map) {
             if (selectedPositionDest) {
-                map.flyTo([selectedPosition.lat, selectedPosition.lon], 17, { animate: true, duration: 1.5 });
+                map.flyTo([selectedPosition?.lat, selectedPosition?.lon], 17, { animate: true, duration: 1.5 });
             }
         }
     };
-
 
     const handleFindMyLocation = () => {
 
@@ -132,7 +165,7 @@ const PassengerApproval = ({
                             routingControlRef.current = L.Routing.control({
                                 waypoints: [
                                     L.latLng(latitude, longitude),
-                                    L.latLng(selectedPosition.lat, selectedPosition.lon)
+                                    L.latLng(selectedPosition?.lat, selectedPosition?.lon)
                                 ],
                                 createMarker: () => null, // Prevent default marker creation
                                 show: false,
@@ -163,21 +196,21 @@ const PassengerApproval = ({
 
     };
 
-
     const flyToDriverPosition = () => {
         const map = driverMap.current;
         if (map) {
             if (startLocaiton) {
-                map.flyTo([startLocaiton.lat, startLocaiton.lon], 18, { animate: true, duration: 1.5 });
+                map.flyTo([startLocaiton?.lat, startLocaiton?.lon], 18, { animate: true, duration: 1.5 });
             }
         }
     }
+    console.log("passengerInfo: ", passenger);
 
 
     return (
         <div className="flex flex-col  md:flex-row justify-around p-4 md:w-full  gap-5 bg-white ">
 
-            <Card className="md:max-w-[800px] w-full rounded-lg shadow-lg ">
+            <Card className="md:max-w-[750px] w-full rounded-lg shadow-lg ">
                 <div className="px-3 py-2 border-b border-gray-200">
                     <h1 className="text-base font-semibold text-gray-800">
                         {selectedPosition ? "Passenger Approved!" : "Waiting for the passenger confirmation...."}
@@ -200,15 +233,15 @@ const PassengerApproval = ({
                     {/* Route Text Inputs */}
                     <div className="flex flex-col gap-3 w-full">
                         {
-                            selectedPosition ? <TextInput isReadOnly={true} value="Liloan, Cebu, Central Visayas, 6002, Philippines" height="30px" /> :
+                            selectedPosition ? <TextInput isReadOnly={true} value="your current location" height="30px" /> :
                                 <Skeleton variant="rounded" width="100%" height="30px" animation="wave" />
                         }
                         {
-                            selectedPosition ? <TextInput isReadOnly={true} value="Liloan, Cebu, Central Visayas, 6002, Philippines" height="30px" /> :
+                            selectedPosition ? <TextInput isReadOnly={true} value={routeRequest[0]?.startLocation} height="30px" /> :
                                 <Skeleton variant="rounded" width="100%" height="30px" animation="wave" />
                         }
                         {
-                            selectedPositionDest ? <TextInput isReadOnly={true} value="Liloan, Cebu, Central Visayas, 6002, Philippines" height="30px" /> :
+                            selectedPositionDest ? <TextInput isReadOnly={true} value={routeRequest[0]?.endLocation} height="30px" /> :
                                 <Skeleton variant="rounded" width="100%" height="30px" animation="wave" />
                         }
 
@@ -274,29 +307,17 @@ const PassengerApproval = ({
                                 <Skeleton variant="rounded" width="90px" height="90px" animation="wave" raduis='50%' />
                         }
                         <div className="flex flex-col">
-                            {passengerInfo ? (
-                                <h2 className="text-xl font-semibold text-gray-900">{passengerInfo.userFn}</h2>
-                            ) : (
-                                <div className="w-[220px] md:w-[240px]">
-                                    <Skeleton variant="rounded" width="auto" height="30px" animation="wave" />
-                                </div>
-                            )}
 
-                            {passengerApproval ? (
-                                <p className="text-gray-500 text-sm">Minglanilla, Cebu</p>
-                            ) : (
-                                <span className="mt-[10px]">
-                                    <Skeleton variant="rounded" width="auto" height="15px" animation="wave" />
-                                </span>
-                            )}
+                            <h2 className="text-xl font-semibold text-gray-900">{passenger?.userFn} {passenger?.userLn} </h2>
 
-                            {passengerApproval ? (
-                                <p className="text-xs text-gray-400">Joined: January 2022 • Gold Member</p>
-                            ) : (
-                                <span className="mt-[8px]">
-                                    <Skeleton variant="rounded" width="auto" height="15px" animation="wave" />
-                                </span>
-                            )}
+
+
+                            <p className="text-gray-500 text-sm">Minglanilla, Cebu</p>
+
+
+
+                            <p className="text-xs text-gray-400">Joined: January 2022 • Gold Member</p>
+
                         </div>
                     </div>
 
@@ -308,26 +329,26 @@ const PassengerApproval = ({
                             <>
                                 <div className="flex justify-between items-center text-gray-700">
                                     <span className="text-sm">Rides Completed:</span>
-                                    <span className="font-semibold text-sm text-gray-800">56</span>
+                                    <span className="font-semibold text-sm text-gray-800">56 </span>
                                 </div>
                                 <div className="flex justify-between items-center text-gray-700">
                                     <span className="text-sm">Preferred Pickup:</span>
-                                    <span className="font-semibold text-right text-sm text-gray-800">USJR Coliseum, Cebu City</span>
+                                    <span className="font-semibold text-right text-sm text-gray-800">{routeRequest[0]?.startLocation}</span>
                                 </div>
                                 <div className="flex justify-between items-center text-gray-700">
                                     <span className="text-sm">Contact:</span>
-                                    <span className="font-semibold text-sm text-gray-800">+63 912 345 6789</span>
+                                    <span className="font-semibold text-sm text-gray-800">{passenger?.userPhone}</span>
                                 </div>
                                 <div className="flex justify-between items-center text-gray-700">
                                     <span className="text-sm">Rating by Drivers:</span>
                                     <div className="flex items-center gap-2">
-                                        <Ratings ratings={4} />
-                                        <span className="font-semibold text-sm text-gray-800">4.8/5</span>
+                                        <Ratings value={passenger ? passenger.userRating : 5} />
+                                        <span className="font-semibold text-sm text-gray-800">{passenger?.userRating}/5</span>
                                     </div>
                                 </div>
                                 <div className="flex justify-between items-center text-gray-700">
                                     <span className="text-sm">Preferred Payment:</span>
-                                    <span className="font-semibold text-sm text-gray-800">Credit Card</span>
+                                    <span className="font-semibold text-sm text-gray-800">Cash on Hand</span>
                                 </div>
                             </>
                         ) : (
@@ -409,7 +430,7 @@ const Map = ({
 
             <div className='ml-3 mr-3 mt-3'>
                 <MapContainer
-                    center={selectedPosition ? [selectedPosition.lat, selectedPosition.lon] : [51.505, -0.09]} // Default center
+                    center={selectedPosition ? [selectedPosition?.lat, selectedPosition?.lon] : [51.505, -0.09]} // Default center
                     zoom={13}
                     scrollWheelZoom={true}
                     style={{ height }}
@@ -422,7 +443,7 @@ const Map = ({
 
                     {pickUpLoc && (
                         <Marker
-                            position={[pickUpLoc.lat, pickUpLoc.lon]}
+                            position={[pickUpLoc?.lat, pickUpLoc?.lon]}
                         >
 
                         </Marker>
@@ -430,14 +451,14 @@ const Map = ({
 
                     {startLocaiton && (
                         <Marker
-                            position={[startLocaiton.lat, startLocaiton.lon]}
+                            position={[startLocaiton?.lat, startLocaiton?.lon]}
                             icon={customIcon(DestMarker)}
                         >
                         </Marker>
                     )}
                     {selectedPositionDest && (
                         <Marker
-                            position={[destLoc.lat, destLoc.lon]}
+                            position={[destLoc?.lat, destLoc?.lon]}
                             icon={customIcon(DestMarker)}
                         >
                             <Popup>Your Location</Popup>
