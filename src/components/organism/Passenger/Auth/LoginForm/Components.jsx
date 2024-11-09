@@ -19,7 +19,7 @@ const Components = () => {
   return (
     <div className='flex justify-center mt-5 pt-10'>
       <Card className="flex flex-col md:flex-row w-full max-w-[95%] md:max-w-[900px] h-[auto] md:h-[600px] pt-[50px] rounded overflow-hidden animate-fadeIn">
-        <div className='p-3 w-full md:w-[70%] '>
+        <div className='p-8 w-full md:w-[70%] '>
           {isError &&
             <Alert variant="filled" severity="error">
               {errorMsg}
@@ -52,7 +52,7 @@ const Components = () => {
             {loading ? ( // Show loading spinner while logging in
               <Loading />
             ) : (
-              <Button name="Sign in" variant="contained" size="large" onClick={loginUser} />
+              <Button name="Sign in" variant="contained" size="large" onClick={loginUser} width="100%" />
             )}
           </div>
           <div className='mt-[20px]'>
