@@ -1,11 +1,13 @@
 import React from 'react'
 import { ViewRide } from '../../../templates/Passenger/ViewRide'
+import { ViewRidesContextProvider } from '../../../../context/PassengerContext/VieRides/ViewRides'
 
 const Components = () => {
   return (
-    <div>
-       <ViewRide/>
-    </div>
+    <ViewRidesContextProvider>
+      <ViewRide />
+    </ViewRidesContextProvider>
+
   )
 }
 
