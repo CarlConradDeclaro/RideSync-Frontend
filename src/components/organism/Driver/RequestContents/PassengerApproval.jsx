@@ -26,7 +26,7 @@ const PassengerApproval = ({
 
 }) => {
     const { isRideCancelled, currentRide, passengerInfo, passengerApproval, driverMap, selectedPosition, selectedPositionDest,
-        setSelectedPosition, customIcon, routingControlRef, request } = useContext(RequestContext);
+        setSelectedPosition, setStep2, setStep1, customIcon, routingControlRef, request } = useContext(RequestContext);
 
 
     const [driverToPassenger, setDriverToPassenger] = useState(false)
@@ -54,11 +54,15 @@ const PassengerApproval = ({
             setRouteRequest(request);
             console.log("Updated route request:", request);
         }
+
+
     }, [request]);
 
-    // Check if positions are set and handle route direction
+
+
+
     useEffect(() => {
-        if (selectedPosition && selectedPositionDest && !hasRendered) {
+        if (selectedPosition && selectedPositionDest && !hasRendered && currentRide) {
             const timeoutId = setTimeout(() => {
                 handleRouteDirection();
                 setHasRendered(true);
@@ -67,6 +71,7 @@ const PassengerApproval = ({
             // Clean up the timeout when selectedPosition or selectedPositionDest changes
             return () => clearTimeout(timeoutId);
         }
+
         console.log("Pick up location:", pickUpLoc);
         console.log("Destination location:", destLoc);
         console.log("Selected position:", selectedPosition);
@@ -76,16 +81,8 @@ const PassengerApproval = ({
         console.log("Current Ride:", currentRide);
 
 
+
     }, [selectedPosition, selectedPositionDest, hasRendered]);
-
-
-
-
-
-
-
-
-
 
 
 

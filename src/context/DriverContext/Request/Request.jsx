@@ -13,7 +13,6 @@ export const RequestContextProvider = ({ children }) => {
 
 
 
-
     const [driverInfo, setDriverInfo] = useState(null);
     const [socket, setSocket] = useState(null);
     const driverMap = useRef();
@@ -175,10 +174,12 @@ export const RequestContextProvider = ({ children }) => {
 
         socket.on("getCancelledRequest", (id) => {
             setRequest((prevRequests) => prevRequests.filter(req => req.userId !== id));
-            setOpenInfoModal(true)
+            setOpenInfoModal(false)
             setStep1(false)
             setStep2(false)
-
+            setCurrentRide(null)
+            setPassengerInfo(null)
+            setPassengerApproval(false)
 
             const map = driverMap.current;
             if (routingControlRef.current) {
@@ -349,6 +350,7 @@ export const RequestContextProvider = ({ children }) => {
                 openInfoModal,
                 step1,
                 step2,
+                setStep2,
                 passengerApproval,
                 isRideCancelled,
                 passengerInfo,

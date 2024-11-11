@@ -1,11 +1,31 @@
-import React from 'react'
+import React, { useContext } from 'react';
+import { Navbar } from '../../../molecules/Passenger/Navbar'
+import { ViewRidesContext } from '../../../../context/PassengerContext/VieRides/ViewRides';
+import RecentRides from './RecentRides';
+import UpComingRides from './UpComingRides';
+import CancelledRides from './CancelledRides';
 
 const Components = () => {
-  return (
-    <div className="p-5 ">
-      <h1>View Rides </h1>
-    </div>
-  )
-}
+  const { currentRoute, cancelledRoutes,
+    isInUpComingRides,
+    isInInCancelledRides,
+  } = useContext(ViewRidesContext)
 
-export default Components
+
+  return (
+    <div className="flex flex-col items-center pl-5 pr-5 w-full">
+      <Navbar />
+      {isInUpComingRides ? (
+        <UpComingRides />
+      ) : isInInCancelledRides ? (
+        <CancelledRides cancelledRoutes={cancelledRoutes} />
+      ) : (
+        <RecentRides currentRoute={currentRoute} />
+      )}
+
+
+    </div>
+  );
+};
+
+export default Components;

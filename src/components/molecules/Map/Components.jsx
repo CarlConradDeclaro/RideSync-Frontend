@@ -21,7 +21,7 @@ const Components = ({
 
       <div className='ml-3 mr-3 mt-3'>
         <MapContainer
-          center={selectedPosition ? [selectedPosition.lat, selectedPosition.lon] : [51.505, -0.09]} // Default center
+          center={selectedPosition ? [selectedPosition?.lat, selectedPosition?.lon] : [51.505, -0.09]} // Default center
           zoom={13}
           scrollWheelZoom={true}
           style={{ height }}
@@ -34,15 +34,15 @@ const Components = ({
 
           {selectedPosition && (
             <Marker
-              position={[selectedPosition.lat, selectedPosition.lon]}
+              position={[selectedPosition?.lat, selectedPosition?.lon]}
 
             >
-              <Popup>{selectedPosition.display_name}</Popup>
+              <Popup>{selectedPosition?.display_name}</Popup>
             </Marker>
           )}
           {selectedPositionDest && (
             <Marker
-              position={[selectedPositionDest.lat, selectedPositionDest.lon]}
+              position={[selectedPositionDest?.lat, selectedPositionDest?.lon]}
               icon={customIcon(DestMarker)}
             >
               <Popup>Your Location</Popup>
