@@ -14,17 +14,18 @@ const Components = ({
   mapRef,
   selectedPosition,
   customIcon,
-  height
+  height,
+  borderRadius
 }) => {
   return (
     <div className='flex flex-col  w-full    '>
 
-      <div className='ml-3 mr-3 mt-3'>
+      <div className='ml-3 mr-3 mt-3 '>
         <MapContainer
-          center={selectedPosition ? [selectedPosition?.lat, selectedPosition?.lon] : [51.505, -0.09]} // Default center
+          center={selectedPosition ? [selectedPosition?.lat, selectedPosition?.lon] : [10.3157, 123.8854]} // Default center
           zoom={13}
           scrollWheelZoom={true}
-          style={{ height }}
+          style={{ height, borderRadius }}
           ref={mapRef}
         >
           <TileLayer
