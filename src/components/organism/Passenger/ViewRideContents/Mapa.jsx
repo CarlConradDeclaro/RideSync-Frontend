@@ -13,7 +13,7 @@ const Mapa = ({ mapRef, selectedPosition, selectedPositionDest, routingControlRe
         if (!mapRef.current) return;
 
         const map = L.map(mapRef.current, {
-            center: [selectedPosition?.lat || 0, selectedPosition?.lon || 0],
+            center: [selectedPosition?.lat || 10.3157, selectedPosition?.lon || 123.8854],
             zoom: 13,
         });
 
