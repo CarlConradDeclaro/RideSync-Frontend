@@ -1,3 +1,4 @@
 import SelectCountries from './SelectCountry'
 import DemoStat from './DemoStat'
-export {SelectCountries,DemoStat}
+import SelectTrip from './SelectTrip'
+export { SelectCountries, DemoStat, SelectTrip }

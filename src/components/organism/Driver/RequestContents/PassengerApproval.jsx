@@ -165,7 +165,7 @@ const PassengerApproval = ({
                                     L.latLng(selectedPosition?.lat, selectedPosition?.lon)
                                 ],
                                 createMarker: () => null, // Prevent default marker creation
-                                show: false,
+
                                 routeWhileDragging: true,
                                 lineOptions: {
                                     styles: [{ color: '#00A6CE', opacity: 1, weight: 5 }]

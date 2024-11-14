@@ -18,7 +18,6 @@ const Components = () => {
                 const routeRequest = await postRequest(`${BASEURLDrivers}/getRides`, body);
                 // Set the fetched data to state
                 if (routeRequest && routeRequest[0].length > 0) {
-
                     setStep1(true)
                     setRide(routeRequest);
                     console.log("THERE IS VALUE");

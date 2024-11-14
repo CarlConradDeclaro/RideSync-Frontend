@@ -4,6 +4,8 @@ import { Register } from '../../components/pages/Passenger/Auth/Register';
 import { Login } from '../../components/pages/Passenger/Auth/Login';
 import { Home } from '../../components/pages/Passenger/Home';
 import { ViewRide } from '../../components/pages/Passenger/ViewRide';
+import { BookRide } from '../../components/pages/Passenger/BookRide';
+
 import { LoginContext, LoginContextProvider } from '../../context/PassengerContext/Auth/LoginContext';
 
 
@@ -11,7 +13,8 @@ const routes = [
   { path: '/register', element: <Register />, isProtected: false },
   { path: '/login', element: <Login />, isProtected: false },
   { path: '/homeContents', element: <Home />, isProtected: true },
-  { path: '/viewRideContents', element: <ViewRide />, isProtected: true }
+  { path: '/viewRideContents', element: <ViewRide />, isProtected: true },
+  { path: '/bookRideContents', element: <BookRide />, isProtected: true }
 ]
 
 

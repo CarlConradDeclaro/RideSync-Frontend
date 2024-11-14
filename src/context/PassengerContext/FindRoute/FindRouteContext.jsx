@@ -79,7 +79,6 @@ export const FindRouteContextProvider = ({ children }) => {
     }
   };
 
-
   useEffect(() => {
     const fetchRequestRide = async () => {
       if (userInfo && userInfo.id) {
@@ -92,20 +91,11 @@ export const FindRouteContextProvider = ({ children }) => {
           const endPosition = { lat: potentialDrivers2[0].endLatitude, lon: potentialDrivers2[0].endLongitude }
           setSelectedPosition(startPosition)
           setSelectedPositionDest(endPosition)
-
-
         }
-
-
       }
-
-
     };
-
     fetchRequestRide();
   }, [userInfo]);
-
-
 
   useEffect(() => {
     console.log("Selected Position:", selectedPosition);
@@ -211,6 +201,8 @@ export const FindRouteContextProvider = ({ children }) => {
     setTotalDistance(0)
     setAmout(0)
   };
+
+
   const handleSelectSuggestion = (lat, lon, display_name) => {
     console.log("Selecting suggestion with lat:", lat, "lon:", lon, "display_name:", display_name);
 
