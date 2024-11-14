@@ -1,2 +1,2 @@
 import Landing from './Components'
-export {Landing}
+export { Landing }
