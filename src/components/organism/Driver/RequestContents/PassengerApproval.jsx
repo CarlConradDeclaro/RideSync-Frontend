@@ -19,13 +19,13 @@ import 'leaflet-control-geocoder/dist/Control.Geocoder.css'; // Geocoder CSS
 import 'leaflet-control-geocoder'; // Geocoder JS
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import DestMarker from '../../../../assets/location.png'
+import Driver from '../../../../assets/driver2.png'
+import otwIcon from '../../../../assets/otwIcon.png'
+import StartLocation from '../../../../assets/startLocation.png'
 
 
-const PassengerApproval = ({
-
-
-}) => {
-    const { isRideCancelled, currentRide, passengerInfo, passengerApproval, driverMap, selectedPosition, selectedPositionDest,
+const PassengerApproval = ({ }) => {
+    const { socket, isRideCancelled, currentRide, passengerInfo, passengerApproval, driverMap, selectedPosition, selectedPositionDest,
         setSelectedPosition, setStep2, setStep1, customIcon, routingControlRef, request } = useContext(RequestContext);
 
 
@@ -39,7 +39,9 @@ const PassengerApproval = ({
     const [passenger, setPassenger] = useState(passengerInfo)
     const [routeRequest, setRouteRequest] = useState(request)
 
+    const [isGoingTodestination, setIsGoingToDestination] = useState(false)
 
+    const [isGoingToPickLoc, setIsGoingToPickUpLoc] = useState(false)
 
     // Update passenger and routeRequest when passengerInfo and request become available
     useEffect(() => {
@@ -113,6 +115,7 @@ const PassengerApproval = ({
                         styles: [{ color: '#00A6CE', opacity: 1, weight: 5 }],
                     },
                 }).addTo(map);
+
             } catch (error) {
                 console.error("Routing error:", error);
                 alert("Failed to calculate route. Please try again later.");
@@ -165,12 +168,15 @@ const PassengerApproval = ({
                                     L.latLng(selectedPosition?.lat, selectedPosition?.lon)
                                 ],
                                 createMarker: () => null, // Prevent default marker creation
-
+                                show: false,
                                 routeWhileDragging: true,
                                 lineOptions: {
                                     styles: [{ color: '#00A6CE', opacity: 1, weight: 5 }]
                                 }
                             }).addTo(map);
+                            setIsGoingToPickUpLoc(false)
+                            socket.emit("driverIsOtw", passenger.userId, latitude, longitude)
+                            setIsGoingToDestination(false)
                         } catch (error) {
                             console.error("Routing error:", error);
                             alert("Failed to calculate route. Please try again later.");
@@ -189,9 +195,64 @@ const PassengerApproval = ({
         } else {
             alert("Geolocation is not supported by this browser.");
         }
-
-
     };
+
+    // real time tracking
+    useEffect(() => {
+        if (!isGoingToPickLoc)
+            if (navigator.geolocation) {
+                const watchId = navigator.geolocation.watchPosition(
+                    (position) => {
+                        const { latitude, longitude } = position.coords;
+                        console.log("Updated location:", latitude, longitude);
+
+                        // Update location and reroute
+                        setStartLocation({ lat: latitude, lon: longitude });
+                        if (driverMap.current && selectedPosition && selectedPositionDest && latitude && longitude) {
+                            // Remove any existing route control
+                            if (routingControlRef.current) {
+                                driverMap.current.removeControl(routingControlRef.current);
+                            }
+
+                            try {
+                                routingControlRef.current = L.Routing.control({
+                                    waypoints: [
+                                        L.latLng(latitude, longitude),
+                                        L.latLng(selectedPosition?.lat, selectedPosition?.lon)
+                                    ],
+                                    createMarker: () => null,
+                                    show: false,
+                                    routeWhileDragging: true,
+                                    lineOptions: {
+                                        styles: [{ color: '#00A6CE', opacity: 1, weight: 5 }]
+                                    }
+                                }).addTo(driverMap.current);
+
+                                // Emit updated location to socket
+                                socket.emit("driverIsOtw", passenger?.userId, latitude, longitude);
+                            } catch (error) {
+                                console.error("Routing error:", error);
+                                alert("Failed to calculate route. Please try again later.");
+                            }
+                        }
+                    },
+                    (error) => {
+                        console.error("Error watching location:", error);
+                        alert("Unable to retrieve your location. Please ensure location services are enabled.");
+                    },
+                    { enableHighAccuracy: true }
+                );
+
+                // Cleanup function to stop watching location
+                return () => {
+                    navigator.geolocation.clearWatch(watchId);
+                };
+            }
+    }, [selectedPosition, selectedPositionDest, passenger?.userId, isGoingToPickLoc]);
+
+
+
+
 
     const flyToDriverPosition = () => {
         const map = driverMap.current;
@@ -202,6 +263,16 @@ const PassengerApproval = ({
         }
     }
     console.log("passengerInfo: ", passenger);
+
+    const handleDriverHasArrived = () => {
+        socket.emit("driverArrivedAtPickUpLoc", passenger.userId)
+    }
+
+    const handleDriveToDestination = () => {
+        handleRouteDirection()
+        setIsGoingToPickUpLoc(true)
+        setIsGoingToDestination(true)
+    }
 
 
     return (
@@ -249,7 +320,7 @@ const PassengerApproval = ({
                     {/* Go Buttons */}
                     <div className="flex flex-col gap-2 items-center">
                         <Button name="Go" variant="contained" size="small" fontColor="#fff" onClick={handleFindMyLocation} />
-                        <Button name="Go" variant="contained" size="small" fontColor="#fff" onClick={handleRouteDirection} />
+                        <Button name="Go" variant="contained" size="small" fontColor="#fff" onClick={handleDriveToDestination} />
                     </div>
                 </div>
 
@@ -270,7 +341,7 @@ const PassengerApproval = ({
 
                 {/* Map */}
                 <div className='relative z-0 '>
-                    <Map startLocaiton={startLocaiton} pickUpLoc={pickUpLoc} destLoc={destLoc} mapRef={driverMap} height="55vh" selectedPosition={driverToPassenger ? startLocaiton : selectedPosition} selectedPositionDest={selectedPositionDest} customIcon={customIcon} />
+                    <Map startLocaiton={startLocaiton} pickUpLoc={pickUpLoc} destLoc={destLoc} mapRef={driverMap} isGoingTodestination={isGoingTodestination} height="55vh" selectedPosition={driverToPassenger ? startLocaiton : selectedPosition} selectedPositionDest={selectedPositionDest} customIcon={customIcon} />
                 </div>
             </Card>
 
@@ -361,7 +432,9 @@ const PassengerApproval = ({
                             <span className="text-sm font-medium text-gray-700">Arrived at Pickup Location</span>
                             <label className="relative inline-flex items-center cursor-pointer">
                                 <input type="checkbox" className="sr-only peer" />
-                                <div className="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center peer-checked:bg-green-500 transition-colors">
+                                <div className="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center peer-checked:bg-green-500 transition-colors"
+                                    onClick={handleDriverHasArrived}
+                                >
                                     <span className="text-white text-xl mb-2 font-bold peer-checked:block">✔</span>
                                 </div>
                             </label>
@@ -420,7 +493,8 @@ const Map = ({
     pickUpLoc,
     destLoc,
     customIcon,
-    height
+    height,
+    isGoingTodestination
 }) => {
     return (
         <div className='flex flex-col  w-full    '>
@@ -441,7 +515,9 @@ const Map = ({
                     {pickUpLoc && (
                         <Marker
                             position={[pickUpLoc?.lat, pickUpLoc?.lon]}
+                            icon={isGoingTodestination ? customIcon(otwIcon) : customIcon(StartLocation)}
                         >
+
 
                         </Marker>
                     )}
@@ -449,7 +525,7 @@ const Map = ({
                     {startLocaiton && (
                         <Marker
                             position={[startLocaiton?.lat, startLocaiton?.lon]}
-                            icon={customIcon(DestMarker)}
+                            icon={customIcon(Driver)}
                         >
                         </Marker>
                     )}

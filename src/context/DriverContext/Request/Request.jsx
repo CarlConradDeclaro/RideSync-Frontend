@@ -336,6 +336,7 @@ export const RequestContextProvider = ({ children }) => {
     return (
         <RequestContext.Provider
             value={{
+                socket,
                 driverInfo,
                 request,
                 driverMap,
