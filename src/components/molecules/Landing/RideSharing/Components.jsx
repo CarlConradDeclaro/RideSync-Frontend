@@ -1,11 +1,11 @@
 import rideshare from '../../../../assets/rideshare.png'
 const Components = ()=> {
     return (
-        <div className="w-64 flex flex-col items-center gap-3 group cursor-pointer">
+        <div className="w-80 flex flex-col items-center gap-3 group cursor-pointer">
           <div className="bg-homeHeaderBg rounded-full">
             <img
               src={rideshare}
-              className="rounded-full h-64 transform transition-transform duration-300 group-hover:scale-125"
+              className="rounded-full h-80 transform transition-transform duration-300 group-hover:scale-125"
             />
           </div>
           <h2 className="text-4xl font-bold">Ride Sharing</h2>

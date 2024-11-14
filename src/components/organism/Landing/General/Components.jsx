@@ -1,7 +1,16 @@
 import {Button} from '../../../atoms/Button'
 import RideSyncImage from '../../../../assets/RideSync.png'
+import { useNavigate } from 'react-router-dom'
 
 const Components = () => {
+    const navigate = useNavigate()
+    const handleLogin = ()=> {
+        navigate("/passenger/*")
+    }
+    const handleSignUp = ()=> {
+        navigate("/passenger/register")
+    }
+
     return(
         <section className='flex h-lvh justify-center items-center'>
             <div className='w-3/5 flex justify-center'>
@@ -11,8 +20,8 @@ const Components = () => {
                         Seamlessly Connect for every Journey
                     </h1>
                     <div className='flex justify-center py-8 gap-5'>
-                        <Button name="Login" variant="contained" size="large"/>
-                        <Button name="Sign Up" variant="contained" size="large" bgColor="white" fontColor="black"/>
+                        <Button name="Login" variant="contained" size="large" onClick={handleLogin}/>
+                        <Button name="Sign Up" variant="contained" size="large" bgColor="white" fontColor="black" onClick={handleSignUp}/>
                     </div>
                 </div>
             </div>
