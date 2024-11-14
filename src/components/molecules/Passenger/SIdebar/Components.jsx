@@ -64,9 +64,9 @@ const Sidebar = ({ active }) => {
             <h1 className="text-sidebarTxtOff font-bold">MAIN MENU</h1>
           </div>
 
-          {[{ name: 'Home', icon: HomeIcon, key: 'home', route: '/passenger/homecontents' },
+          {[{ name: 'Book a ride', icon: HomeIcon, key: 'home', route: '/passenger/homecontents' },
           { name: 'View Rides', icon: ViewRides, key: 'viewRides', route: '/passenger/viewRideContents' },
-          { name: 'Book a Ride', icon: BookRide, key: 'bookRide', route: '/passenger/bookRideContents' },
+          { name: 'Schedule a Ride', icon: BookRide, key: 'bookRide', route: '/passenger/bookRideContents' },
           { name: 'Message', icon: Message, key: 'message', route: '' },
           { name: 'Profile', icon: Profile, key: 'profile', route: '' }
           ].map(({ name, icon, key, route }) => (

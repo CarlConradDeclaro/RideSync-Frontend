@@ -1,4 +1,5 @@
-import { createContext, useRef, useState } from "react";
+import { createContext, useEffect, useRef, useState } from "react";
+import { BASEURL, postRequest } from "../../../utils/Service";
 
 export const BookRideContext = createContext()
 
@@ -18,7 +19,14 @@ export const BookRideContextProvider = ({ children }) => {
     const [selectedPosition, setSelectedPosition] = useState(null);
     const [selectedPositionDest, setSelectedPositionDest] = useState(null);
 
+    const [estDuration, setEstDuration] = useState(0)
+    const [totalDistance, setTotalDistance] = useState(0)
+    const [amt, setAmout] = useState(0)
+    const [driverId, setDriverId] = useState()
 
+
+
+    const [userInfo, setUserInfo] = useState()
 
     const [isBooking, setIsBooking] = useState(false);
 
@@ -41,6 +49,21 @@ export const BookRideContextProvider = ({ children }) => {
     const handleBooking = (value) => {
         setIsBooking(value)
     }
+
+    useEffect(() => {
+        const storedInfo = localStorage.getItem("User");
+        if (storedInfo) {
+            try {
+                const parsedInfo = JSON.parse(storedInfo)
+                setUserInfo(parsedInfo)
+                console.log("booking  User info set:", parsedInfo);
+            } catch (error) {
+                console.error("Error parsing user info:", error);
+            }
+        } else {
+            console.log("No user info found in localStorage");
+        }
+    }, [])
 
 
     const handleSearchInput = async (e) => {
@@ -113,7 +136,7 @@ export const BookRideContextProvider = ({ children }) => {
     });
 
 
-    const handleRouteDirection = () => {
+    const handleRouteDirection = async () => {
         if (!selectedPosition || !selectedPositionDest) {
             alert("Please ensure both your location and the selected location are set.");
             return;
@@ -121,34 +144,120 @@ export const BookRideContextProvider = ({ children }) => {
 
         const map = mapRef.current;
 
+        // Remove the existing routing control if it exists
         if (routingControlRef.current) {
             map.removeControl(routingControlRef.current);
         }
 
+        // Initialize routing control
         routingControlRef.current = L.Routing.control({
             waypoints: [
                 L.latLng(selectedPosition.lat, selectedPosition.lon),
                 L.latLng(selectedPositionDest.lat, selectedPositionDest.lon)
             ],
             createMarker: function () {
-                return null;
+                return null; // Hide markers for the waypoints
             },
-
             routeWhileDragging: true,
             lineOptions: {
-                styles: [{ color: '#00A6CE', opacity: 1, weight: 5 }]
+                styles: [{ color: '#00A6CE', opacity: 1, weight: 5 }] // Styling the route line
             }
         }).addTo(map);
 
-        // Add an event listener to get all the route details
-        routingControlRef.current.on('routesfound', function (e) {
+        // Listen for routes found event
+        routingControlRef.current.on('routesfound', (e) => {
+            const routes = e.routes[0]; // First route found
+
+            console.log("Routes found:", routes); // Debug: Log the route data
+
+            // Check if routes and summary are available
+            if (routes && routes.summary) {
+                const distance = (routes.summary.totalDistance / 1000).toFixed(2); // Convert to kilometers
+                const duration = Math.ceil(routes.summary.totalTime / 60); // Convert to minutes
+
+                console.log("Route distance:", distance, "Duration:", duration); // Debug: Log distance and duration
+
+                if (routes.summary.totalDistance > 0 && routes.summary.totalTime > 0) {
+                    setEstDuration(duration); // Set the estimated duration
+                    setTotalDistance(distance); // Set the total distance
+                } else {
+                    console.error("Invalid route data received. Total distance or time is 0.");
+                }
+
+                // Calculate the total amount based on the distance
+                const flagdown = 5; // Base fare
+                const AmtPerKPH = 12; // Fare per kilometer
+                const numericKm = parseFloat(distance);
+
+                if (!isNaN(numericKm)) {
+                    const totalAmt = (flagdown + (numericKm * AmtPerKPH)).toFixed(2);
+                    setAmout(totalAmt); // Set the calculated amount
+                } else {
+                    console.error("Invalid distance:", distance);
+                }
+            } else {
+                console.error("Route summary not found.");
+            }
+
+            // Fit the map view to the bounds of the route
             const bounds = L.latLngBounds([
                 L.latLng(selectedPosition.lat, selectedPosition.lon),
                 L.latLng(selectedPositionDest.lat, selectedPositionDest.lon)
             ]);
-            map.fitBounds(bounds);
-
+            map.fitBounds(bounds); // Adjust map view to fit route
         });
+    };
+
+
+    const handleSubmitBooking = async () => {
+        // Validate required fields
+        if (!userInfo?.id || !selectedPosition || !selectedPositionDest || !selectedDate || !totalDistance || !amt) {
+            console.error("Please complete all required fields.");
+            alert("Please complete all required fields.");
+            return;
+        }
+
+        // Prepare booking information
+        const bookingInfo = {
+            userId: userInfo.id,
+            startLocation: searchInput,
+            startLatitude: selectedPosition.lat,
+            startLongitude: selectedPosition.lon,
+            endLocation: searchInputDest,
+            endLatitude: selectedPositionDest.lat,
+            endLongitude: selectedPositionDest.lon,
+            estimatedDuration: estDuration,
+            distance: totalDistance,
+            totalAmount: amt,
+            driverId: 9807, // Example driver ID
+            trip: trip, // Trip ID (if applicable)
+            numPassengers: passenger, // Number of passengers
+            rideType: rideType, // Type of ride (e.g., economy, luxury)
+            travelDate: convertToSQLDateTime(selectedDate), // Convert date to SQL format
+            status: "pending" // Initial status
+        };
+
+        console.log("Booking Info:", bookingInfo); // Debug: Log the booking information
+
+        try {
+            const response = await postRequest(`${BASEURL}/booking`, JSON.stringify(bookingInfo));
+        } catch (error) {
+            console.error("An error occurred while submitting the booking:", error); // Debug: Log error
+            alert("An unexpected error occurred. Please try again.");
+        }
+    };
+
+    const convertToSQLDateTime = (isoDate) => {
+        const date = new Date(isoDate);
+
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-indexed
+        const day = String(date.getDate()).padStart(2, '0');
+        const hours = String(date.getHours()).padStart(2, '0');
+        const minutes = String(date.getMinutes()).padStart(2, '0');
+        const seconds = String(date.getSeconds()).padStart(2, '0');
+
+        return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
     };
 
 
@@ -168,7 +277,6 @@ export const BookRideContextProvider = ({ children }) => {
                 handleChangePassenger,
                 handleDateChange,
                 handleBooking,
-
                 searchInput,
                 suggestions,
                 setSearchInput,
@@ -182,8 +290,8 @@ export const BookRideContextProvider = ({ children }) => {
                 selectedPosition,
                 selectedPositionDest,
                 customIcon,
-                handleRouteDirection
-
+                handleRouteDirection,
+                handleSubmitBooking
             }}
         >
             {children}

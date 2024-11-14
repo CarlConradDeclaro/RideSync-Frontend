@@ -1,6 +1,7 @@
 import Circle from '../../../../assets/Circle.png';
 import Dots from '../../../../assets/Dots.png';
 import Location from '../../../../assets/Location.png';
+import { Card } from '../../../molecules/Card';
 
 export const RecentList = ({ startLocation, endLocation, status }) => {
 
@@ -32,6 +33,55 @@ export const RecentList = ({ startLocation, endLocation, status }) => {
 
     )
 }
+
+
+
+export const UpComingList = ({ bookingInfo }) => {
+    return (
+        <Card className="bg-gray-50 h-auto w-full md:w-[700px] p-2 mb-2 rounded-lg hover:shadow-xl cursor-pointer transition-shadow duration-300">
+            <div className="flex flex-col h-full text-gray-800">
+
+                {/* Trip Date and Amount */}
+                <div className="flex justify-between items-center mb-3">
+                    <div className="text-sm font-semibold text-gray-600">
+                        <span className="text-gray-400 mr-[8px]">Trip Date:</span>
+                        <span className="text-red-500 text-[16px]">
+                            {bookingInfo?.travelDate
+                                ? new Date(bookingInfo.travelDate).toLocaleString()
+                                : "2024-11-20 10:00 AM"}
+                        </span>
+                    </div>
+                    <div className="text-lg font-bold text-green-600">
+                        {bookingInfo?.totalAmount || "25.00"}
+                    </div>
+                </div>
+
+                {/* Locations and Icons */}
+                <div className="flex items-center space-x-4">
+
+                    {/* Icons */}
+                    <div className="flex flex-col items-center space-y-1">
+                        <img src={Circle} alt="start" className="w-[16px] h-[16px]" />
+                        <img src={Dots} alt="dots" className="w-[18px] h-[18px]" />
+                        <img src={Location} alt="end" className="w-[18px] h-[18px]" />
+                    </div>
+
+                    {/* Location Details */}
+                    <div className="flex flex-col">
+                        <p className="text-md font-medium text-gray-700">
+                            {bookingInfo?.startLocation || "Giporlos, Eastern Samar, Eastern Visayas, 6811, Pilipinas"}
+                        </p>
+                        <p className="text-md text-gray-500">
+                            {bookingInfo?.endLocation || "Balangiga, Eastern Samar, Eastern Visayas, 6812, Pilipinas"}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </Card>
+
+    )
+}
+
 
 
 export const CancenlledList = ({ startLocation, endLocation, status }) => {
