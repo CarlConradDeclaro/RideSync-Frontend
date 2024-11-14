@@ -31,7 +31,8 @@ const Booking2 = ({
     selectedPosition,
     selectedPositionDest,
     customIcon,
-    handleRouteDirection
+    handleRouteDirection,
+    handleSubmitBooking
 }) => {
 
 
@@ -152,7 +153,7 @@ const Booking2 = ({
                 </div>
 
                 <div className='mt-5'>
-                    <Button name="Confirm Booking" variant="contained" size="large" borderRadius="20px" onClick={handleRouteDirection} />
+                    <Button name="Confirm Booking" variant="contained" size="large" borderRadius="20px" onClick={handleSubmitBooking} />
                 </div>
             </div>
             <div className='w-full h-screen '>

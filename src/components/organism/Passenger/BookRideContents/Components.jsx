@@ -7,14 +7,10 @@ import { BookRideContext } from '../../../../context/PassengerContext/BookRide/B
 const Components = () => {
 
     const { mapRef, routingControlRef, isBooking, trip, rideType, passenger, selectedDate,
-        handleChangeTrip, handleChangeRideTypes, handleChangePassenger,
-        handleDateChange, handleBooking, searchInput,
-        searchInputDest,
-        handleSearchInput,
-        suggestions,
-        handleSearchInputDest, suggestionsDest, handleSelectSuggestion,
-        handleSelectSuggestionDest, selectedPosition,
-        selectedPositionDest, customIcon, handleRouteDirection } = useContext(BookRideContext)
+        handleChangeTrip, handleChangeRideTypes, handleChangePassenger, handleDateChange,
+        handleBooking, searchInput, searchInputDest, handleSearchInput, suggestions,
+        handleSearchInputDest, suggestionsDest, handleSelectSuggestion, handleSelectSuggestionDest,
+        selectedPosition, selectedPositionDest, customIcon, handleRouteDirection, handleSubmitBooking } = useContext(BookRideContext)
 
     return (
         <div>
@@ -28,7 +24,7 @@ const Components = () => {
                         handleSearchInputDest={handleSearchInputDest} suggestions={suggestions} suggestionsDest={suggestionsDest}
                         handleSelectSuggestion={handleSelectSuggestion} handleSelectSuggestionDest={handleSelectSuggestionDest}
                         selectedPosition={selectedPosition} selectedPositionDest={selectedPositionDest} customIcon={customIcon}
-                        handleRouteDirection={handleRouteDirection}
+                        handleRouteDirection={handleRouteDirection} handleSubmitBooking={handleSubmitBooking}
                     />
 
 
