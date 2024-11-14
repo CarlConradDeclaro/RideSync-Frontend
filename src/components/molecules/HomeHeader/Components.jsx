@@ -9,7 +9,7 @@ const Components = ({ isDriver = false }) => {
   };
 
   return (
-    <div className="flex flex-col md:flex-row justify-between items-center bg-homeHeaderBg h-auto md:h-[70px] w-full p-4 md:p-6">
+    <div className="flex flex-col md:flex-row justify-around items-center bg-homeHeaderBg h-auto md:h-[70px] w-full p-4 md:p-6">
       <div className="flex items-center text-textColorHeader">
         <h1 className="text-xl md:text-2xl font-bold">RideSync</h1>
       </div>
