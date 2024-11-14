@@ -11,7 +11,7 @@ import { BASEURL, postRequest } from '../../../../utils/Service';
 import { Ratings } from '../../../atoms/Ratings';
 
 const SelectedDriver = () => {
-    const { handleCancelRide, userInfo, handleRouteDirection } = useContext(FindRouteContext);
+    const { handleCancelRide, userInfo, handleRouteDirection, isDriverComming, isDriverHasArrive } = useContext(FindRouteContext);
     const [driverId, setDriverId] = useState(null);
     const [driverInfo, setDriverInfo] = useState(null);
     const [val, setVal] = useState(3)
@@ -69,6 +69,13 @@ const SelectedDriver = () => {
         <div className="flex flex-col items-center animate-slideInFromRight">
             <Card className="flex flex-col gap-6 sm:w-full md:w-[450px] rounded-2xl shadow-lg bg-white p-5">
                 <h1 className="text-2xl font-semibold text-gray-800">Driver</h1>
+                <span>
+                    {isDriverComming ? "Your driver is comming!" :
+                        isDriverHasArrive ? "Your driver have arrived!" : ""
+                    }
+
+                </span>
+
                 <div className="w-full flex flex-col sm:flex-row justify-around gap-4 bg-amtBg p-5 rounded-lg">
                     <div className="flex justify-center items-center">
                         <img src={DefaultProfile} className="max-w-[80px] max-h-[80px] rounded-full border-2 border-gray-300" alt="Driver Profile" />
@@ -98,7 +105,10 @@ const SelectedDriver = () => {
                 </div>
                 <div className="flex justify-center gap-5">
                     <Button name="Message" variant="contained" size="large" onClick={handleRouteDirection} />
-                    <Button name="Cancel" variant="contained" size="large" bgColor="red" onClick={() => handleCancelRide(false)} />
+                    {
+                        !isDriverHasArrive && <Button name="Cancel" variant="contained" size="large" bgColor="red" onClick={() => handleCancelRide(false)} />
+                    }
+
                 </div>
             </Card>
         </div>

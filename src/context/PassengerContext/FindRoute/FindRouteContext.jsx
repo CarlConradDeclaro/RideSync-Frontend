@@ -28,16 +28,18 @@ export const FindRouteContextProvider = ({ children }) => {
   const [step1, setStep1] = useState(false)
   const [step2, setStep2] = useState(false)
   const [step3, setStep3] = useState(false)
-
+  const [hasRendered, setHasRendered] = useState(false); // To track if it has already rendered
   const [userInfo, setUserInfo] = useState(null);
   const [socket, setSocket] = useState(null)
   const [onlineUsers, setOnlineUsers] = useState([])
   const [socketID, setSocketID] = useState()
   const [drivers, setDrivers] = useState([]);// list of potential drivers
   const [yourDriver, setYourDriver] = useState();// this is your selected driver
+  const [driverCoordinates, setDriverCoordinates] = useState()
   const [routeInfo, setRouteInfo] = useState();
 
-
+  const [isDriverComming, setIsDriverComming] = useState(false)
+  const [isDriverHasArrive, setIsDriverHasArrive] = useState(false)
 
 
 
@@ -46,6 +48,7 @@ export const FindRouteContextProvider = ({ children }) => {
     if (userInfo && userInfo.id) {
       const userId = userInfo.id;
       const status = 'pending'
+
       try {
         const data = await postRequest(`${BASEURL}/getRouteRequest`, JSON.stringify({ userId, status }));
         console.log("Fetched route data:", data); // Check the structure here
@@ -77,6 +80,8 @@ export const FindRouteContextProvider = ({ children }) => {
     } else {
       console.warn('UserInfo is not available or invalid.');
     }
+
+
   };
 
   useEffect(() => {
@@ -95,13 +100,93 @@ export const FindRouteContextProvider = ({ children }) => {
       }
     };
     fetchRequestRide();
+
   }, [userInfo]);
+
+
+
+  useEffect(() => {
+    if (selectedPosition && selectedPositionDest && !hasRendered) {
+      const timeoutId = setTimeout(() => {
+        handleRouteDirectionLoad();
+        fetchRoute()
+
+        setHasRendered(true);
+      }, 1000);
+
+      return () => clearTimeout(timeoutId);
+    }
+
+
+  }, [selectedPosition, selectedPositionDest, hasRendered]);
+
+
+  const handleRouteDirectionLoad = async () => {
+    const map = mapRef.current;
+    setSelectedPosition({ lat: selectedPosition?.lat, lon: selectedPosition?.lon });
+    // Ensure map and positions are ready
+    if (map && selectedPosition && selectedPositionDest) {
+      // Remove any existing route control
+      if (routingControlRef.current) {
+        map.removeControl(routingControlRef.current);
+      }
+
+      try {
+        // Create new route control
+        routingControlRef.current = L.Routing.control({
+          waypoints: [
+            L.latLng(selectedPosition?.lat, selectedPosition?.lon),
+            L.latLng(selectedPositionDest?.lat, selectedPositionDest?.lon),
+          ],
+          createMarker: () => null, // Prevent default marker creation
+          show: false,
+          routeWhileDragging: true,
+          lineOptions: {
+            styles: [{ color: '#00A6CE', opacity: 1, weight: 5 }],
+          },
+        }).addTo(map);
+
+        // Add an event listener to get all the route details
+        routingControlRef.current.on('routesfound', function (e) {
+          const routes = e.routes[0]; // Get the first route
+          const distance = (routes.summary.totalDistance / 1000).toFixed(2); // Distance in kilometers
+          const duration = (routes.summary.totalTime / 60).toFixed(2); // Duration in minutes
+
+          // Extract the step-by-step directions (instructions)
+          const directions = routes.instructions.map(step => ({
+            text: step.text, // Instruction text
+            distance: (step.distance / 1000).toFixed(2), // Distance for this step in kilometers
+            time: (step.time / 60).toFixed(2) // Time for this step in minutes
+          }));
+
+          // Store the distance, duration, and directions in the array
+          routeDetails.push({
+            totalDistance: `${distance} km`,
+            totalDuration: `${duration} min`,
+            directions: directions
+          });
+          console.log("routeDetails", routeDetails);
+          computeTotalAmt()
+          const bounds = L.latLngBounds([
+            L.latLng(selectedPosition.lat, selectedPosition.lon),
+            L.latLng(selectedPositionDest.lat, selectedPositionDest.lon)
+          ]);
+          map.fitBounds(bounds);
+
+        });
+      } catch (error) {
+        console.error("Routing error:", error);
+        alert("Failed to calculate route. Please try again later.");
+      }
+    } else {
+      console.log("Waiting for map and positions to be ready");
+    }
+  };
 
   useEffect(() => {
     console.log("Selected Position:", selectedPosition);
     console.log("Selected Position Destination:", selectedPositionDest);
-
-
+    fetchRoute()
   }, [selectedPosition, selectedPositionDest]);
 
 
@@ -131,6 +216,18 @@ export const FindRouteContextProvider = ({ children }) => {
       console.log("Received driver ID:", driverId);
       setDrivers(prev => [...prev, driverId])
     });
+
+    newSocket.on("driverIsComming", (latitude, longitude) => {
+      setIsDriverComming(true)
+      setIsDriverHasArrive(false)
+      console.log("Driver is Coming from passenger side", latitude, longitude);
+      setDriverCoordinates({ lat: latitude, lon: longitude })
+    })
+
+    newSocket.on("driverHasArrived", () => {
+      setIsDriverComming(false)
+      setIsDriverHasArrive(true)
+    })
 
     return () => {
       newSocket.disconnect();
@@ -501,8 +598,9 @@ export const FindRouteContextProvider = ({ children }) => {
         handelSelectDriver,
         handleCancelRide,
         setYourDriver,
-
-
+        isDriverComming,
+        isDriverHasArrive,
+        driverCoordinates,
       }}
     >
       {children}
