@@ -33,7 +33,7 @@ const RecentRides = ({ currentRoute }) => {
                     <div className="overflow-y-auto max-h-[80%] space-y-3">
                         {/* Check if there are routes */}
                         {currentRoute?.length > 0 ? (
-                            currentRoute.map((ride, index) => (
+                            currentRoute.slice().reverse().map((ride, index) => (
                                 <RecentList
                                     key={index}
                                     startLocation={ride?.startLocation}

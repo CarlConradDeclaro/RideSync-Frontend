@@ -16,11 +16,41 @@ const MapView = () => {
         totalDistance,
         totalDuration,
         driverCoordinates,
-        isDriverHasArrive
+        isDriverHasArrive,
+        isRidesCompleted,
+        setIsRideCompleted
     } = useContext(FindRouteContext)
+    const handleRefreshPage = () => {
 
+        setIsRideCompleted(false)
+        window.location.reload()
+    }
     return (
         <Card className="w-full">
+            {
+                isRidesCompleted && (
+                    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                        <div className="bg-white p-8 rounded-lg shadow-2xl max-w-md w-full text-center">
+                            <h2 className="text-2xl font-bold text-gray-800 mb-4">
+                                Payment Confirmed!
+                            </h2>
+                            <p className="text-gray-600 mb-6">
+                                Thank you for choosing
+                                <span className="font-semibold text-blue-500">
+                                    {" "}RideSync
+                                </span>.
+
+                            </p>
+                            <button
+                                className="bg-green-500 text-white py-2 px-6 rounded-lg hover:bg-green-600 transition duration-300"
+                                onClick={handleRefreshPage}
+                            >
+                                Close
+                            </button>
+                        </div>
+                    </div>
+                )
+            }
             <div className="flex flex-col md:flex-row justify-between ">
 
                 {/* Amount Information */}

@@ -5,6 +5,7 @@ import { Register } from '../../components/pages/Driver/Auth/Register';
 import { NotFound } from '../../components/molecules/NotFound';
 import { Login } from '../../components/pages/Driver/Auth/Login';
 import { LoginDriverContextProvider } from '../../context/DriverContext/Auth/LoginContext';
+import { ViewRides } from '../../components/pages/Driver/ViewRides';
 
 const RootNavigators = () => {
     return (
@@ -15,6 +16,7 @@ const RootNavigators = () => {
                     <Route path="/login" element={<Login />} />
                     <Route path="/register" element={<Register />} />
                     <Route path="/requestContents" element={<Request />} />
+                    <Route path="/viewRidesContents" element={<ViewRides />} />
                     <Route path="*" element={<NotFound />} />
                 </Route>
             </Routes>

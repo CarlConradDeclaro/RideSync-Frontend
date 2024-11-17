@@ -6,7 +6,7 @@ import Location from '../../../../assets/location.png';
 import { UpComingList } from './List';
 
 
-const UpComingRides = ({ bookingInfo }) => {
+const UpComingRides = ({ upcomingRides, anchorEl, setAnchorEl, options }) => {
     const [isExpanded, setIsExpanded] = useState(false);
 
     const toggleDetails = () => {
@@ -20,11 +20,14 @@ const UpComingRides = ({ bookingInfo }) => {
                     <h1 className="text-lg font-semibold text-gray-700 mb-4">
                         Upcoming Rides
                     </h1>
-                    <div>
-                        <UpComingList bookingInfo={bookingInfo} />
-                        <UpComingList bookingInfo={bookingInfo} />
-                        <UpComingList bookingInfo={bookingInfo} />
-
+                    <div className='h-[65vh]  overflow-y-auto'>
+                        {
+                            upcomingRides?.slice().reverse().map((upcomingRides) =>
+                                <UpComingList key={upcomingRides.routeId} upcomingRides={upcomingRides}
+                                    anchorEl={anchorEl} setAnchorEl={setAnchorEl} options={options}
+                                />
+                            )
+                        }
                     </div>
 
                 </div>

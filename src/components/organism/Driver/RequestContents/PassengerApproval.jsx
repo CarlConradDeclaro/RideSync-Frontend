@@ -22,26 +22,25 @@ import DestMarker from '../../../../assets/location.png'
 import Driver from '../../../../assets/driver2.png'
 import otwIcon from '../../../../assets/otwIcon.png'
 import StartLocation from '../../../../assets/startLocation.png'
+import Payment from './Payment';
+import { BASEURL, updateRequest } from '../../../../utils/Service';
 
 
 const PassengerApproval = ({ }) => {
-    const { socket, isRideCancelled, currentRide, passengerInfo, passengerApproval, driverMap, selectedPosition, selectedPositionDest,
+    const { driverInfo, socket, isRideCancelled, currentRide, passengerInfo, passengerApproval, driverMap, selectedPosition, selectedPositionDest,
         setSelectedPosition, setStep2, setStep1, customIcon, routingControlRef, request } = useContext(RequestContext);
-
 
     const [driverToPassenger, setDriverToPassenger] = useState(false)
     const [initialPosition, setInitialPosition] = useState(selectedPosition);
     const [hasRendered, setHasRendered] = useState(false); // To track if it has already rendered
-
     const [startLocaiton, setStartLocation] = useState(null)
     const [pickUpLoc, setPickUpLoc] = useState({ lat: selectedPosition?.lat, lon: selectedPosition?.lon })
     const [destLoc, setDestLoc] = useState({ lat: selectedPositionDest?.lat, lon: selectedPositionDest?.lon })
     const [passenger, setPassenger] = useState(passengerInfo)
     const [routeRequest, setRouteRequest] = useState(request)
-
     const [isGoingTodestination, setIsGoingToDestination] = useState(false)
-
     const [isGoingToPickLoc, setIsGoingToPickUpLoc] = useState(false)
+    const [paymentModal, setPaymentModal] = useState(false);
 
     // Update passenger and routeRequest when passengerInfo and request become available
     useEffect(() => {
@@ -59,9 +58,6 @@ const PassengerApproval = ({ }) => {
 
 
     }, [request]);
-
-
-
 
     useEffect(() => {
         if (selectedPosition && selectedPositionDest && !hasRendered && currentRide) {
@@ -266,6 +262,9 @@ const PassengerApproval = ({ }) => {
 
     const handleDriverHasArrived = () => {
         socket.emit("driverArrivedAtPickUpLoc", passenger.userId)
+        handleRouteDirection()
+        setIsGoingToPickUpLoc(true)
+        setIsGoingToDestination(true)
     }
 
     const handleDriveToDestination = () => {
@@ -274,10 +273,29 @@ const PassengerApproval = ({ }) => {
         setIsGoingToDestination(true)
     }
 
+    const handlePayment = async () => {
+        if (driverInfo && driverInfo.id) {
+            console.log("idDriver", driverInfo?.id);
+            try {
+                const driverId = driverInfo?.id;
+                const response = await updateRequest(`${BASEURL}/updateRidesToCompleted`, JSON.stringify({ driverId }))
+                socket.emit("transactionCompleted", passenger?.userId)
+            } catch (error) {
+                console.error("Error occurred while updating ride status:", error.message);
+            }
+        } else {
+            console.log("driver id is not defined");
+
+        }
+
+    }
+
+
+
+
 
     return (
         <div className="flex flex-col  md:flex-row justify-around p-4 md:w-full  gap-5 bg-white ">
-
             <Card className="md:max-w-[750px] w-full rounded-lg shadow-lg ">
                 <div className="px-3 py-2 border-b border-gray-200">
                     <h1 className="text-base font-semibold text-gray-800">
@@ -344,26 +362,9 @@ const PassengerApproval = ({ }) => {
                     <Map startLocaiton={startLocaiton} pickUpLoc={pickUpLoc} destLoc={destLoc} mapRef={driverMap} isGoingTodestination={isGoingTodestination} height="55vh" selectedPosition={driverToPassenger ? startLocaiton : selectedPosition} selectedPositionDest={selectedPositionDest} customIcon={customIcon} />
                 </div>
             </Card>
-
-
             <div className='h-[500px] '>
                 <Card className="flex flex-col p-8 rounded-2xl  shadow-md bg-gradient-to-br from-gray-50 to-gray-100 w-full max-w-md mx-auto">
-                    {/* Header with Profile and Basic Info */}
-                    {/* {
-                        isRideCancelled &&
-                        <div className='flex mb-[50px] w-full h-[30px]'>
-                            <h1>Passenger want to cancelled the Ride</h1>
-                            <Button
-                                name="Approved"
-                                variant="contained"
-                                size="large"
-                                fontColor="#fff"
-                                width="130px"
-                                height="40px"
-                                bgColor="red"
-                            />
-                        </div>
-                    } */}
+
                     <div className="flex items-center gap-6 mb-4">
                         {
                             passengerApproval ? <img
@@ -443,11 +444,23 @@ const PassengerApproval = ({ }) => {
                             <span className="text-sm font-medium text-gray-700">Arrived at Destination</span>
                             <label className="relative inline-flex items-center cursor-pointer">
                                 <input type="checkbox" className="sr-only peer" />
-                                <div className="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center peer-checked:bg-green-500 transition-colors">
+                                <div className="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center peer-checked:bg-green-500 transition-colors"
+                                    onClick={() => setPaymentModal(true)}
+                                >
                                     <span className="text-white text-xl font-bold peer-checked:block">✔</span>
                                 </div>
                             </label>
                         </div>
+                        {
+                            paymentModal && (
+                                <div
+                                    className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+                                    style={{ margin: 0, padding: 0 }}
+                                >
+                                    <Payment setPaymentModal={setPaymentModal} handlePayment={handlePayment} />
+                                </div>
+                            )
+                        }
                     </div>
 
                     {/* Icon Actions */}
@@ -476,9 +489,6 @@ const PassengerApproval = ({ }) => {
                 </Card>
 
             </div>
-
-
-
         </div>
     );
 };

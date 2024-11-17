@@ -7,6 +7,8 @@ import { TextInput } from '../../../atoms/TextInput';
 import { DatePicker } from '../../../atoms/DatePicker'; // Assuming you are using CustomDatePicker
 import L from 'leaflet';
 import 'leaflet-routing-machine/dist/leaflet-routing-machine.css';
+import DefaultProfile from '../../../../assets/DefaultProfile.png'
+
 
 const Booking2 = ({
     mapRef,
@@ -32,7 +34,11 @@ const Booking2 = ({
     selectedPositionDest,
     customIcon,
     handleRouteDirection,
-    handleSubmitBooking
+    handleSubmitBooking,
+    fetchDrivers,
+    listOfSuggestionDrivers,
+    handleSelectedDriver,
+    setIsBooking
 }) => {
 
 
@@ -48,11 +54,11 @@ const Booking2 = ({
     }, [selectedPosition, selectedPositionDest]);
 
     return (
-        <div className='w-full flex'>
+        <div className='w-full flex flex-col md:flex md:flex-row'>
 
-            <div className='flex flex-col items-center w-[380px] h-screen mt-5 '>
+            <div className='flex flex-col items-center w-full md:w-[500px] h-screen mt-5 '>
                 <div className='cursor-pointer'
-                    onClick={() => handleBooking(false)}
+                    onClick={() => setIsBooking(false)}
                 >
                     Back
                 </div>
@@ -64,7 +70,7 @@ const Booking2 = ({
                         onChange={handleChangeTrip}
                         options={[
                             { value: 'One way', label: 'One way' },
-                            { value: 'Round Trip', label: 'Round Trip' },
+                            // { value: 'Round Trip', label: 'Round Trip' },
                         ]}
                         sx={{ minWidth: 100, backgroundColor: 'white' }}
                     />
@@ -152,6 +158,26 @@ const Booking2 = ({
                     />
                 </div>
 
+                <div className='flex w-full flex-col  '>
+                    <div className='m-2'><h2>Select a driver: </h2></div>
+                    <div className='flex flex-col gap-2 p-2 md:ml-4'>
+                        {
+                            listOfSuggestionDrivers
+                                .filter(driver => driver.userType === 'D')
+                                .slice(0, 5)
+                                .map((driver) => (
+                                    <DriverCard
+                                        driverName={`${driver.userFn} ${driver.userLn}`}
+                                        plateNo={driver.plateNo || "Not Available"}
+                                        ratings={driver.userRating || 0}
+                                        key={driver.userId}
+                                        driverId={driver.userId}
+                                        handleSelectedDriver={handleSelectedDriver}
+                                    />
+                                ))
+                        }
+                    </div>
+                </div>
                 <div className='mt-5'>
                     <Button name="Confirm Booking" variant="contained" size="large" borderRadius="20px" onClick={handleSubmitBooking} />
                 </div>
@@ -160,6 +186,27 @@ const Booking2 = ({
                 <Map mapRef={mapRef} height="100vh" selectedPosition={selectedPosition} selectedPositionDest={selectedPositionDest} customIcon={customIcon} />
             </div>
         </div>
+    )
+}
+
+
+const DriverCard = ({ driverName, plateNo, ratings, handleSelectedDriver, driverId }) => {
+    return (
+        <div className="   p-1 flex gap-4 bg-white w-full rounded-lg shadow-md justify-between items-center cursor-pointer transition-transform hover:scale-105">
+            <div className="flex items-center gap-4">
+                <img src={DefaultProfile} className="w-16 h-16 rounded-full object-cover border border-gray-200" alt="Driver Profile" />
+                <div>
+                    <h1 className="text-sm md:text-md font-semibold text-gray-800">{driverName}</h1>
+                    <p className="text-sm text-gray-500">Plate No: <span className="font-medium">{plateNo}</span></p>
+                    <div className="flex items-center gap-1">
+                        <span className="text-yellow-500">⭐⭐⭐⭐</span>
+                        <span className="text-sm text-gray-600">({ratings})</span>
+                    </div>
+                </div>
+            </div>
+            <Button name="Ride" variant="contained" size="small" borderRadius="20px" className="text-white bg-blue-500 hover:bg-blue-600 px-4 py-1 text-sm font-medium rounded-full" onClick={() => handleSelectedDriver(driverId)} />
+        </div>
+
     )
 }
 

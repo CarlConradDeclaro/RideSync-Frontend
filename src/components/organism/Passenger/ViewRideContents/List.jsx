@@ -1,6 +1,7 @@
 import Circle from '../../../../assets/Circle.png';
 import Dots from '../../../../assets/Dots.png';
 import Location from '../../../../assets/Location.png';
+import { LongMenu } from '../../../atoms/LongMenu';
 import { Card } from '../../../molecules/Card';
 
 export const RecentList = ({ startLocation, endLocation, status }) => {
@@ -36,9 +37,9 @@ export const RecentList = ({ startLocation, endLocation, status }) => {
 
 
 
-export const UpComingList = ({ bookingInfo }) => {
+export const UpComingList = ({ upcomingRides, anchorEl, setAnchorEl, options }) => {
     return (
-        <Card className="bg-gray-50 h-auto w-full md:w-[700px] p-2 mb-2 rounded-lg hover:shadow-xl cursor-pointer transition-shadow duration-300">
+        <Card className="bg-gray-50 h-auto w-full md:w-[650px] p-2 mb-2 rounded-lg hover:shadow-xl cursor-pointer transition-shadow duration-300">
             <div className="flex flex-col h-full text-gray-800">
 
                 {/* Trip Date and Amount */}
@@ -46,13 +47,16 @@ export const UpComingList = ({ bookingInfo }) => {
                     <div className="text-sm font-semibold text-gray-600">
                         <span className="text-gray-400 mr-[8px]">Trip Date:</span>
                         <span className="text-red-500 text-[16px]">
-                            {bookingInfo?.travelDate
-                                ? new Date(bookingInfo.travelDate).toLocaleString()
-                                : "2024-11-20 10:00 AM"}
+                            {upcomingRides ?
+                                new Date(upcomingRides.travelDate).toLocaleString("en-US", { timeZone: "Asia/Manila" })
+                                :
+                                'none'
+                            }
                         </span>
                     </div>
-                    <div className="text-lg font-bold text-green-600">
-                        {bookingInfo?.totalAmount || "25.00"}
+                    <div className="flex text-lg font-bold text-green-600 gap-3">
+                        ₱{upcomingRides?.totalAmount || "25.00"}
+                        <LongMenu anchorEl={anchorEl} setAnchorEl={setAnchorEl} options={options} />
                     </div>
                 </div>
 
@@ -69,10 +73,10 @@ export const UpComingList = ({ bookingInfo }) => {
                     {/* Location Details */}
                     <div className="flex flex-col">
                         <p className="text-md font-medium text-gray-700">
-                            {bookingInfo?.startLocation || "Giporlos, Eastern Samar, Eastern Visayas, 6811, Pilipinas"}
+                            {upcomingRides?.startLocation || "Giporlos, Eastern Samar, Eastern Visayas, 6811, Pilipinas"}
                         </p>
                         <p className="text-md text-gray-500">
-                            {bookingInfo?.endLocation || "Balangiga, Eastern Samar, Eastern Visayas, 6812, Pilipinas"}
+                            {upcomingRides?.endLocation || "Balangiga, Eastern Samar, Eastern Visayas, 6812, Pilipinas"}
                         </p>
                     </div>
                 </div>

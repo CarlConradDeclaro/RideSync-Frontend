@@ -8,6 +8,7 @@ export const ViewRidesContext = createContext();
 export const ViewRidesContextProvider = ({ children }) => {
 
     const mapRef = useRef(null);
+    const mapRefForRecentRides = useRef(null)
     const routingControlRef = useRef(null);
     const [isInRecentRide, setIsInRecentRides] = useState(true);
     const [isInUpComingRides, setIsInUpComingRides] = useState(false);
@@ -15,7 +16,12 @@ export const ViewRidesContextProvider = ({ children }) => {
     const [userInfo, setUserInfo] = useState();
 
     const [currentRoute, setCurrentRoute] = useState();
+    const [upcomingRides, setUpComingRides] = useState()
     const [cancelledRoutes, setCancelledRoutes] = useState();
+    const [anchorEl, setAnchorEl] = useState(null);
+    const options = ['Cancel'];
+
+
 
     useEffect(() => {
         const storedInfo = localStorage.getItem("User");
@@ -47,6 +53,20 @@ export const ViewRidesContextProvider = ({ children }) => {
     }, [userInfo]);
 
     useEffect(() => {
+        const fetchUpComingRides = async () => {
+            if (userInfo && userInfo.id) {
+                const userId = userInfo.id;
+                const upComingRideRequest = await postRequest(`${BASEURL}/getBookings`, JSON.stringify({ userId }))
+                if (upComingRideRequest && upComingRideRequest.length > 0) {
+                    setUpComingRides(upComingRideRequest)
+                }
+            }
+        }
+
+        fetchUpComingRides()
+    }, [userInfo])
+
+    useEffect(() => {
         const fetchCancelledRoutes = async () => {
             if (userInfo && userInfo.id) {
                 const userId = userInfo.id;
@@ -56,7 +76,6 @@ export const ViewRidesContextProvider = ({ children }) => {
                 }
             }
         };
-
         fetchCancelledRoutes();
     }, [userInfo]);
 
@@ -67,8 +86,9 @@ export const ViewRidesContextProvider = ({ children }) => {
         console.log("current ride from view", currentRoute);
         console.log("cancelledRoutes ride from view", cancelledRoutes);
         console.log("selectedPosition", selectedPositionDest);
+        console.log("upcomingRides", upcomingRides);
 
-    }, [userInfo, currentRoute, cancelledRoutes]);
+    }, [userInfo, currentRoute, cancelledRoutes, upcomingRides]);
 
     const handleNav = (nav) => {
         if (nav === 'recent') {
@@ -103,6 +123,7 @@ export const ViewRidesContextProvider = ({ children }) => {
         <ViewRidesContext.Provider
             value={{
                 mapRef,
+                mapRefForRecentRides,
                 routingControlRef,
                 currentRoute,
                 cancelledRoutes,
@@ -115,7 +136,11 @@ export const ViewRidesContextProvider = ({ children }) => {
                 customIcon,
                 handleNav,
                 selectedPosition,
-                selectedPositionDest
+                selectedPositionDest,
+                upcomingRides,
+                anchorEl,
+                setAnchorEl,
+                options
             }}
         >
             {children}

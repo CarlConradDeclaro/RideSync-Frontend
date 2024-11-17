@@ -76,10 +76,10 @@ const RequestRides = () => {
 
                 {/* Info Drawer */}
                 {
-                    selectedPosition && openInfoModal && (
+                    openInfoModal && (
                         <div className="fixed inset-0 flex justify-end bg-black bg-opacity-50 z-50">
                             <div
-                                className={`relative w-full md:w-[400px] h-screen bg-dRouteBG animate-slideRight transform ${openInfoModal ? 'translate-x-0' : 'translate-x-full'
+                                className={`relative w-full md:w-[500px] h-screen bg-dRouteBG animate-slideRight transform ${openInfoModal ? 'translate-x-0' : 'translate-x-full'
                                     } transition-transform duration-300 ease-in-out`}
                             >
                                 <Card className="flex flex-col h-full rounded-xl gap-4 p-4 relative">
@@ -108,8 +108,8 @@ const RequestRides = () => {
                                                         <img src={Location} className="w-[33px] h-[33px]" alt="Location Icon" />
                                                     </div>
                                                     <div className="flex flex-col justify-center">
-                                                        <h1 className="text-lg font-semibold">{requestInfo.startLocation}</h1>
-                                                        <h2 className="text-sm text-gray-600">{requestInfo.endLocation}</h2>
+                                                        <h1 className="text-lg font-semibold">{requestInfo?.startLocation}</h1>
+                                                        <h2 className="text-sm text-gray-600">{requestInfo?.endLocation}</h2>
                                                     </div>
                                                 </div>
                                                 <div className="flex items-center h-[120px] shadow-xl p-4 rounded-lg bg-white">
@@ -124,8 +124,8 @@ const RequestRides = () => {
                                                 </div>
                                                 <div className="h-[80px] shadow-xl p-4 rounded-lg bg-white flex items-center">
                                                     <h1 className="text-xl font-bold text-gray-800">
-                                                        <span className="mr-2">{requestInfo.distance}km</span>
-                                                        <span className="text-gray-600">{requestInfo.duration}mins</span>
+                                                        <span className="mr-2">{requestInfo?.distance}km</span>
+                                                        <span className="text-gray-600">{requestInfo?.duration}mins</span>
                                                     </h1>
                                                 </div>
                                                 <div className="h-[90px] shadow-xl p-4 rounded-lg bg-white flex flex-col justify-center">

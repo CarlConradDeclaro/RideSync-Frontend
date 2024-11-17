@@ -8,9 +8,8 @@ import 'leaflet-control-geocoder/dist/Control.Geocoder.css'; // Geocoder CSS
 import 'leaflet-control-geocoder';
 import DestMarker from '../../../assets/location.png'
 import Driver from '../../../assets/Driver.png'
-import Location from '../../../assets/location.png'
+import Location from '../../../assets/startLocation.png'
 import otwIcon from '../../../assets/otwIcon.png'
-
 
 const Components = ({
   selectedPositionDest,
@@ -20,7 +19,8 @@ const Components = ({
   height,
   borderRadius,
   driverCoordinates,
-  isDriverHasArrive
+  isDriverHasArrive,
+
 }) => {
   return (
     <div className='flex flex-col  w-full    '>
@@ -66,6 +66,8 @@ const Components = ({
               )
             )
           }
+
+
         </MapContainer>
       </div>
     </div>
