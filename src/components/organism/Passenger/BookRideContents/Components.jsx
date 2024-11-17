@@ -10,7 +10,8 @@ const Components = () => {
         handleChangeTrip, handleChangeRideTypes, handleChangePassenger, handleDateChange,
         handleBooking, searchInput, searchInputDest, handleSearchInput, suggestions,
         handleSearchInputDest, suggestionsDest, handleSelectSuggestion, handleSelectSuggestionDest,
-        selectedPosition, selectedPositionDest, customIcon, handleRouteDirection, handleSubmitBooking } = useContext(BookRideContext)
+        selectedPosition, selectedPositionDest, customIcon, handleRouteDirection, handleSubmitBooking,
+        fetchDrivers, listOfSuggestionDrivers, handleSelectedDriver, handleExploreDestinations, setIsBooking } = useContext(BookRideContext)
 
     return (
         <div>
@@ -24,7 +25,9 @@ const Components = () => {
                         handleSearchInputDest={handleSearchInputDest} suggestions={suggestions} suggestionsDest={suggestionsDest}
                         handleSelectSuggestion={handleSelectSuggestion} handleSelectSuggestionDest={handleSelectSuggestionDest}
                         selectedPosition={selectedPosition} selectedPositionDest={selectedPositionDest} customIcon={customIcon}
-                        handleRouteDirection={handleRouteDirection} handleSubmitBooking={handleSubmitBooking}
+                        handleRouteDirection={handleRouteDirection} handleSubmitBooking={handleSubmitBooking} fetchDrivers={fetchDrivers}
+                        listOfSuggestionDrivers={listOfSuggestionDrivers} handleSelectedDriver={handleSelectedDriver}
+                        setIsBooking={setIsBooking}
                     />
 
 
@@ -36,7 +39,7 @@ const Components = () => {
                         searchInput={searchInput} searchInputDest={searchInputDest} handleSearchInput={handleSearchInput}
                         handleSearchInputDest={handleSearchInputDest} suggestions={suggestions} suggestionsDest={suggestionsDest}
                         handleSelectSuggestion={handleSelectSuggestion} handleSelectSuggestionDest={handleSelectSuggestionDest}
-
+                        handleExploreDestinations={handleExploreDestinations}
                     />
             }
 

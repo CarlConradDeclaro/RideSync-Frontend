@@ -18,7 +18,9 @@ const Booking = ({
     handleChangeTrip, handleChangeRideTypes, handleChangePassenger,
     handleDateChange, handleBooking,
     suggestions,
-    suggestionsDest, handleSelectSuggestion, handleSelectSuggestionDest
+    suggestionsDest, handleSelectSuggestion, handleSelectSuggestionDest,
+    handleExploreDestinations,
+
 }) => {
     return (
         <div className='w-full'>
@@ -123,7 +125,7 @@ const Booking = ({
                     </div>
 
                     <div className="absolute bottom-[-20px] left-1/2 transform -translate-x-1/2">
-                        <Button name="Book Now" variant="contained" size="large" borderRadius="20px" onClick={handleBooking} />
+                        <Button name="Book Now" variant="contained" size="large" borderRadius="20px" onClick={() => handleBooking(true)} />
                     </div>
                 </Card>
             </div>
@@ -141,7 +143,7 @@ const Booking = ({
 
                     {/* Button centered over the map */}
                     <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10">
-                        <Button name="Explore destinations" variant="contained" size="small" borderRadius="20px" bgColor="white" fontColor="blue" />
+                        <Button name="Explore destinations" variant="contained" size="small" borderRadius="20px" bgColor="white" fontColor="blue" onClick={handleExploreDestinations} />
                     </div>
                 </div>
             </div>

@@ -39,7 +39,12 @@ export const FindRouteContextProvider = ({ children }) => {
   const [routeInfo, setRouteInfo] = useState();
 
   const [isDriverComming, setIsDriverComming] = useState(false)
-  const [isDriverHasArrive, setIsDriverHasArrive] = useState(false)
+  const [isDriverHasArrive, setIsDriverHasArrive] = useState(() => {
+    const storedValue = localStorage.getItem('isDriverHasArrive');
+    return storedValue === 'true';
+  });
+  const [isRidesCompleted, setIsRideCompleted] = useState(false)
+
 
 
 
@@ -227,6 +232,12 @@ export const FindRouteContextProvider = ({ children }) => {
     newSocket.on("driverHasArrived", () => {
       setIsDriverComming(false)
       setIsDriverHasArrive(true)
+      localStorage.setItem('isDriverHasArrive', true);
+    })
+
+    newSocket.on("rideIsCompleted", () => {
+      setIsRideCompleted(true)
+      localStorage.setItem('isDriverHasArrive', false);
     })
 
     return () => {
@@ -553,6 +564,7 @@ export const FindRouteContextProvider = ({ children }) => {
       setDrivers([])
       setStep3(v)
       setStep2(v)
+      localStorage.setItem('isDriverHasArrive', false);
       socket.emit("cancelledRide", userId, yourDriver),
         console.log("ABout to cancelled:", userId, "and", yourDriver);
     } catch (error) {
@@ -601,6 +613,8 @@ export const FindRouteContextProvider = ({ children }) => {
         isDriverComming,
         isDriverHasArrive,
         driverCoordinates,
+        isRidesCompleted,
+        setIsRideCompleted
       }}
     >
       {children}
