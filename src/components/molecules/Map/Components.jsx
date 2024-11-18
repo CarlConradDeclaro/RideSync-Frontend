@@ -7,7 +7,9 @@ import 'leaflet-routing-machine';
 import 'leaflet-control-geocoder/dist/Control.Geocoder.css'; // Geocoder CSS
 import 'leaflet-control-geocoder';
 import DestMarker from '../../../assets/location.png'
-
+import Driver from '../../../assets/Driver.png'
+import Location from '../../../assets/startLocation.png'
+import otwIcon from '../../../assets/otwIcon.png'
 
 const Components = ({
   selectedPositionDest,
@@ -15,7 +17,10 @@ const Components = ({
   selectedPosition,
   customIcon,
   height,
-  borderRadius
+  borderRadius,
+  driverCoordinates,
+  isDriverHasArrive,
+
 }) => {
   return (
     <div className='flex flex-col  w-full    '>
@@ -36,7 +41,7 @@ const Components = ({
           {selectedPosition && (
             <Marker
               position={[selectedPosition?.lat, selectedPosition?.lon]}
-
+              icon={isDriverHasArrive ? customIcon(otwIcon) : customIcon(Location)}
             >
               <Popup>{selectedPosition?.display_name}</Popup>
             </Marker>
@@ -49,6 +54,20 @@ const Components = ({
               <Popup>Your Location</Popup>
             </Marker>
           )}
+          {
+            driverCoordinates && (
+              !isDriverHasArrive && (
+                <Marker
+                  position={[driverCoordinates?.lat, driverCoordinates?.lon]}
+                  icon={customIcon(Driver)}
+                >
+                  <Popup>Driver Location</Popup>
+                </Marker>
+              )
+            )
+          }
+
+
         </MapContainer>
       </div>
     </div>

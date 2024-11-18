@@ -11,8 +11,6 @@ import { BASEURL, BASEURLDrivers, postRequest } from "../../../utils/Service";
 export const RequestContext = createContext();
 export const RequestContextProvider = ({ children }) => {
 
-
-
     const [driverInfo, setDriverInfo] = useState(null);
     const [socket, setSocket] = useState(null);
     const driverMap = useRef();
@@ -61,6 +59,7 @@ export const RequestContextProvider = ({ children }) => {
         }
     };
 
+
     useEffect(() => {
         fetchRequest();
     }, [driverInfo]); // Trigger fetchRequest when driverInfo changes
@@ -77,7 +76,7 @@ export const RequestContextProvider = ({ children }) => {
             const body = JSON.stringify({ routeId });
             const routeRequest = await postRequest(`${BASEURLDrivers}/getOnGoingRoute`, body);
 
-            if (routeRequest && routeRequest.length > 0) {
+            if (routeRequest && routeRequest?.length > 0) {
                 setCurrentRide(routeRequest);
                 setRequest(routeRequest)
                 // Only set selectedPosition and selectedPositionDest if the coordinates are present
@@ -156,12 +155,9 @@ export const RequestContextProvider = ({ children }) => {
         }
     };
 
-
-
     useEffect(() => {
         fetchRequestData();
     }, []);
-
 
     useEffect(() => {
         if (socket === null) return
@@ -200,6 +196,8 @@ export const RequestContextProvider = ({ children }) => {
             console.log("your passenger is", passengerId, "your id is: ");
             setPassengerApproval(true)
             getPassengerInfo(passengerId)
+            window.location.reload();
+
         })
 
 
@@ -255,7 +253,7 @@ export const RequestContextProvider = ({ children }) => {
         }
 
         let routeId
-        if (Array.isArray(request) && request.length > 0) {
+        if (Array.isArray(request) && request?.length > 0) {
             routeId = request[0].routeId
         } else if (request && request.routeId) {
             routeId = request.routeId
@@ -329,13 +327,18 @@ export const RequestContextProvider = ({ children }) => {
             duration
         });
         setOpenInfoModal(true)
+
+
     };
+
+
 
 
 
     return (
         <RequestContext.Provider
             value={{
+                socket,
                 driverInfo,
                 request,
                 driverMap,
@@ -360,7 +363,8 @@ export const RequestContextProvider = ({ children }) => {
                 isOfferingRide,
                 setIsOfferingRide,
                 setStep1,
-                currentRide
+                currentRide,
+
             }}
         >
             {children}
