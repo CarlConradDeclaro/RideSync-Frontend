@@ -1,5 +1,5 @@
 
-import { createTheme, ThemeProvider, Typography } from "@mui/material";
+import { colors, createTheme, ThemeProvider, Typography } from "@mui/material";
 
 
 const theme = createTheme({
@@ -8,6 +8,11 @@ const theme = createTheme({
             fontSize: '1.5rem',
             color: '#0F172A',
             fontWeight: 500,
+        },
+        profileTitle:{
+            fontSize: '1.5rem',
+            color: 'black',
+            fontWeight: 400,
         },
     },
 });

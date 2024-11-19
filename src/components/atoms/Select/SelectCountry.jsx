@@ -3,10 +3,11 @@ import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import { countries } from '../../../constant/Countries';
 
-export default  function CountrySelect({handleCountry}) {
+export default  function CountrySelect({handleCountry, isEdit = true}) {
     return (
       <Autocomplete
         id="country-select-demo"
+        disabled={!isEdit}
         options={countries}
         size='small'
         autoHighlight

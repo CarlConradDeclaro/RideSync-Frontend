@@ -5,12 +5,12 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 
-export default function DemoStat({demographStat,handleDemoStat}) {
+export default function DemoStat({demographStat,handleDemoStat, isEdit = true}) {
   
 
   return (
     <Box >
-      <FormControl fullWidth size='small'>
+      <FormControl fullWidth size='small' disabled={!isEdit}>
         <InputLabel id="demo-simple-select-label">Demographic Status*</InputLabel>
         <Select
           labelId="demo-simple-select-label"
