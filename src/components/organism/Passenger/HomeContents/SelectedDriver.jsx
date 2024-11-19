@@ -11,7 +11,7 @@ import { BASEURL, postRequest } from '../../../../utils/Service';
 import { Ratings } from '../../../atoms/Ratings';
 
 const SelectedDriver = () => {
-    const { handleCancelRide, userInfo, handleRouteDirection, isDriverComming, isDriverHasArrive } = useContext(FindRouteContext);
+    const { handleCancelRide, userInfo, handleRouteDirection, isDriverComming, isDriverHasArrive, handleChats } = useContext(FindRouteContext);
     const [driverId, setDriverId] = useState(null);
     const [driverInfo, setDriverInfo] = useState(null);
     const [val, setVal] = useState(3)
@@ -104,7 +104,7 @@ const SelectedDriver = () => {
                     </div>
                 </div>
                 <div className="flex justify-center gap-5">
-                    <Button name="Message" variant="contained" size="large" onClick={handleRouteDirection} />
+                    <Button name="Message" variant="contained" size="large" onClick={handleChats} />
                     {
                         !isDriverHasArrive && <Button name="Cancel" variant="contained" size="large" bgColor="red" onClick={() => handleCancelRide(false)} />
                     }

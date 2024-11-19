@@ -36,7 +36,7 @@ const RecentRides = ({
     return (
         <div className='flex flex-col gap-6 p-4 md:flex-row md:gap-8'>
             {/* Recent Rides Card    */}
-            <Card className='w-full md:w-[620px] p-4 overflow-auto h-[70vh]'>
+            <Card className='w-full md:w-[620px] p-4 overflow-auto h-[70vh] custom-scrollbar'>
                 <h2 className="text-xl font-semibold mb-4">Recent Rides:</h2>
                 {currentRoute?.slice().reverse().map((routes) => (
                     <RecentList
@@ -56,7 +56,7 @@ const RecentRides = ({
 
             {/* Profile and Ride Details Card */}
 
-            <Card className='w-full md:w-[500px] p-4 overflow-auto h-[70vh]'>
+            <Card className='w-full md:w-[500px] p-4 overflow-auto h-[70vh] custom-scrollbar'>
 
 
                 <Card className="w-full p-6 rounded-lg shadow-lg bg-gradient-to-b from-white to-gray-50 border border-gray-200">
@@ -131,7 +131,7 @@ const RecentRides = ({
                         label="Comment"
                         multiline
                         rows={4}
-                        defaultValue="Default Value"
+                        defaultValue=""
                         className="mt-4"
                     />
 

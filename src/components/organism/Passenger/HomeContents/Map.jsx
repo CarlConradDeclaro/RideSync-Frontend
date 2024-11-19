@@ -54,23 +54,24 @@ const MapView = () => {
             <div className="flex flex-col md:flex-row justify-between ">
 
                 {/* Amount Information */}
-                <div className="m-2 bg-amtBg rounded-2xl p-2">
-                    <h1 className="text-lg md:text-1xl font-bold">
+                <div className=" rounded-2xl p-2">
+                    <h1 className="text-lg  md:text-[16px] font-bold">
                         Amount: <span className="text-colorBlue">₱ {amount ? amount : '0.00'}</span>
                     </h1>
                 </div>
 
                 {/* Estimated Time and Distance */}
-                <div className="flex items-center m-2 rounded-2xl">
-                    <h1 className="p-2 text-sm md:text-[17px]">
+                <div className="flex items-center   rounded-2xl">
+                    <h1 className="p-2 text-sm md:text-[16px]">
                         (EST: {totalDuration ? totalDuration + 's' : '0 min'} )
-                        <span className="font-bold text-kmColor md:text-[20px]"> {totalDistance ? totalDistance : '0 km'}</span>
+                        <span className="font-bold text-kmColor md:text-[16px]"> {totalDistance ? totalDistance : '0 km'}</span>
                     </h1>
                 </div>
             </div>
 
             {/* Map Section with responsive height */}
-            <div className="flex justify-center pb-5">
+            <div className="flex justify-center pb-1">
+
                 <div className="w-full z-0">
                     <Map
                         mapRef={mapRef}
@@ -79,7 +80,7 @@ const MapView = () => {
                         customIcon={customIcon}
                         driverCoordinates={driverCoordinates}
                         isDriverHasArrive={isDriverHasArrive}
-                        height="65vh"
+                        height="75vh"
                     />
                 </div>
             </div>

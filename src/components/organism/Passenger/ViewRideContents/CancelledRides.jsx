@@ -9,7 +9,7 @@ const CancelledRides = ({ cancelledRoutes }) => {
             <div className='flex flex-col w-full md:flex-row md:justify-center gap-5'>
                 <Card className="h-[65vh] w-full md:w-[700px] p-5 rounded-lg shadow-md bg-white overflow-hidden">
                     <h1 className="text-lg font-semibold text-gray-700 mb-4">Cancelled Rides  </h1>
-                    <div className="overflow-y-auto max-h-[80%] space-y-3 pr-2">
+                    <div className="overflow-y-auto max-h-[80%] space-y-3 pr-2 custom-scrollbar">
                         {/* Check if there are routes */}
 
                         {cancelledRoutes?.length > 0 ? (

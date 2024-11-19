@@ -30,7 +30,7 @@ const CreateRides = () => {
 
     return (
         <div className="flex flex-col items-center justify-center  ">
-            <Card className="flex flex-col gap-5  items-center w-full md:w-[400px] h-[300px] md:h-[400px] rounded-2xl p-5">
+            <Card className="flex flex-col gap-5  items-start w-full md:w-[400px] h-[300px] md:h-[400px] rounded-2xl p-5">
 
                 <div className="flex items-center mb-5 space-x-4">
                     <h1 className="font-bold">Select a ride:</h1>

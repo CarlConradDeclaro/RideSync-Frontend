@@ -213,6 +213,13 @@ export const RequestContextProvider = ({ children }) => {
             setSelectedPositionDest(null)
 
         })
+
+
+
+        // socket.on("message", (message) => {
+        //     console.log("Receive Message", message);
+
+        // })
         // Cleanup socket listener on component unmount
         return () => {
             if (socket) {
