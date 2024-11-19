@@ -9,13 +9,13 @@ import Location from '../../../../assets/Location.png';
 export const RecentList = ({ startLocation, endLocation, status, startLatitude, startLongitude, endLatitude, endLongitude, handleRecentRideInfo, routes }) => {
 
     return (
-        <div className="p-4 mb-4 hover:shadow-xl cursor-pointer transition-shadow duration-300 bg-gradient-to-b  to-gray-50   rounded-lg shadow-md flex md:flex-nowrap items-center gap-4"
+        <div className="   p-4 mb-4 hover:shadow-xl cursor-pointer transition-shadow duration-300 bg-gradient-to-b  to-gray-50   rounded-lg shadow-md flex md:flex-nowrap items-center gap-4"
             onClick={() => handleRecentRideInfo({ lat: startLatitude, lon: startLongitude }, { lat: endLatitude, lon: endLongitude }, routes.userFn, routes.userLn, routes.userPhone, routes.userRating, startLocation, endLocation, routes.totalAmount, routes.estimatedDuration, routes.distance)}
         >
 
             <div className="flex items-start gap-4">
 
-                <div className="flex flex-col justify-center items-center space-y-2">
+                <div className="flex flex-col justify-center items-center space-y-1">
                     <img src={Circle} alt="circle" className="w-4 h-4 sm:w-6 sm:h-6 md:max-w-6 md:max-h-6 lg:w-5 lg:h-5" />
                     <img src={Dots} alt="dots" className="max-w-6 max-h-6 sm:w-7 sm:h-7 md:w-9 md:h-9 lg:w-5 lg:h-5" />
                     <img src={Location} alt="location" className="w-8 h-6 sm:w-7 sm:h-7 md:max-w-9 md:max-h-9 lg:max-w-9 lg:max-h-9" />
@@ -23,9 +23,9 @@ export const RecentList = ({ startLocation, endLocation, status, startLatitude, 
 
 
                 <div>
-                    <h2 className="font-bold text-gray-700 text-sm md:text-[15px] md:mb-3">{startLocation}</h2>
-                    <p className="text-sm text-gray-500 md:text-[18px]">{endLocation}</p>
-                    <p className="text-xs text-gray-400 md:mt-4">
+                    <h2 className="font-bold text-gray-700 text-sm md:text-[15px] md:mb-1">{startLocation}</h2>
+                    <p className="text-sm text-gray-500 md:text-[16px]">{endLocation}</p>
+                    <p className="text-xs text-gray-400 md:mt-2">
                         <span className="text-[15px]">12 October 2024, 2:30 pm / </span>
                         <span className="text-green-600 text-[15px] font-semibold">{status}</span>
                     </p>

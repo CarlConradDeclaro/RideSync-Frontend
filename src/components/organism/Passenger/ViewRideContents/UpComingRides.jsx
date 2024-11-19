@@ -21,7 +21,7 @@ const UpComingRides = ({ upcomingRides, anchorEl, setAnchorEl, options, bookingI
             <div className="flex flex-col w-full md:flex-row md:justify-center gap-5">
                 <Card className="h-[70vh] w-full md:w-[700px] p-2 md:p-5 rounded-lg shadow-md bg-white overflow-hidden">
                     <h1 className="text-lg font-semibold text-gray-700 mb-4">
-                        Upcoming Rides
+                        Booking
                     </h1>
                     <div className='h-[65vh]  overflow-y-auto custom-scrollbar'>
                         {

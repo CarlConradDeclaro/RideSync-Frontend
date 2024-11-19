@@ -363,7 +363,7 @@ const PassengerApproval = ({ }) => {
                 </div>
             </Card>
             <div className='h-[500px] '>
-                <Card className="flex flex-col p-8 rounded-2xl  shadow-md bg-gradient-to-br from-gray-50 to-gray-100 w-full max-w-md mx-auto">
+                <Card className="flex flex-col p-8 rounded-2xl  shadow-md   bg-gradient-to-b from-white to-gray-50 border border-gray-200  w-full max-w-md mx-auto">
 
                     <div className="flex items-center gap-6 mb-4">
                         {
@@ -393,7 +393,7 @@ const PassengerApproval = ({ }) => {
                     <hr className="border-gray-200 mb-4" />
 
                     {/* Passenger Details */}
-                    <div className="space-y-4 mb-6">
+                    <div className="space-y-4 mb-6 ">
                         {passengerApproval ? (
                             <>
                                 <div className="flex justify-between items-center text-gray-700">

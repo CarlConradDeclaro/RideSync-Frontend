@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useRef } from 'react'
 import DefaultProfile from '../../../../assets/DefaultProfile.png'
 import { MessageContext } from '../../../../context/DriverContext/Message/MessageContext';
 import { FiPhone, FiVideo } from "react-icons/fi";
-
+import { Card } from '../../../molecules/Card'
 const Components = () => {
     const { userInfo, chats, sendMessage,
         setMessage, openChat, chatId, driverId,
@@ -21,7 +21,7 @@ const Components = () => {
     }, [conversation]);
 
     return (
-        <div className="flex flex-wrap w-full h-[87vh] p-5 bg-gray-100">
+        <Card className="flex flex-wrap w-full h-[87vh] p-5 ">
             {/* Left Section - Chat List */}
             <div className="w-full lg:w-1/4 p-4 bg-white shadow-lg rounded-lg mb-4 lg:mb-0 h-full">
                 <h2 className="text-2xl font-bold text-gray-800 mb-6">Chats</h2>
@@ -88,7 +88,7 @@ const Components = () => {
                         </div>
 
                         {/* Conversation */}
-                        <div className="flex-grow overflow-y-auto p-6 space-y-4">
+                        <div className="flex-grow overflow-y-auto p-6 space-y-4 custom-scrollbar">
                             {conversation && conversation.length > 0 ? (
                                 conversation.map((message, index) =>
                                     message.sender_Id === userInfo?.id ? (
@@ -150,7 +150,7 @@ const Components = () => {
                     </div>
                 )}
             </div>
-        </div>
+        </Card>
 
     )
 }
