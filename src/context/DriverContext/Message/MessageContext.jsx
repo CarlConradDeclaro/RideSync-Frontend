@@ -66,7 +66,7 @@ export const MessageContextProvider = ({ children }) => {
 
     const openChat = async (chatId, user2_Id, userFn, userLn) => {
         setChatId(chatId)
-        setOpenChatContainer((prev) => !prev)
+        setOpenChatContainer(true)
         console.log("chatId:", chatId);
         fetchMessage(chatId)
         setDriverId(user2_Id)
