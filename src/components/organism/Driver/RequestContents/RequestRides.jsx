@@ -38,12 +38,12 @@ const RequestRides = () => {
 
     return (
         <div className="m-5">
-            <div className="text-2xl font-semibold mb-3">Request:</div>
+
             <div className="md:flex gap-5 md:justify-center grid grid-cols-1">
                 {/* Left Card */}
                 <div className="w-full md:max-w-[370px] h-[400px]">
                     <Card className="h-full rounded-2xl shadow-lg overflow-y-auto p-5 bg-white">
-                        <h1 className="text-xl font-semibold mb-3">Nearby Requests</h1>
+                        <h1 className="text-xl font-semibold mb-3">Requests Rides</h1>
                         <div className="flex flex-col space-y-4">
                             {request.map((req, index) => (
                                 <RouteList
@@ -65,11 +65,11 @@ const RequestRides = () => {
                 </div>
 
                 {/* Map Card */}
-                <div className="w-full md:max-w-[800px] h-[600px] z-0">
+                <div className="w-full  z-0">
                     <Card className="h-full rounded-2xl shadow-lg overflow-hidden">
-                        <h1 className="pt-5 pl-5 text-xl font-semibold text-gray-800">Route:</h1>
+                        <h1 className="pl-1 text-xl font-semibold text-gray-800">Route:</h1>
                         <div className="h-full">
-                            <Map mapRef={driverMap} height="500px" selectedPosition={selectedPosition} selectedPositionDest={selectedPositionDest} customIcon={customIcon} />
+                            <Map mapRef={driverMap} height="80vh" selectedPosition={selectedPosition} selectedPositionDest={selectedPositionDest} customIcon={customIcon} />
                         </div>
                     </Card>
                 </div>

@@ -6,14 +6,20 @@ import UpComingRides from './UpComingRides';
 import CancelledRides from './CancelledRides';
 
 const Components = () => {
-  const { currentRoute,
+  const {
+    mapRef,
+    currentRoute,
     cancelledRoutes,
     isInUpComingRides,
     isInInCancelledRides,
     upcomingRides,
     anchorEl,
     setAnchorEl,
-    options
+    options,
+    handleBookingRide,
+    upComingRidesInfo,
+    customIcon, pickUp, destination
+
   } = useContext(ViewRidesContext)
 
 
@@ -21,11 +27,14 @@ const Components = () => {
     <div className="flex flex-col items-center pl-5 pr-5 w-full">
       <Navbar />
       {isInUpComingRides ? (
-        <UpComingRides upcomingRides={upcomingRides} anchorEl={anchorEl} setAnchorEl={setAnchorEl} options={options} />
+        <UpComingRides upcomingRides={upcomingRides} anchorEl={anchorEl} setAnchorEl={setAnchorEl}
+          options={options} handleBookingRide={handleBookingRide} upComingRidesInfo={upComingRidesInfo}
+          customIcon={customIcon} pickUp={pickUp} destination={destination} mapRef={mapRef}
+        />
       ) : isInInCancelledRides ? (
         <CancelledRides cancelledRoutes={cancelledRoutes} />
       ) : (
-        <RecentRides currentRoute={currentRoute} />
+        <RecentRides currentRoute={currentRoute} mapRef={mapRef} />
       )}
 
 

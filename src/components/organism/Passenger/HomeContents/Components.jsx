@@ -57,7 +57,7 @@ const Components = () => {
 
   return (
     <div className="p-5  ">
-      <h1 className="text-xl font-bold mb-5">Main Content</h1>
+
       <div className="grid grid-cols-1 md:grid-cols-[1fr_2fr] gap-5">
 
         {
