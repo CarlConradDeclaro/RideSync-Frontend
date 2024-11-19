@@ -76,7 +76,7 @@ const SelectedDriver = () => {
 
                 </span>
 
-                <div className="w-full flex flex-col sm:flex-row justify-around gap-4 bg-amtBg p-5 rounded-lg">
+                <div className="w-full flex flex-col sm:flex-row justify-around gap-4  bg-gradient-to-b from-white to-gray-50 border border-gray-200 p-5 rounded-lg">
                     <div className="flex justify-center items-center">
                         <img src={DefaultProfile} className="max-w-[80px] max-h-[80px] rounded-full border-2 border-gray-300" alt="Driver Profile" />
                     </div>

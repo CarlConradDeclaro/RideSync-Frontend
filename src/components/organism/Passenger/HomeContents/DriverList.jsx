@@ -84,7 +84,7 @@ const DriverCard = ({ driverId, handelSelectDriver }) => {
                     <div className="flex-1">
                         <h2 className="text-lg font-medium text-gray-800">{driverData.userFn || "Unknown Driver"}</h2>
                         <p className="text-sm text-gray-600">License Plate No: <span className="font-bold text-gray-800">{driverData.licensePlate || "N/A"}</span></p>
-                        <Ratings ratings={driverData.userRating} />
+                        <Ratings value={driverData.userRating} />
                     </div>
                 </div>
                 <Button
@@ -108,38 +108,62 @@ const DriverModal = ({ driver, isOpen, onClose }) => {
     if (!isOpen) return null;
 
     return (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-80 z-10">
-            <div className="bg-white rounded-2xl shadow-xl max-w-md w-full m-5 overflow-hidden">
-                <img
-                    src={driver.profileImage || DefaultProfile}
-                    className='w-full h-56 object-cover'
-                    alt="Driver Profile"
-                />
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-70 z-10">
+            <div className="bg-white rounded-lg shadow-2xl w-full max-w-md mx-4">
+                {/* Modal Header */}
+                <div className="bg-gradient-to-r from-blue-500 to-blue-600 text-white p-6 rounded-t-lg flex items-center justify-between">
+                    <h2 className="text-xl font-bold">Driver Details</h2>
+                    <button
+                        onClick={onClose}
+                        className="text-white hover:bg-blue-700 p-1 rounded transition"
+                    >
+                        ✕
+                    </button>
+                </div>
+
+                {/* Modal Body */}
                 <div className="p-6">
-                    <h2 className="text-2xl font-bold text-gray-800 mb-3 text-center">Driver Details</h2>
-                    <div className="border-b border-gray-300 pb-4 mb-4">
-                        <p className="text-lg font-medium text-gray-700"><strong>First Name:</strong> {driver.userFn}</p>
-                        <p className="text-lg font-medium text-gray-700"><strong>Last Name:</strong> {driver.userLn}</p>
-                        <p className="text-lg font-medium text-gray-700"><strong>Email:</strong> {driver.userEmail}</p>
-                        <p className="text-lg font-medium text-gray-700"><strong>Phone:</strong> {driver.userPhone}</p>
-                        <div className="flex items-center mb-2">
-                            <strong className="mr-2">Rating:</strong>
-                            <Ratings ratings={driver.userRating} />
-                        </div>
-                        <p className="text-lg font-medium text-gray-700"><strong>Country:</strong> {driver.country}</p>
-                    </div>
-                    <div className="flex justify-center">
-                        <Button
-                            name="Close"
-                            variant="contained"
-                            size="large"
-                            onClick={onClose}
-                            className="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white rounded-lg shadow-md transition duration-300 transform hover:scale-105"
+                    {/* Driver Info Section */}
+                    <div className="flex items-center mb-6">
+                        <img
+                            src={driver.profileImage || DefaultProfile}
+                            alt="Driver Profile"
+                            className="w-24 h-24 rounded-full border-4 border-blue-500 shadow-lg"
                         />
+                        <div className="ml-4">
+                            <p className="text-lg font-semibold text-gray-800">{driver.userFn} {driver.userLn}</p>
+                            <p className="text-sm text-gray-600">{driver.userEmail}</p>
+                            <p className="text-sm text-gray-600">{driver.userPhone}</p>
+                        </div>
                     </div>
+
+                    {/* Additional Details */}
+                    <div className="space-y-4">
+                        <div className="flex justify-between items-center">
+                            <span className="text-gray-500 font-medium">Plate Number:</span>
+                            <span className="text-gray-800">N/A</span>
+                        </div>
+                        <div className="flex justify-between items-center">
+                            <span className="text-gray-500 font-medium">Rating:</span>
+                            <span className="flex items-center text-yellow-500">
+                                <Ratings value={driver.userRating} /> {driver?.userRating ? driver.userRating : 5}/5
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Modal Footer */}
+                <div className="p-4 bg-gray-100 rounded-b-lg flex justify-center">
+                    <button
+                        onClick={onClose}
+                        className="px-6 py-2 bg-red-500 text-white font-semibold rounded-lg shadow hover:bg-red-600 transition"
+                    >
+                        Close
+                    </button>
                 </div>
             </div>
         </div>
+
     );
 };
 

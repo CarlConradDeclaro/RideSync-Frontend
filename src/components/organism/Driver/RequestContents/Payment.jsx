@@ -49,16 +49,16 @@ const Payment = ({ setPaymentModal, handlePayment }) => {
                     <h3 className="text-lg font-semibold text-gray-700 mb-3">Payment Summary</h3>
                     <ul className="text-sm text-gray-700 space-y-3">
                         <li className="flex justify-between">
-                            <span className="font-medium">Base Fare:</span> <span>$10.00</span>
+                            <span className="font-medium">Base Fare:</span> <span>₱10.00</span>
                         </li>
                         <li className="flex justify-between">
-                            <span className="font-medium">Distance Fare:</span> <span>$8.50</span>
+                            <span className="font-medium">Distance Fare:</span> <span>₱8.50</span>
                         </li>
                         <li className="flex justify-between">
-                            <span className="font-medium">Service Fee:</span> <span>$1.50</span>
+                            <span className="font-medium">Service Fee:</span> <span>₱1.50</span>
                         </li>
                         <li className="flex justify-between text-lg font-bold text-gray-900">
-                            <span>Total:</span> <span className="text-green-500">$20.00</span>
+                            <span>Total:</span> <span className="text-green-500">₱20.00</span>
                         </li>
                     </ul>
                 </div>

@@ -97,45 +97,55 @@ const RequestRides = () => {
                                     {
                                         !isOfferingRide ?
 
-                                            <div className='flex flex-col gap-5'>
-                                                <div className="flex justify-start p-3 mt-[30px]">
-                                                    <h1 className="text-lg font-semibold">Price: $ {requestInfo.price}</h1>
+                                            <div className="flex flex-col gap-6 bg-gradient-to-b from-white to-gray-50 border border-gray-200 p-4 rounded-lg shadow-lg">
+                                                {/* Price Section */}
+                                                <div className="flex justify-between items-center bg-white p-4 rounded-lg shadow">
+                                                    <h1 className="text-xl font-semibold text-gray-800">Price</h1>
+                                                    <span className="text-xl font-bold text-green-600">₱ {requestInfo.price}</span>
                                                 </div>
-                                                <div className="flex items-center h-[110px] shadow-xl p-4 rounded-lg bg-white">
-                                                    <div className="flex flex-col justify-center items-center mr-4">
-                                                        <img src={Circle} className="w-[20px] h-[20px] mb-1" alt="Circle Icon" />
-                                                        <img src={Dots} className="w-[24px] h-[24px] mb-1" alt="Dots Icon" />
-                                                        <img src={Location} className="w-[33px] h-[33px]" alt="Location Icon" />
-                                                    </div>
-                                                    <div className="flex flex-col justify-center">
-                                                        <h1 className="text-lg font-semibold">{requestInfo?.startLocation}</h1>
-                                                        <h2 className="text-sm text-gray-600">{requestInfo?.endLocation}</h2>
-                                                    </div>
-                                                </div>
-                                                <div className="flex items-center h-[120px] shadow-xl p-4 rounded-lg bg-white">
-                                                    <div className="mr-4">
-                                                        <img src={DefaultProfile} alt="Default profile" className="w-[50px] h-[50px] rounded-full border-2 border-gray-300" />
+
+                                                {/* Start and End Location Section */}
+                                                <div className="flex items-center p-4 shadow rounded-lg bg-gradient-to-b from-white to-gray-50 border border-gray-200">
+                                                    <div className="flex flex-col items-center mr-4">
+                                                        <img src={Circle} className="w-5 h-5 mb-2" alt="Circle Icon" />
+                                                        <img src={Dots} className="w-4 h-4 mb-2" alt="Dots Icon" />
+                                                        <img src={Location} className="max-w-8 h-8" alt="Location Icon" />
                                                     </div>
                                                     <div className="flex flex-col">
-                                                        <h1 className="text-lg font-semibold">Passenger Name id</h1>
-                                                        <h2 className="text-sm text-gray-600">Contact Number</h2>
+                                                        <h1 className="text-[15px] font-semibold text-gray-800">{requestInfo?.startLocation}</h1>
+                                                        <h2 className="text-[17px] text-gray-500">{requestInfo?.endLocation}</h2>
+                                                    </div>
+                                                </div>
+
+                                                {/* Passenger Information Section */}
+                                                <div className="flex items-center p-4 shadow rounded-lg bg-gradient-to-b from-white to-gray-50 border border-gray-200">
+                                                    <img
+                                                        src={DefaultProfile}
+                                                        alt="Default Profile"
+                                                        className="w-12 h-12 rounded-full border-2 border-gray-300 mr-4"
+                                                    />
+                                                    <div>
+                                                        <h1 className="text-lg font-semibold text-gray-800">Passenger Name</h1>
+                                                        <h2 className="text-sm text-gray-500">Contact Number</h2>
                                                         <h3 className="text-sm text-yellow-500">Rating: ★★★★☆</h3>
                                                     </div>
                                                 </div>
-                                                <div className="h-[80px] shadow-xl p-4 rounded-lg bg-white flex items-center">
-                                                    <h1 className="text-xl font-bold text-gray-800">
-                                                        <span className="mr-2">{requestInfo?.distance}km</span>
-                                                        <span className="text-gray-600">{requestInfo?.duration}mins</span>
-                                                    </h1>
-                                                </div>
-                                                <div className="h-[90px] shadow-xl p-4 rounded-lg bg-white flex flex-col justify-center">
-                                                    <h1 className="text-lg font-semibold text-gray-800">
-                                                        Payment Method: <span className="font-bold text-blue-600">NULL</span>
-                                                    </h1>
-                                                    <span className="text-gray-600">Not specified</span>
+
+                                                {/* Distance and Duration Section */}
+                                                <div className="flex justify-between items-center p-4 shadow rounded-lg bg-gradient-to-b from-white to-gray-50 border border-gray-200">
+                                                    <h1 className="text-lg font-semibold text-gray-800">Distance</h1>
+                                                    <span className="text-xl font-bold text-gray-800">
+                                                        {requestInfo?.distance} km <span className="text-sm text-gray-500">({requestInfo?.duration} mins)</span>
+                                                    </span>
                                                 </div>
 
+                                                {/* Payment Method Section */}
+                                                <div className="p-4 shadow rounded-lg bg-gradient-to-b from-white to-gray-50 border border-gray-200">
+                                                    <h1 className="text-lg font-semibold text-gray-800 mb-2">Payment Method</h1>
+                                                    <span className="text-base font-bold text-blue-600">{requestInfo?.paymentMethod || 'CASH'}</span>
+                                                </div>
                                             </div>
+
                                             :
                                             <div className="flex justify-center items-center w-full h-screen bg-gray-100 p-4">
                                                 <div className="bg-white rounded-xl shadow-xl p-6 w-full max-w-md flex flex-col justify-center items-center">
@@ -146,23 +156,23 @@ const RequestRides = () => {
                                                     <div className="flex justify-center items-center gap-3 mb-6">
                                                         <div className="animate-spin rounded-full border-t-4 border-blue-500 w-[40px] h-[40px]"></div>
                                                         <span className="text-gray-600 text-lg font-medium">Waiting...</span>
-                                                        <span>status {passengerApproval ? "approved" : "not yet"}</span>
+                                                        <span>{passengerApproval && passengerApproval}</span>
                                                     </div>
 
                                                     {/* Ride Information */}
                                                     <div className="flex flex-col w-full bg-gray-50 p-4 rounded-lg mb-4 shadow-md">
                                                         <h3 className="text-md font-semibold text-gray-800">Ride Offer Details:</h3>
-                                                        <div className="flex justify-between items-center mt-2">
+                                                        <div className="flex flex-col  items-start mt-2">
                                                             <span className="text-sm text-gray-600">Start Location:</span>
-                                                            <span className="text-sm text-gray-700 font-medium">Downtown</span>
+                                                            <span className="text-sm text-gray-700 font-medium">{requestInfo?.startLocation}</span>
                                                         </div>
-                                                        <div className="flex justify-between items-center mt-2">
+                                                        <div className="flex flex-col items-start mt-2">
                                                             <span className="text-sm text-gray-600">End Location:</span>
-                                                            <span className="text-sm text-gray-700 font-medium">Airport</span>
+                                                            <span className="text-sm text-gray-700 font-medium">{requestInfo?.endLocation}</span>
                                                         </div>
                                                         <div className="flex justify-between items-center mt-2">
                                                             <span className="text-sm text-gray-600">Estimated Price:</span>
-                                                            <span className="text-sm text-gray-700 font-medium">$25.00</span>
+                                                            <span className="text-sm text-gray-700 font-medium">₱{requestInfo.price}</span>
                                                         </div>
                                                     </div>
 

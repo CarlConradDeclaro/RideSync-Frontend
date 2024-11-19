@@ -7,12 +7,12 @@ const RouteList = ({ userId, routeName, location, price, distance, duration, sta
     const { handleRouteDirection, handleRequestInfo } = useContext(RequestContext)
 
     return (
-        <div className='w-full rounded-xl bg-dRequest cursor-pointer transition-shadow duration-300 ease-in-out hover:shadow-lg'>
+        <div className='w-full rounded-xl bg-gradient-to-b from-white to-gray-50 border border-gray-200 cursor-pointer transition-shadow duration-300 ease-in-out hover:shadow-lg'>
             <div className='flex items-center justify-between p-4'>
                 <div className='flex-1'>
                     <h3 className='text-sm font-semibold text-gray-800'>{routeName}</h3>
                     <p className='text-sm text-gray-600'>{location}</p>
-                    <p className='text-lg font-bold text-green-600'>Price: ${price}</p>
+                    <p className='text-lg font-bold text-green-600'>Price: ₱{price}</p>
                 </div>
                 <div className='flex items-center'>
                     <span

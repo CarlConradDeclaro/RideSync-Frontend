@@ -16,7 +16,7 @@ const Booking = ({ mapRefBooking, pickUp, destination, bookings, handleBookingRi
     return (
         <div className='flex flex-col gap-5 p-4 h-[75vh] md:flex md:flex-row'>
             <Card className='w-full   md:w-[630px] p-4  overflow-y-auto custom-scrollbar '>
-                <h2 className='text-xl font-semibold mb-4'>Your Booking:</h2>
+                <h2 className='text-xl font-semibold mb-4'>Upcoming Rides:</h2>
                 {
                     bookings?.slice().reverse().map((bookings, index) =>
                         <BookingList

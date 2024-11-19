@@ -29,19 +29,19 @@ const Components = () => {
                 {/* Cards for ride options */}
                 <div className="flex flex-wrap gap-4 w-full justify-center md:justify-start">
 
-                    <div className="flex justify-center items-center rounded-lg cursor-pointer p-3 h-[35px] bg-gray-100 hover:bg-gray-200 transition duration-200 ease-in-out shadow-md w-full sm:w-auto"
+                    <div className="flex justify-center items-center rounded-lg cursor-pointer p-3 h-[35px] bg-gradient-to-b from-white   border-gray-200    hover:bg-gray-200 transition duration-200 ease-in-out shadow-md w-full sm:w-auto"
                         onClick={onRecentRideClick}
                     >
                         <h1 className="text-xs md:text-sm font-medium text-gray-700"
                         >Recent Rides</h1>
                     </div>
-                    <div className="flex justify-center items-center rounded-lg cursor-pointer p-3 h-[35px] bg-gray-100 hover:bg-gray-200 transition duration-200 ease-in-out shadow-md w-full sm:w-auto"
+                    <div className="flex justify-center items-center rounded-lg cursor-pointer p-3 h-[35px] bg-gradient-to-b from-white   border-gray-200 hover:bg-gray-200 transition duration-200 ease-in-out shadow-md w-full sm:w-auto"
                         onClick={onUpcomingRideClick}
                     >
                         <h1 className="text-xs md:text-sm font-medium text-gray-700"
-                        >Booking</h1>
+                        >Upcoming Rides</h1>
                     </div>
-                    <div className="flex justify-center items-center rounded-lg cursor-pointer p-3 h-[35px] bg-gray-100 hover:bg-gray-200 transition duration-200 ease-in-out shadow-md w-full sm:w-auto"
+                    <div className="flex justify-center items-center rounded-lg cursor-pointer p-3 h-[35px] bg-gradient-to-b from-white   border-gray-200 hover:bg-gray-200 transition duration-200 ease-in-out shadow-md w-full sm:w-auto"
                         onClick={onCancelledRideClick}
                     >
                         <h1 className="text-xs md:text-sm font-medium text-gray-700">Cancelled Rides</h1>
