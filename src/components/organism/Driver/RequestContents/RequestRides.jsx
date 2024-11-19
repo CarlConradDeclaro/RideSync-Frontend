@@ -38,12 +38,12 @@ const RequestRides = () => {
 
     return (
         <div className="m-5">
-            <div className="text-2xl font-semibold mb-3">Request:</div>
+
             <div className="md:flex gap-5 md:justify-center grid grid-cols-1">
                 {/* Left Card */}
                 <div className="w-full md:max-w-[370px] h-[400px]">
                     <Card className="h-full rounded-2xl shadow-lg overflow-y-auto p-5 bg-white">
-                        <h1 className="text-xl font-semibold mb-3">Nearby Requests</h1>
+                        <h1 className="text-xl font-semibold mb-3">Requests Rides</h1>
                         <div className="flex flex-col space-y-4">
                             {request.map((req, index) => (
                                 <RouteList
@@ -65,21 +65,21 @@ const RequestRides = () => {
                 </div>
 
                 {/* Map Card */}
-                <div className="w-full md:max-w-[800px] h-[600px] z-0">
+                <div className="w-full  z-0">
                     <Card className="h-full rounded-2xl shadow-lg overflow-hidden">
-                        <h1 className="pt-5 pl-5 text-xl font-semibold text-gray-800">Route:</h1>
+                        <h1 className="pl-1 text-xl font-semibold text-gray-800">Route:</h1>
                         <div className="h-full">
-                            <Map mapRef={driverMap} height="500px" selectedPosition={selectedPosition} selectedPositionDest={selectedPositionDest} customIcon={customIcon} />
+                            <Map mapRef={driverMap} height="80vh" selectedPosition={selectedPosition} selectedPositionDest={selectedPositionDest} customIcon={customIcon} />
                         </div>
                     </Card>
                 </div>
 
                 {/* Info Drawer */}
                 {
-                    selectedPosition && openInfoModal && (
+                    openInfoModal && (
                         <div className="fixed inset-0 flex justify-end bg-black bg-opacity-50 z-50">
                             <div
-                                className={`relative w-full md:w-[400px] h-screen bg-dRouteBG animate-slideRight transform ${openInfoModal ? 'translate-x-0' : 'translate-x-full'
+                                className={`relative w-full md:w-[500px] h-screen bg-dRouteBG animate-slideRight transform ${openInfoModal ? 'translate-x-0' : 'translate-x-full'
                                     } transition-transform duration-300 ease-in-out`}
                             >
                                 <Card className="flex flex-col h-full rounded-xl gap-4 p-4 relative">
@@ -108,8 +108,8 @@ const RequestRides = () => {
                                                         <img src={Location} className="w-[33px] h-[33px]" alt="Location Icon" />
                                                     </div>
                                                     <div className="flex flex-col justify-center">
-                                                        <h1 className="text-lg font-semibold">{requestInfo.startLocation}</h1>
-                                                        <h2 className="text-sm text-gray-600">{requestInfo.endLocation}</h2>
+                                                        <h1 className="text-lg font-semibold">{requestInfo?.startLocation}</h1>
+                                                        <h2 className="text-sm text-gray-600">{requestInfo?.endLocation}</h2>
                                                     </div>
                                                 </div>
                                                 <div className="flex items-center h-[120px] shadow-xl p-4 rounded-lg bg-white">
@@ -124,8 +124,8 @@ const RequestRides = () => {
                                                 </div>
                                                 <div className="h-[80px] shadow-xl p-4 rounded-lg bg-white flex items-center">
                                                     <h1 className="text-xl font-bold text-gray-800">
-                                                        <span className="mr-2">{requestInfo.distance}km</span>
-                                                        <span className="text-gray-600">{requestInfo.duration}mins</span>
+                                                        <span className="mr-2">{requestInfo?.distance}km</span>
+                                                        <span className="text-gray-600">{requestInfo?.duration}mins</span>
                                                     </h1>
                                                 </div>
                                                 <div className="h-[90px] shadow-xl p-4 rounded-lg bg-white flex flex-col justify-center">

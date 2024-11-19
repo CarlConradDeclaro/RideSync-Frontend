@@ -66,9 +66,8 @@ const Components = ({ active }) => {
                     </div>
 
                     {[{ name: 'Request', icon: RequestRide, key: 'request', route: '/driver/requestContents' },
-                    { name: 'Booking', icon: ViewRides, key: 'booking', route: '' },
-                    { name: 'View Rides', icon: BookRide, key: 'viewrides', route: '' },
-                    { name: 'Message', icon: Message, key: 'message', route: '' },
+                    { name: 'View Rides', icon: BookRide, key: 'viewrides', route: '/driver/viewRidesContents' },
+                    { name: 'Message', icon: Message, key: 'message', route: '/driver/messageContents' },
                     { name: 'Profile', icon: Profile, key: 'profile', route: '' }
                     ].map(({ name, icon, key, route }) => (
                         <div

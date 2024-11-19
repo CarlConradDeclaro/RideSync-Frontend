@@ -5,7 +5,7 @@ import { RequestContext } from '../../../../context/DriverContext/Request/Reques
 import { BASEURL, BASEURLDrivers, postRequest } from '../../../../utils/Service'
 
 const Components = () => {
-    const { driverInfo, step1, step2, setStep1, request } = useContext(RequestContext);
+    const { setIsOfferingRide, setOpenInfoModal, driverInfo, step1, step2, setStep1, request } = useContext(RequestContext);
     const [ride, setRide] = useState(null);
 
     const fetchRequest = async () => {
@@ -16,13 +16,23 @@ const Components = () => {
                 const driverId = driverInfo.id;
                 const body = JSON.stringify({ driverId: Number(driverId), status: 'onGoing' });
                 const routeRequest = await postRequest(`${BASEURLDrivers}/getRides`, body);
+                const isDriverOfferingARide = await postRequest(`${BASEURLDrivers}/fetchIfDriverOfferingRide`, JSON.stringify({ driverId }))
+                console.log(isDriverOfferingARide);
                 // Set the fetched data to state
-                if (routeRequest && routeRequest[0].length > 0) {
+                if (routeRequest && routeRequest[0]?.length > 0) {
                     setStep1(true)
                     setRide(routeRequest);
                     console.log("THERE IS VALUE");
+                }
+
+                if (isDriverOfferingARide && isDriverOfferingARide.length > 0) {
+                    setIsOfferingRide(true)
+                    setOpenInfoModal(true)
+                    // console.log("opening modal ");
 
                 }
+
+
                 console.log("Fetched Ride Info:", routeRequest);
             } catch (error) {
                 console.error("Error fetching ride info:", error);

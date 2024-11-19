@@ -1,12 +1,19 @@
 import Circle from '../../../../assets/Circle.png';
 import Dots from '../../../../assets/Dots.png';
 import Location from '../../../../assets/Location.png';
+import { LongMenu } from '../../../atoms/LongMenu';
 import { Card } from '../../../molecules/Card';
 
-export const RecentList = ({ startLocation, endLocation, status }) => {
+export const RecentList = ({ startLocation, endLocation, status, recentRides, handleRecentRide }) => {
 
     return (
-        <div className="p-4  bg-gray-50 rounded-lg shadow-md flex  md:flex-nowrap items-center justify-between gap-4">
+        <div className="p-2 from-white to-gray-50  rounded-lg shadow-md flex  md:flex-nowrap items-center justify-between gap-4 cursor-pointer md:mr-4"
+            onClick={() => handleRecentRide(recentRides.startLocation, recentRides.endLocation, recentRides.totalAmount, recentRides.estimatedDuration,
+                recentRides.distance, { lat: recentRides.startLatitude, lon: recentRides.startLongitude }, {
+                lat: recentRides.endLatitude,
+                lon: recentRides.endLongitude
+            }, recentRides.userFn, recentRides.userLn, recentRides.userRating, recentRides.status)}
+        >
             {/* Left Section: Icons and Text */}
             <div className="flex items-start gap-4">
                 {/* Icon Column */}
@@ -17,9 +24,9 @@ export const RecentList = ({ startLocation, endLocation, status }) => {
                 </div>
                 {/* Text Column */}
                 <div >
-                    <h2 className="font-bold text-gray-700 text-sm md:text-[20px] md:mb-3">{startLocation}</h2>
-                    <p className="text-sm text-gray-500 md:text-[18px]">{endLocation}</p>
-                    <p className="text-xs text-gray-400 md:mt-4">
+                    <h2 className="font-bold text-gray-700 text-sm md:text-[15px] md:mb-1">{startLocation}</h2>
+                    <p className="text-sm text-gray-500 md:text-[14px]">{endLocation}</p>
+                    <p className="text-xs text-gray-400 md:mt-1">
                         <span className='text-[15px]'> 12 October 2024, 2:30 pm / </span><span className="text-green-600 text-[15px] font-semibold">{status}</span>
                     </p>
                 </div>
@@ -36,23 +43,30 @@ export const RecentList = ({ startLocation, endLocation, status }) => {
 
 
 
-export const UpComingList = ({ bookingInfo }) => {
+export const UpComingList = ({ anchorEl, setAnchorEl, options, upcomingRides, handleBookingRide }) => {
     return (
-        <Card className="bg-gray-50 h-auto w-full md:w-[700px] p-2 mb-2 rounded-lg hover:shadow-xl cursor-pointer transition-shadow duration-300">
-            <div className="flex flex-col h-full text-gray-800">
+        <Card className="from-white to-gray-50  h-auto w-full md:w-[650px] p-2 mb-2 rounded-lg hover:shadow-xl cursor-pointer transition-shadow duration-300">
+            <div className="flex flex-col h-full text-gray-800"
+                onClick={() => handleBookingRide({ lat: upcomingRides.startLatitude, lon: upcomingRides.startLongitude }, { lat: upcomingRides.endLatitude, lon: upcomingRides.endLongitude },
+                    upcomingRides.startLocation, upcomingRides.endLocation, upcomingRides.estimatedDuration, upcomingRides.distance, upcomingRides.totalAmount,
+                    upcomingRides.travelDate, upcomingRides.userFn, upcomingRides.userLn, upcomingRides.userEmail, upcomingRides.userPhone, upcomingRides.userRating)}
+            >
 
                 {/* Trip Date and Amount */}
-                <div className="flex justify-between items-center mb-3">
+                <div className="flex justify-between items-center ">
                     <div className="text-sm font-semibold text-gray-600">
                         <span className="text-gray-400 mr-[8px]">Trip Date:</span>
                         <span className="text-red-500 text-[16px]">
-                            {bookingInfo?.travelDate
-                                ? new Date(bookingInfo.travelDate).toLocaleString()
-                                : "2024-11-20 10:00 AM"}
+                            {upcomingRides ?
+                                new Date(upcomingRides.travelDate).toLocaleString("en-US", { timeZone: "Asia/Manila" })
+                                :
+                                'none'
+                            }
                         </span>
                     </div>
-                    <div className="text-lg font-bold text-green-600">
-                        {bookingInfo?.totalAmount || "25.00"}
+                    <div className="flex text-lg items-center font-bold text-green-600 gap-3">
+                        ₱{upcomingRides?.totalAmount || "25.00"}
+                        <LongMenu anchorEl={anchorEl} setAnchorEl={setAnchorEl} options={options} />
                     </div>
                 </div>
 
@@ -62,17 +76,17 @@ export const UpComingList = ({ bookingInfo }) => {
                     {/* Icons */}
                     <div className="flex flex-col items-center space-y-1">
                         <img src={Circle} alt="start" className="w-[16px] h-[16px]" />
-                        <img src={Dots} alt="dots" className="w-[18px] h-[18px]" />
+                        <img src={Dots} alt="dots" className="max-w-[18px] h-[18px]" />
                         <img src={Location} alt="end" className="w-[18px] h-[18px]" />
                     </div>
 
                     {/* Location Details */}
                     <div className="flex flex-col">
                         <p className="text-md font-medium text-gray-700">
-                            {bookingInfo?.startLocation || "Giporlos, Eastern Samar, Eastern Visayas, 6811, Pilipinas"}
+                            {upcomingRides?.startLocation || "Giporlos, Eastern Samar, Eastern Visayas, 6811, Pilipinas"}
                         </p>
                         <p className="text-md text-gray-500">
-                            {bookingInfo?.endLocation || "Balangiga, Eastern Samar, Eastern Visayas, 6812, Pilipinas"}
+                            {upcomingRides?.endLocation || "Balangiga, Eastern Samar, Eastern Visayas, 6812, Pilipinas"}
                         </p>
                     </div>
                 </div>
@@ -86,15 +100,18 @@ export const UpComingList = ({ bookingInfo }) => {
 
 export const CancenlledList = ({ startLocation, endLocation, status }) => {
     return (
-        <div className="p-4 bg-gray-50 rounded-lg shadow flex items-center justify-between">
+        <div className="p-5 bg-white rounded-xl shadow-md flex items-center justify-between hover:shadow-lg transition-shadow">
             <div>
-                <h2 className="font-medium text-gray-700">{endLocation}</h2>
-                <p className="text-sm text-gray-500">{startLocation}</p>
-                <p className="text-xs text-gray-400">12 October 2024, 2:30 pm /{status}</p>
+                <h2 className="font-semibold text-gray-800 text-lg">{endLocation}</h2>
+                <p className="text-sm text-gray-600">{startLocation}</p>
+                <p className="text-xs text-gray-500 mt-1 flex items-center">
+                    <span className="inline-block w-2 h-2 rounded-full bg-red-500 mr-2"></span>
+                    12 October 2024, 2:30 pm
+                    <span className="ml-1 text-red-500 font-medium">{status}</span>
+                </p>
             </div>
-            <button className="text-gray-500">
-                •••
-            </button>
+
         </div>
+
     )
 }

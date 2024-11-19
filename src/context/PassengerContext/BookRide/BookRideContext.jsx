@@ -1,5 +1,6 @@
 import { createContext, useEffect, useRef, useState } from "react";
 import { BASEURL, postRequest } from "../../../utils/Service";
+import { json } from "react-router-dom";
 
 export const BookRideContext = createContext()
 
@@ -18,17 +19,14 @@ export const BookRideContextProvider = ({ children }) => {
     const [suggestionsDest, setSuggestionsDest] = useState([]);
     const [selectedPosition, setSelectedPosition] = useState(null);
     const [selectedPositionDest, setSelectedPositionDest] = useState(null);
-
+    const [listOfSuggestionDrivers, setListOfSuggestionDrivers] = useState([])
     const [estDuration, setEstDuration] = useState(0)
     const [totalDistance, setTotalDistance] = useState(0)
     const [amt, setAmout] = useState(0)
     const [driverId, setDriverId] = useState()
-
-
-
     const [userInfo, setUserInfo] = useState()
-
     const [isBooking, setIsBooking] = useState(false);
+
 
     const handleChangeTrip = (event) => {
         setTrip(event.target.value);
@@ -47,7 +45,19 @@ export const BookRideContextProvider = ({ children }) => {
     };
 
     const handleBooking = (value) => {
+        if (!trip || !rideType || !passenger || !selectedPosition || !selectedPositionDest || !selectedDate) {
+            console.error("Please complete all required fields.");
+            alert("Please complete all required fields.");
+            return;
+        }
         setIsBooking(value)
+        fetchDrivers()
+    }
+    const handleSelectedDriver = (id) => {
+        setDriverId(id)
+    }
+    const handleExploreDestinations = () => {
+        setIsBooking(true)
     }
 
     useEffect(() => {
@@ -211,7 +221,7 @@ export const BookRideContextProvider = ({ children }) => {
 
     const handleSubmitBooking = async () => {
         // Validate required fields
-        if (!userInfo?.id || !selectedPosition || !selectedPositionDest || !selectedDate || !totalDistance || !amt) {
+        if (!trip || !passenger || !rideType || !selectedDate || !driverId) {
             console.error("Please complete all required fields.");
             alert("Please complete all required fields.");
             return;
@@ -229,18 +239,28 @@ export const BookRideContextProvider = ({ children }) => {
             estimatedDuration: estDuration,
             distance: totalDistance,
             totalAmount: amt,
-            driverId: 9807, // Example driver ID
+            driverId: driverId, // Example driver ID
             trip: trip, // Trip ID (if applicable)
             numPassengers: passenger, // Number of passengers
             rideType: rideType, // Type of ride (e.g., economy, luxury)
             travelDate: convertToSQLDateTime(selectedDate), // Convert date to SQL format
-            status: "pending" // Initial status
+            status: "booking" // Initial status
         };
 
         console.log("Booking Info:", bookingInfo); // Debug: Log the booking information
 
         try {
             const response = await postRequest(`${BASEURL}/booking`, JSON.stringify(bookingInfo));
+            setIsBooking(false)
+            setTrip('')
+            setRideType('')
+            setPassenger('')
+            setSearchInput('')
+            setSearchInputDest('')
+            setDriverId(null)
+            setSelectedDate(null)
+            setSelectedPosition(null)
+            setSelectedPositionDest(null)
         } catch (error) {
             console.error("An error occurred while submitting the booking:", error); // Debug: Log error
             alert("An unexpected error occurred. Please try again.");
@@ -259,6 +279,25 @@ export const BookRideContextProvider = ({ children }) => {
 
         return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
     };
+
+
+    const fetchDrivers = async () => {
+        try {
+            const response = await fetch("http://localhost:8000/api/users/")
+            const data = await response.json()
+            setListOfSuggestionDrivers(data)
+        } catch (error) {
+            console.error("Error fetching request data:", error);
+        }
+    }
+
+
+    useEffect(() => {
+        fetchDrivers();
+    }, []);
+
+
+
 
 
 
@@ -291,7 +330,13 @@ export const BookRideContextProvider = ({ children }) => {
                 selectedPositionDest,
                 customIcon,
                 handleRouteDirection,
-                handleSubmitBooking
+                handleSubmitBooking,
+                fetchDrivers,
+                listOfSuggestionDrivers,
+                handleSelectedDriver,
+                driverId,
+                handleExploreDestinations,
+                setIsBooking
             }}
         >
             {children}
