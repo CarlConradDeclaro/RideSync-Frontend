@@ -9,9 +9,11 @@ import { Message } from '../../components/pages/Passenger/Message';
 
 
 import { LoginContext, LoginContextProvider } from '../../context/PassengerContext/Auth/LoginContext';
+import { LandingPage } from '../../components/pages/LandingPage';
 
 
 const routes = [
+  { path: '/', element: <LandingPage />, isProtected: false },
   { path: '/register', element: <Register />, isProtected: false },
   { path: '/login', element: <Login />, isProtected: false },
   { path: '/homeContents', element: <Home />, isProtected: true },
