@@ -56,7 +56,7 @@ const Components = () => {
   }, [])
 
   return (
-    <div className="p-5  ">
+    <div className="p-5 animate-fadeIn ">
 
       <div className="grid grid-cols-1 md:grid-cols-[1fr_2fr] gap-5">
 

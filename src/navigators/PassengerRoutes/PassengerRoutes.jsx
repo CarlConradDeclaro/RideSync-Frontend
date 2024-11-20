@@ -6,6 +6,7 @@ import { Home } from '../../components/pages/Passenger/Home';
 import { ViewRide } from '../../components/pages/Passenger/ViewRide';
 import { BookRide } from '../../components/pages/Passenger/BookRide';
 import { Message } from '../../components/pages/Passenger/Message';
+import { Profile } from '../../components/pages/Passenger/Profile';
 
 
 import { LoginContext, LoginContextProvider } from '../../context/PassengerContext/Auth/LoginContext';
@@ -19,7 +20,9 @@ const routes = [
   { path: '/homeContents', element: <Home />, isProtected: true },
   { path: '/viewRideContents', element: <ViewRide />, isProtected: true },
   { path: '/bookRideContents', element: <BookRide />, isProtected: true },
-  { path: '/messageContents', element: <Message />, isProtected: true }
+  { path: '/messageContents', element: <Message />, isProtected: true },
+  { path: '/profileContents', element: <Profile />, isProtected: true }
+
 
 ]
 
