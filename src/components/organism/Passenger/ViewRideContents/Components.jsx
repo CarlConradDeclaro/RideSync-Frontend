@@ -24,7 +24,7 @@ const Components = () => {
 
 
   return (
-    <div className="flex flex-col items-center pl-5 pr-5 w-full">
+    <div className="flex flex-col items-center pl-5 pr-5 w-full animate-fadeIn">
       <Navbar />
       {isInUpComingRides ? (
         <UpComingRides upcomingRides={upcomingRides} anchorEl={anchorEl} setAnchorEl={setAnchorEl}

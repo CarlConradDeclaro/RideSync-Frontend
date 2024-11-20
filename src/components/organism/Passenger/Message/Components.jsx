@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef } from 'react'
+import React, { useContext, useEffect, useLayoutEffect, useRef } from 'react'
 import DefaultProfile from '../../../../assets/DefaultProfile.png'
 import { MessageContext } from '../../../../context/PassengerContext/Messages/MessagesContext'
 import { FiPhone, FiVideo } from "react-icons/fi";
@@ -16,12 +16,17 @@ const Components = () => {
         }
     };
 
+    // useLayoutEffect(() => {
+    //     scrollToBottom();
+    // }, [conversation]);
+
+
     useEffect(() => {
         scrollToBottom();
     }, [conversation]);
 
     return (
-        <Card className="flex flex-wrap w-full h-[87vh] p-5">
+        <Card className="flex flex-wrap w-full h-[87vh] p-5 animate-fadeIn">
             {/* Left Section - Chat List */}
             <div className="w-full lg:w-1/4 p-4 bg-white shadow-lg rounded-lg mb-4 lg:mb-0 h-full">
                 <h2 className="text-2xl font-bold text-gray-800 mb-6">Chats</h2>

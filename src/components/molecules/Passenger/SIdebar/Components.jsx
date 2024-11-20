@@ -68,7 +68,7 @@ const Sidebar = ({ active }) => {
           { name: 'View Rides', icon: ViewRides, key: 'viewRides', route: '/passenger/viewRideContents' },
           { name: 'Schedule a Ride', icon: BookRide, key: 'bookRide', route: '/passenger/bookRideContents' },
           { name: 'Message', icon: Message, key: 'message', route: '/passenger/messageContents' },
-          { name: 'Profile', icon: Profile, key: 'profile', route: '' }
+          { name: 'Profile', icon: Profile, key: 'profile', route: '/passenger/profileContents' }
           ].map(({ name, icon, key, route }) => (
             <div
               key={key}

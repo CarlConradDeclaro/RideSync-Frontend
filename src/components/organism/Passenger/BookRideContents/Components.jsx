@@ -14,7 +14,7 @@ const Components = () => {
         fetchDrivers, listOfSuggestionDrivers, handleSelectedDriver, handleExploreDestinations, setIsBooking } = useContext(BookRideContext)
 
     return (
-        <div>
+        <div className='animate-fadeIn'>
             {
                 isBooking ?
 
