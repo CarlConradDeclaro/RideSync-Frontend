@@ -39,13 +39,6 @@ const Components = ({
           />
 
 
-
-
-
-
-
-
-
           {selectedPosition && (
             <Marker
               position={[selectedPosition?.lat, selectedPosition?.lon]}

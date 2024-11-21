@@ -191,6 +191,8 @@ export const FindRouteContextProvider = ({ children }) => {
 
       if (userInfo && userInfo.id) {
         newSocket.emit("addNewUser", userInfo.id, newSocket.id);
+        console.log("new user added");
+
       }
     });
 
@@ -247,9 +249,9 @@ export const FindRouteContextProvider = ({ children }) => {
   }, [userInfo]);
 
 
-  useEffect(() => {
-    console.log("Updated drivers: ", drivers);
-  }, [drivers]);
+  // useEffect(() => {
+  //   console.log("Updated drivers: ", drivers);
+  // }, [drivers]);
 
   useEffect(() => {
     const storedUserInfo = localStorage.getItem('User');
@@ -521,13 +523,18 @@ export const FindRouteContextProvider = ({ children }) => {
       setAmout()
       setTotalDistance()
       setTotalDuration()
-
       setStep1(v)
       setStep2(v)
       setStep3(v)
-
-
-
+      setIsRideCompleted(false)
+      setRouteInfo([])
+      setSearchInput("")
+      setSearchInputDest("")
+      setDriverCoordinates(null)
+      setSelectedPosition(null)
+      setSelectedPositionDest(null)
+      const map = mapRef.current;
+      map.removeControl(routingControlRef.current);
     } catch (err) {
       console.log(err);
     }
@@ -548,6 +555,25 @@ export const FindRouteContextProvider = ({ children }) => {
         console.log("ABout to cancelled:", userId, "and", yourDriver);
     } catch (error) {
     }
+
+
+    setIsRideCompleted(false)
+    setRouteInfo([])
+    setSearchInput("")
+    setSearchInputDest("")
+    setIsDriverHasArrive(false)
+    setSelectedPosition(null)
+    setSelectedPositionDest(null)
+    setAmout()
+    setTotalDistance()
+    setTotalDuration()
+    const map = mapRef.current;
+    map.removeControl(routingControlRef.current);
+
+
+
+
+
   }
 
   const [dId, setId] = useState();
@@ -569,6 +595,7 @@ export const FindRouteContextProvider = ({ children }) => {
   }, [userInfo])
 
   const handleChats = async () => {
+    await fetchYourDriver()
     const user1_Id = userInfo?.id;
     const user2_Id = dId;
     try {
@@ -587,6 +614,7 @@ export const FindRouteContextProvider = ({ children }) => {
       value={{
         userInfo,
         mapRef,
+        routingControlRef,
         searchInput,
         setSearchInput,
         suggestions,
@@ -599,6 +627,8 @@ export const FindRouteContextProvider = ({ children }) => {
         handleSelectSuggestionDest,
         selectedPosition,
         selectedPositionDest,
+        setSelectedPosition,
+        setSelectedPositionDest,
         handleRouteDirection,
         handleChats,
         customIcon,
@@ -619,9 +649,15 @@ export const FindRouteContextProvider = ({ children }) => {
         setYourDriver,
         isDriverComming,
         isDriverHasArrive,
+        setIsDriverHasArrive,
         driverCoordinates,
         isRidesCompleted,
-        setIsRideCompleted
+        setIsRideCompleted,
+        setRouteInfo,
+        setAmout,
+        setTotalDistance,
+        setTotalDuration,
+        setDrivers
       }}
     >
       {children}

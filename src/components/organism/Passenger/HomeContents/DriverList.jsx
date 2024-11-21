@@ -9,7 +9,7 @@ const DriverList = () => {
     const { handleCancel, drivers, handelSelectDriver } = useContext(FindRouteContext);
 
     return (
-        <div className="flex flex-col items-center animate-slideInFromRight   ">
+        <div className="flex flex-col items-center animate-slideInFromRight  md:w-[600px] ">
             <Card className="flex flex-col gap-6 sm:w-full w-full max-w-3xl h-[500px] rounded-2xl shadow-lg bg-white p-6">
                 <h1 className="text-2xl font-semibold text-gray-800">Select a Driver</h1>
                 <div className="w-full p-2 overflow-y-auto overflow-x-hidden flex flex-col gap-4  flex-grow">
@@ -108,7 +108,7 @@ const DriverModal = ({ driver, isOpen, onClose }) => {
     if (!isOpen) return null;
 
     return (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-70 z-10">
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-70 z-50">
             <div className="bg-white rounded-lg shadow-2xl w-full max-w-md mx-4">
                 {/* Modal Header */}
                 <div className="bg-gradient-to-r from-blue-500 to-blue-600 text-white p-6 rounded-t-lg flex items-center justify-between">

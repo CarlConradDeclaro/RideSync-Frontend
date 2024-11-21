@@ -193,7 +193,6 @@ export const RequestContextProvider = ({ children }) => {
 
 
         socket.on("yourPassenger", (passengerId) => {
-            console.log("your passenger is", passengerId, "your id is: ");
             setPassengerApproval(true)
             getPassengerInfo(passengerId)
             window.location.reload();
@@ -366,11 +365,16 @@ export const RequestContextProvider = ({ children }) => {
                 passengerInfo,
                 offerRide,
                 setSelectedPosition,
+                setSelectedPositionDest,
                 setOpenInfoModal,
                 isOfferingRide,
                 setIsOfferingRide,
                 setStep1,
                 currentRide,
+                getPassengerInfo,
+                setRequest,
+                setCurrentRide
+
 
             }}
         >

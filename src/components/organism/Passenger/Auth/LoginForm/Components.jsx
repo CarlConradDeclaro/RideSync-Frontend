@@ -7,6 +7,9 @@ import { useNavigate } from 'react-router-dom'; // Import useNavigate
 import { LoginContext } from '../../../../../context/PassengerContext/Auth/LoginContext';
 import Alert from '@mui/material/Alert';
 import { Loading } from '../../../../molecules/Loading'; // Import loading component
+import { GoogleLogin } from '@react-oauth/google';
+
+
 
 const Components = () => {
   const navigate = useNavigate();
@@ -14,7 +17,7 @@ const Components = () => {
     navigate('/passenger/register');
   };
 
-  const { loginUser, loginInfo, setLogInInfo, isError, errorMsg, loading } = useContext(LoginContext);
+  const { loginUser, loginInfo, setLogInInfo, isError, errorMsg, loading, handleGoogleLoginSuccess } = useContext(LoginContext);
 
   return (
     <div className='flex justify-center mt-5 pt-10'>
@@ -48,13 +51,18 @@ const Components = () => {
               onChange={(e) => setLogInInfo({ ...loginInfo, userPassword: e.target.value })}
             />
           </div>
-          <div className='pt-5 w-full'>
+          <div className='pt-5 w-full mb-3'>
             {loading ? ( // Show loading spinner while logging in
               <Loading />
             ) : (
               <Button name="Sign in" variant="contained" size="large" onClick={loginUser} width="100%" />
             )}
           </div>
+          <GoogleLogin
+            onSuccess={handleGoogleLoginSuccess}
+            onError={() => console.error('Google Login failed')}
+          />
+
           <div className='mt-[20px]'>
             <p>Don't have an account? <span className='underline text-colorBlue cursor-pointer' onClick={handleSignUp}>Sign Up</span></p>
           </div>
