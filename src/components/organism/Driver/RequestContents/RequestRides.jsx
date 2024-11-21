@@ -3,6 +3,7 @@ import { Card } from '../../../molecules/Card';
 import { Map } from '../../../molecules/Map';
 import RouteList from './RouteList';
 import { Button } from '../../../atoms/Button';
+import { Ratings } from '../../../atoms/Ratings'
 import Circle from '../../../../assets/circle.png';
 import Dots from '../../../../assets/dots.png';
 import Location from '../../../../assets/location.png';
@@ -125,9 +126,9 @@ const RequestRides = () => {
                                                         className="w-12 h-12 rounded-full border-2 border-gray-300 mr-4"
                                                     />
                                                     <div>
-                                                        <h1 className="text-lg font-semibold text-gray-800">Passenger Name</h1>
-                                                        <h2 className="text-sm text-gray-500">Contact Number</h2>
-                                                        <h3 className="text-sm text-yellow-500">Rating: ★★★★☆</h3>
+                                                        <h1 className="text-lg font-semibold text-gray-800">{passengerInfo?.userFn + " " + passengerInfo?.userLn}</h1>
+                                                        <h2 className="text-sm text-gray-500">{passengerInfo?.userPhone}</h2>
+                                                        <h3 className="flex   items-center  justify-center text-sm text-yellow-500">Rating: <Ratings value={passengerInfo?.userRating ? passengerInfo?.userRating : 5} /> {passengerInfo?.userRating}/5</h3>
                                                     </div>
                                                 </div>
 

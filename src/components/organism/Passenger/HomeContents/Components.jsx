@@ -56,9 +56,9 @@ const Components = () => {
   }, [])
 
   return (
-    <div className="p-5 animate-fadeIn ">
+    <div className="p-5 md:pl-3 md:pt-4  animate-fadeIn ">
 
-      <div className="grid grid-cols-1 md:grid-cols-[1fr_2fr] gap-5">
+      <div className="flex flex-col  md:flex-row  gap-5">
 
         {
           !step1 ? <CreateRides /> : !step2 ? <DriverList /> : !step3 ? <SelectedDriver /> : null

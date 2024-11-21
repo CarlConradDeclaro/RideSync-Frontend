@@ -29,16 +29,27 @@ const CreateRides = () => {
 
 
     return (
-        <div className="flex flex-col items-center justify-center  ">
-            <Card className="flex flex-col gap-5  items-start w-full md:w-[400px] h-[300px] md:h-[400px] rounded-2xl p-5">
+        <div className="flex flex-col md:w-[500px]">
+
+            <div className="flex gap-4 justify-start w-full max-w-md mb-6">
+                <button
+                    className="w-full px-6 py-3 bg-gradient-to-r from-sky-500 to-sky-400 text-white text-sm font-medium rounded-lg shadow-lg hover:from-sky-600 hover:to-sky-500 hover:shadow-xl transition-all duration-200 ease-in-out"
+                >
+                    Carpool
+                </button>
+                <button
+                    className="w-full px-6 py-3 bg-gradient-to-r from-teal-500 to-teal-400 text-white text-sm font-medium rounded-lg shadow-lg hover:from-teal-600 hover:to-teal-500 hover:shadow-xl transition-all duration-200 ease-in-out"
+                >
+                    Schedule a ride now!
+                </button>
+            </div>
+            <Card className="flex flex-col gap-5  items-start w-full md:w-[400px] h-[300px] md:h-[300px] rounded-2xl p-5">
 
                 <div className="flex items-center mb-5 space-x-4">
-                    <h1 className="font-bold">Select a ride:</h1>
+
                     <div className="hover:shadow-2xl p-2 rounded-full cursor-pointer">
-                        <img src={MotorIcon} alt="Motorbike" className="w-12 h-12" />
                     </div>
                     <div className="hover:shadow-2xl p-2 rounded-full cursor-pointer">
-                        <img src={CarIcon} alt="Car" className="w-12 h-12" />
                     </div>
                 </div>
 
@@ -99,7 +110,6 @@ const CreateRides = () => {
                             <Button name="Procced" variant="contained" size="large" onClick={() => handleProceed(true)} />
                         </div>
                     </div>
-
                 </div>
             </Card>
 

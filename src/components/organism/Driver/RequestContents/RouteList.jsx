@@ -4,7 +4,7 @@ import { RequestContext } from '../../../../context/DriverContext/Request/Reques
 const RouteList = ({ userId, routeName, location, price, distance, duration, startLatitude, startLongitude, endLatitude, endLongitude }) => {
     const [isExpanded, setIsExpanded] = useState(false);
 
-    const { handleRouteDirection, handleRequestInfo } = useContext(RequestContext)
+    const { handleRouteDirection, handleRequestInfo, getPassengerInfo } = useContext(RequestContext)
 
     return (
         <div className='w-full rounded-xl bg-gradient-to-b from-white to-gray-50 border border-gray-200 cursor-pointer transition-shadow duration-300 ease-in-out hover:shadow-lg'>
@@ -20,6 +20,7 @@ const RouteList = ({ userId, routeName, location, price, distance, duration, sta
                         onClick={() => {
                             handleRouteDirection(startLatitude, startLongitude, endLatitude, endLongitude)
                             handleRequestInfo(routeName, location, price, userId, distance, duration)
+                            getPassengerInfo(userId)
                         }}>View</span>
                     <div onClick={() => setIsExpanded(!isExpanded)} className='ml-2'>
                         <svg
