@@ -14,9 +14,9 @@ const Components = ()=> {
                 {data.map((item) => (
                     <li
                         key={item.id}
-                         className="transition-all duration-300 transform hover:translate-x-2 hover:text-blue-500 w-fit"
+                         className="group transition-all duration-300 transform hover:translate-x-2 hover:text-blue-500 w-fit"
                     >
-                        <a href="" className="text-lg font-medium hover:font-bold ">
+                        <a href="" className="text-lg group-hover:font-bold font-medium">
                             {item.name}
                         </a>
                     </li>
