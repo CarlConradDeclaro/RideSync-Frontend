@@ -9,8 +9,6 @@ const theme = createTheme({
             color: '#0F172A',
             fontWeight: 500,
         },
-<<<<<<< Updated upstream
-=======
         profileTitle:{
             fontSize: '1.5rem',
             color: 'black',
@@ -21,7 +19,6 @@ const theme = createTheme({
             color: 'black',
             fontWeight:700,
         },
->>>>>>> Stashed changes
     },
 });
 

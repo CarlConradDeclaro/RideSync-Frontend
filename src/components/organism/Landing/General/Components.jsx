@@ -13,17 +13,9 @@ const Components = () => {
         navigate("/passenger/register")
     }
 
-<<<<<<< Updated upstream
-
-
-    return (
-        <section className='flex h-lvh justify-center items-center'>
-            <div className='w-3/5 flex justify-center'>
-=======
     return(
         <section className='py-5 flex-col items-center md:flex-row flex lg:h-lvh lg:justify-center lg:items-center flex-wrap'>
             <div className='md:w-3/5 flex justify-center'>
->>>>>>> Stashed changes
                 <div className=''>
                     {/* For Title */}
                     <h1 className='pb-5 text-5xl text-start lg:text-6xl font-bold lg:text-center lg:px-40'>
@@ -39,11 +31,7 @@ const Components = () => {
             </div>
             <div className=' md:w-2/5'>
                 <div className='w-1/1'>
-<<<<<<< Updated upstream
-                    <img src={RideSyncImage} alt="Picture of a car" className='w-1/1' />
-=======
                     <img src={RideSyncImage} alt="Picture of a car" className=''/>
->>>>>>> Stashed changes
                 </div>
             </div>
         </section>
