@@ -13,14 +13,12 @@ const Components = () => {
         navigate("/passenger/register")
     }
 
-
-
-    return (
-        <section className='flex h-lvh justify-center items-center'>
-            <div className='w-3/5 flex justify-center'>
+    return(
+        <section className='py-5 flex-col items-center md:flex-row flex lg:h-lvh lg:justify-center lg:items-center flex-wrap'>
+            <div className='md:w-3/5 flex justify-center'>
                 <div className=''>
                     {/* For Title */}
-                    <h1 className='text-6xl font-bold text-center px-40'>
+                    <h1 className='pb-5 text-5xl text-start lg:text-6xl font-bold lg:text-center lg:px-40'>
                         Seamlessly Connect for every Journey
                     </h1>
                     <div className='flex justify-center py-8 gap-5'>
@@ -31,9 +29,9 @@ const Components = () => {
                     </div>
                 </div>
             </div>
-            <div className='w-2/5'>
+            <div className=' md:w-2/5'>
                 <div className='w-1/1'>
-                    <img src={RideSyncImage} alt="Picture of a car" className='w-1/1' />
+                    <img src={RideSyncImage} alt="Picture of a car" className=''/>
                 </div>
             </div>
         </section>

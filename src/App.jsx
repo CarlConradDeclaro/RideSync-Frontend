@@ -4,7 +4,6 @@ import { DriverRoutes } from './navigators/DriverRoutes'
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import { Landing } from './components/templates/Landing';
-import { Browse } from './components/molecules/Landing/Footer/Browse';
 
 
 function App() {
