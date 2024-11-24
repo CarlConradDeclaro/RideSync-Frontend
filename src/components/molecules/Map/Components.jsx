@@ -38,7 +38,6 @@ const Components = ({
             url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
           />
 
-
           {selectedPosition && (
             <Marker
               position={[selectedPosition?.lat, selectedPosition?.lon]}
@@ -56,7 +55,8 @@ const Components = ({
             </Marker>
           )}
           {
-            driverCoordinates && (
+            driverCoordinates &&
+             (
               !isDriverHasArrive && (
                 <Marker
                   position={[driverCoordinates?.lat, driverCoordinates?.lon]}
@@ -67,8 +67,6 @@ const Components = ({
               )
             )
           }
-
-
         </MapContainer>
       </div>
     </div>
