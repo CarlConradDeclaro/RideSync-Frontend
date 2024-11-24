@@ -18,6 +18,7 @@ const MapView = () => {
         totalDistance,
         totalDuration,
         driverCoordinates,
+        setDriverCoordinates,
         isDriverHasArrive,
         isRidesCompleted,
         setIsRideCompleted,
@@ -36,7 +37,9 @@ const MapView = () => {
 
     } = useContext(FindRouteContext)
     const handleRefreshPage = () => {
-
+        const map = mapRef.current;
+        map.removeControl(routingControlRef.current);
+        setDriverCoordinates(null)
         setIsRideCompleted(false)
         setRouteInfo([])
         setStep1(false)
@@ -51,8 +54,7 @@ const MapView = () => {
         setTotalDistance()
         setTotalDuration()
         setDrivers([])
-        const map = mapRef.current;
-        map.removeControl(routingControlRef.current);
+       
     }
 
     return (

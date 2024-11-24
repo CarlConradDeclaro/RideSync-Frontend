@@ -19,9 +19,9 @@ const RequestRides = () => {
 
 
     const handleCancelRequest = () => {
-
+         
         setOpenInfoModal(false)
-        setIsOfferingRide(false)
+        setIsOfferingRide(true)
     }
 
     useEffect(() => {

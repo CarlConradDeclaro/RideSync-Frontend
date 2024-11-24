@@ -651,6 +651,7 @@ export const FindRouteContextProvider = ({ children }) => {
         isDriverHasArrive,
         setIsDriverHasArrive,
         driverCoordinates,
+        setDriverCoordinates,
         isRidesCompleted,
         setIsRideCompleted,
         setRouteInfo,
