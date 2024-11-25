@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
 import { Card } from '../../../../molecules/Card'
-import RideSyncImage from '../../../../../assets/RideSync.png';
+import Driver from '../../../../../assets/driver3.jpg';
 import { TextInput } from '../../../../atoms/TextInput';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
@@ -222,7 +222,7 @@ const Components = () => {
                 </div>
 
                 <div className='w-full md:w-[40%] flex items-center justify-center p-'>
-                    <img src={RideSyncImage} alt="RideSync Logo" className="w-full max-w-[200px] md:max-w-[400px] h-auto object-contain" />
+                    <img src={Driver} alt="RideSync Logo" className="w-full max-w-[200px] md:max-w-[400px] h-auto object-contain" />
                 </div>
 
             </Card>

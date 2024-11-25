@@ -39,6 +39,26 @@ export default {
             transform: 'translateX(0)',
           },
         },
+        slideInFromLeft: {
+          '0%': {
+            opacity: '0',
+            transform: 'translateX(-20%)',
+          },
+          '100%': {
+            opacity: '1',
+            transform: 'translateX(0)', 
+          },
+        },
+        slideUp: {
+          '0%': {
+            opacity: '0',
+            transform: 'translateY(60px)',
+          },
+          '100%': {
+            opacity: '1',
+            transform: 'translateY(0)',
+          },
+        },
         slideDown: {
           '0%': {
             opacity: '0',
@@ -50,14 +70,16 @@ export default {
           },
         },
         slideRight: {
-          '0%': { transform: 'translateX(100%)' },  // Start from off-screen
-          '100%': { transform: 'translateX(0)' },    // End at its original position
+          '0%': { transform: 'translateX(100%)' }, 
+          '100%': { transform: 'translateX(0)' }, 
         },
 
       },
       animation: {
         fadeIn: 'fadeIn 0.4s ease-in-out',
         slideInFromRight: 'slideInFromRight 0.5s ease-out',
+        slideInFromLeft: 'slideInFromLeft 0.5s ease-out',
+        slideUp: 'slideUp 0.5s ease-out',
         slideDown: 'slideDown 0.5s ease-out', // New slide-down animation
         slideRight: 'slideRight 0.5s ease-out',
       },

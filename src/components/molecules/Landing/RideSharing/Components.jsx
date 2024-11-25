@@ -8,7 +8,7 @@ const Components = ()=> {
               className="rounded-full h-36 sm:h-80 transform transition-transform duration-300 group-hover:scale-125"
             />
           </div>
-          <div className='flex flex-col items-start md:items-center'>
+          <div className='flex flex-col items-start sm:items-center'>
             <h2 className="text-4xl font-bold text-white mb-3">Ride Sharing</h2>
             <h3 className="text-xl font-bold text-neutral-500 mb-6">Passenger Service</h3>
             <p className='text-xl mb-3'>Book a ride effortlessly and travel to your destination with ease</p>
