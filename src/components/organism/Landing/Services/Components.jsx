@@ -1,13 +1,17 @@
 import { Rideshare } from "../../../molecules/Landing/RideSharing";
 import { Carpool } from "../../../molecules/Landing/Carpool";
+import useInView from "../../../../utils/CustomHook/useInView";
+import { useRef } from "react";
 
 const Components = () => {
+    const sectionRef = useRef(null)
+    const isInView = useInView(sectionRef)
     return (
-        <section className="lg:h-lvh flex flex-col pt-5 pb-24">
-            <h2 className="py-6 text-5xl font-bold text-sky-50">Our Services</h2>
-            <div className="pt-10 flex flex-col justify-start items-start  md:flex-row md:justify-center  gap-10 md:gap-20 lg:gap-44 grow flex-wrap shrink">
-                <Rideshare />
-                <Carpool />
+        <section ref={sectionRef}  className="w-full lg:h-lvh flex flex-col pt-5 pb-24 lg:pb-0">
+            <h2 className={`py-6 text-5xl font-bold text-sky-50 ${isInView ? 'animate-slideUp' : 'opacity-0'}`} >Our Services</h2>
+            <div className={`pt-10 md:pt-20 flex flex-col justify-start items-start  md:flex-row md:justify-center  gap-10 md:gap-20 lg:gap-44 grow  shrink ${isInView ? 'animate-slideUp' : 'opacity-0'}`}>
+                <div className={`${isInView ? 'animate-slideUp' : 'opacity-0'}`} ><Rideshare /></div>
+                <div className={`${isInView ? 'animate-slideUp' : 'opacity-0'}`}><Carpool /></div>
             </div>
         </section>
     );
