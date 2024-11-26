@@ -8,9 +8,9 @@ import CarIcon from '../../../../assets/CarIcon.png'
 import { TextInput } from '../../../atoms/TextInput'
 import { Button } from '../../../atoms/Button'
 import { FindRouteContext } from '../../../../context/PassengerContext/FindRoute/FindRouteContext';
-
+import {useNavigate} from 'react-router-dom'
 const CreateRides = () => {
-
+    const navigate = useNavigate();
     const {
         searchInput,
         suggestions,
@@ -27,6 +27,13 @@ const CreateRides = () => {
         handleProceed,
     } = useContext(FindRouteContext)
 
+    const handleCarpoolClick = ()=>{
+        navigate('/passenger/bookCarpoolContents')
+    }
+
+    const handleBookRideClick = ()=>{
+        navigate('/passenger/bookRideContents')
+    }
 
     return (
         <div className="flex flex-col md:w-[500px]">
@@ -34,11 +41,13 @@ const CreateRides = () => {
             <div className="flex gap-4 justify-start w-full max-w-md mb-6">
                 <button
                     className="w-full px-6 py-3 bg-gradient-to-r from-sky-500 to-sky-400 text-white text-sm font-medium rounded-lg shadow-lg hover:from-sky-600 hover:to-sky-500 hover:shadow-xl transition-all duration-200 ease-in-out"
+                onClick={handleCarpoolClick}
                 >
                     Carpool
                 </button>
                 <button
                     className="w-full px-6 py-3 bg-gradient-to-r from-teal-500 to-teal-400 text-white text-sm font-medium rounded-lg shadow-lg hover:from-teal-600 hover:to-teal-500 hover:shadow-xl transition-all duration-200 ease-in-out"
+                onClick={handleBookRideClick}
                 >
                     Schedule a ride now!
                 </button>

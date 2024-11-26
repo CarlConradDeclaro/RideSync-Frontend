@@ -7,6 +7,7 @@ import 'leaflet-control-geocoder/dist/Control.Geocoder.css'; // Geocoder CSS
 import 'leaflet-control-geocoder';
 import dayjs from "dayjs";
 import {  BASEURLDrivers, postRequest } from "../../../utils/Service";
+import { io } from 'socket.io-client'
 
 
 
@@ -30,6 +31,47 @@ export const HomeCarpoolContextProvider = ({children})=>{
     const [pricePerPerson,setPricePerPerson]= useState(0)
     const [paymentMethod,setPaymentMethod] =useState('')
     const [carpoolRides,setCarpoolRides]= useState([])
+    const [carpoolPassengers,setCarpoolPassengers] = useState([])
+    const [filteredCarpoolPassengers,setFilteredCarpoolPassengers]= useState([])
+    const [totalPassenger,setTotalPassengers]= useState(0)
+    const [socket, setSocket] = useState(null)
+    const [socketID, setSocketID] = useState()
+    const [onlineUsers, setOnlineUsers] = useState([])
+  
+
+    useEffect(() => {
+      const newSocket = io("http://localhost:8000")
+      setSocket(newSocket)
+      newSocket.on("connect", () => {
+        console.log("from frontend: " + newSocket.id);
+        setSocketID(newSocket.id)
+        if (driverInfo && driverInfo.id) {
+          newSocket.emit("addNewUser", driverInfo.id, newSocket.id);
+          console.log("new user added");
+        }
+        newSocket.on("getOnlineUsers", (users) => {
+          setOnlineUsers(users);
+        });
+
+        newSocket.on("getPassengerBooking",( routeId, passengerId, numberOfPassengers)=>{
+          setCarpoolRides((prevRides) =>
+            prevRides.map((item) =>
+              item.routeId === routeId
+              ? { ...item, NumSets: item.NumSets - numberOfPassengers,totalPassengersBooked: numberOfPassengers}
+              : item
+            )
+          );
+          fetchCarpoolRides()
+          fetchCarpoolPassengers()
+        })
+
+
+
+        return () => {
+        newSocket.disconnect();
+      };
+      });
+    },[driverInfo])
     
  
     useEffect(() => {
@@ -251,7 +293,35 @@ export const HomeCarpoolContextProvider = ({children})=>{
           pricePerPerson: rideInfo?.pricePerPerson,
           vehicle: rideInfo?.vehicle,
         })
+        handleFilterPassengers(rideInfo?.routeId)
       }
+      
+    
+      const handleFilterPassengers = (routeId)=>{
+            const filtered = carpoolPassengers?.filter((item)=> item.carpoolRouteId == routeId)
+            const numPasengers = filtered.map((item)=> item.numPassengersBooked).reduce((sum, num) => sum + num, 0)
+            setTotalPassengers(numPasengers)
+            setFilteredCarpoolPassengers(filtered)
+      }
+      const fetchCarpoolPassengers = async()=>{
+      
+           if(driverInfo && driverInfo?.id){
+               const userId  = driverInfo?.id;
+               try {
+                  const response = await postRequest(`${BASEURLDrivers}/fetchPassengers`,JSON.stringify({userId}))
+                  setCarpoolPassengers(response)
+                  console.log("Passengers",response);
+                  
+               } catch (error) {
+                  console.log("error fetching carpool passengers");
+               }
+           }
+      }
+      useEffect(()=>{
+          fetchCarpoolPassengers()
+      },[driverInfo])
+
+
 
  
 
@@ -289,6 +359,9 @@ export const HomeCarpoolContextProvider = ({children})=>{
         carpoolRides,
         rideInfo,
         handleSetRideInfo,
+        carpoolPassengers,
+        filteredCarpoolPassengers,
+        totalPassenger
     }}
     >
         {children}

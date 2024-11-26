@@ -13,7 +13,7 @@ const Rides = () => {
     navigate("/driver/createRide");
   };
 
-  const {carpoolRides,rideInfo,handleSetRideInfo} = useContext(HomeCarpoolContext)
+  const {carpoolRides,rideInfo,handleSetRideInfo,totalPassenger,carpoolPassengers,filteredCarpoolPassengers} = useContext(HomeCarpoolContext)
 
  
   const [isModalOpen, setModalOpen] =  useState(false);
@@ -27,7 +27,7 @@ const Rides = () => {
       <div className="border ">
         
       </div>
-      <CarpoolRideModal isOpen={isModalOpen} onClose={() => setModalOpen(false)} rideDetails={rideInfo}/>
+      <CarpoolRideModal totalPassenger={totalPassenger} filteredCarpoolPassengers={filteredCarpoolPassengers} carpoolPassengers={carpoolPassengers} isOpen={isModalOpen} onClose={() => setModalOpen(false)} rideDetails={rideInfo}/>
 
       {/* Rides Grid */}
        <div className="w-full h-[75vh] overflow-y-auto">
@@ -71,7 +71,7 @@ const CarpoolCardRide = ({ rideDetails,setModalOpen ,handleSetRideInfo}) => {
         <div className="flex items-center space-x-2">
           {/* Car Icon for Pickup (Carpooling related) */}
           <img src ={StartCarpoolLoc} className="max-w-5 h-5"/>
-          <span className="font-medium text-gray-600">Pickup:</span>
+          <span className="font-medium text-gray-600">Pickup: </span>
         </div>
         <span className="text-gray-800 break-words max-w-[200px]">{rideDetails?.startLocation || "Unknown"}</span>
       </div>
@@ -96,7 +96,7 @@ const CarpoolCardRide = ({ rideDetails,setModalOpen ,handleSetRideInfo}) => {
           <circle cx="6" cy="14" r="4" />
           <circle cx="18" cy="14" r="4" />
         </svg>
-        <p>No. of passengers: 0</p>
+        <p>No. of passengers: {rideDetails?.totalPassengersBooked}</p>
       </div>
       <button
         className="px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-md hover:bg-indigo-700 focus:ring focus:ring-indigo-200 focus:outline-none transition duration-200"
@@ -112,7 +112,7 @@ const CarpoolCardRide = ({ rideDetails,setModalOpen ,handleSetRideInfo}) => {
 };
 
 
-const CarpoolRideModal = ({ isOpen, onClose, rideDetails})=>{
+const CarpoolRideModal = ({totalPassenger, filteredCarpoolPassengers, carpoolPassengers,isOpen, onClose, rideDetails})=>{
   if (!isOpen) return null; 
   return (
     <div className="fixed inset-0 z-50 flex justify-end bg-black bg-opacity-50">
@@ -137,51 +137,51 @@ const CarpoolRideModal = ({ isOpen, onClose, rideDetails})=>{
       <div className="mb-8">
         <h2 className="text-xl font-semibold text-gray-800 mb-4">Route Information</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 p-6 bg-white rounded-lg shadow-md text-gray-700">
-  <div className="space-y-1">
-    <p className="text-sm font-semibold text-gray-400 uppercase">Pickup Location</p>
-    <p className="text-sm ">{rideDetails?.pickupLocation || "Unknown"}</p>
-  </div>
-  <div className="space-y-1">
-    <p className="text-xs font-semibold text-gray-400 uppercase">Dropoff Location</p>
-    <p className="text-sm ">{rideDetails?.dropoffLocation || "Unknown"}</p>
-  </div>
-  <div className="space-y-1">
-    <p className="text-xs font-semibold text-gray-400 uppercase">Travel Date</p>
-    <p className="text-sm ">{rideDetails?.travelDate || "No Date"}</p>
-  </div>
-  <div className="space-y-1">
-    <p className="text-xs font-semibold text-gray-400 uppercase">Seats Available</p>
-    <p className="text-sm  ">{rideDetails?.numSeats || "0"}</p>
-  </div>
-  <div className="space-y-1">
-    <p className="text-xs font-semibold text-gray-400 uppercase">Price per Person</p>
-    <p className="text-sm">₱{rideDetails?.pricePerPerson || "0"}</p>
-  </div>
-  <div className="space-y-1">
-    <p className="text-xs font-semibold text-gray-400 uppercase">Vehicle</p>
-    <p className="text-sm">{rideDetails?.vehicle || "Unknown Vehicle"}</p>
-  </div>
-</div>
+        <div className="space-y-1">
+          <p className="text-sm font-semibold text-gray-400 uppercase">Pickup Location</p>
+          <p className="text-sm ">{rideDetails?.pickupLocation || "Unknown"}</p>
+        </div>
+        <div className="space-y-1">
+          <p className="text-xs font-semibold text-gray-400 uppercase">Dropoff Location</p>
+          <p className="text-sm ">{rideDetails?.dropoffLocation || "Unknown"}</p>
+        </div>
+        <div className="space-y-1">
+          <p className="text-xs font-semibold text-gray-400 uppercase">Travel Date</p>
+          <p className="text-sm ">{rideDetails?.travelDate || "No Date"}</p>
+        </div>
+        <div className="space-y-1">
+          <p className="text-xs font-semibold text-gray-400 uppercase">Seats Available</p>
+          <p className="text-sm  ">{rideDetails?.numSeats-totalPassenger || "0"}</p>
+        </div>
+        <div className="space-y-1">
+          <p className="text-xs font-semibold text-gray-400 uppercase">Price per Person</p>
+          <p className="text-sm">₱{rideDetails?.pricePerPerson || "0"}</p>
+        </div>
+        <div className="space-y-1">
+          <p className="text-xs font-semibold text-gray-400 uppercase">Vehicle</p>
+          <p className="text-sm">{rideDetails?.vehicle || "Unknown Vehicle"}</p>
+        </div>
+      </div>
 
       </div>
   
       {/* Passengers Section */}
       <div className="mb-10">
   <h2 className="text-2xl font-bold text-gray-800 mb-6">Passengers</h2>
-  {rideDetails?.passengers && rideDetails.passengers.length > 0 ? (
+  {filteredCarpoolPassengers && filteredCarpoolPassengers.length > 0 ? (
     <ul className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-      {rideDetails.passengers.map((passenger, index) => (
+      {filteredCarpoolPassengers.map((passenger, index) => (
         <li
           key={index}
           className="relative bg-white p-5 rounded-lg shadow-md hover:shadow-lg transition-all border border-gray-200"
         >
           <div className="flex items-center space-x-4">
             <div className="h-12 w-12 rounded-full bg-gray-100 flex items-center justify-center text-gray-600 font-semibold">
-              {passenger.name.charAt(0)}
+              {passenger.userFn.charAt(0).toUpperCase()}
             </div>
             <div>
-              <p className="text-lg font-medium text-gray-800">{passenger.name}</p>
-              <p className="text-sm text-gray-500">Seat {index + 1}</p>
+              <p className="text-lg font-medium text-gray-800">{passenger.userFn}</p>
+              {/* <p className="text-sm text-gray-500">Seat {index + 1}</p> */}
             </div>
           </div>
           <button className="mt-4 w-full py-2 bg-blue-800 text-white text-sm font-medium rounded-lg hover:bg-gray-700 transition">
