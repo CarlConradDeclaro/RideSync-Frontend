@@ -163,7 +163,7 @@ const Booking2 = ({
                     <div className='flex flex-col gap-2 p-2 md:ml-4'>
                         {
                             listOfSuggestionDrivers
-                                .filter(driver => driver.userType === 'D')
+                                .filter(driver => driver.userType == 'D' &&  driver.typeRide == 'rideSharing')
                                 .slice(0, 5)
                                 .map((driver) => (
                                     <DriverCard

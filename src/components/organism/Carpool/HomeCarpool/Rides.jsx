@@ -13,7 +13,7 @@ const Rides = () => {
     navigate("/driver/createRide");
   };
 
-  const {carpoolRides,rideInfo,handleSetRideInfo,totalPassenger,carpoolPassengers,filteredCarpoolPassengers} = useContext(HomeCarpoolContext)
+  const {carpoolRides,rideInfo,handleSetRideInfo,totalPassenger,carpoolPassengers,filteredCarpoolPassengers,handleChats} = useContext(HomeCarpoolContext)
 
  
   const [isModalOpen, setModalOpen] =  useState(false);
@@ -27,7 +27,7 @@ const Rides = () => {
       <div className="border ">
         
       </div>
-      <CarpoolRideModal totalPassenger={totalPassenger} filteredCarpoolPassengers={filteredCarpoolPassengers} carpoolPassengers={carpoolPassengers} isOpen={isModalOpen} onClose={() => setModalOpen(false)} rideDetails={rideInfo}/>
+      <CarpoolRideModal handleChats={handleChats} totalPassenger={totalPassenger} filteredCarpoolPassengers={filteredCarpoolPassengers} carpoolPassengers={carpoolPassengers} isOpen={isModalOpen} onClose={() => setModalOpen(false)} rideDetails={rideInfo}/>
 
       {/* Rides Grid */}
        <div className="w-full h-[75vh] overflow-y-auto">
@@ -112,12 +112,12 @@ const CarpoolCardRide = ({ rideDetails,setModalOpen ,handleSetRideInfo}) => {
 };
 
 
-const CarpoolRideModal = ({totalPassenger, filteredCarpoolPassengers, carpoolPassengers,isOpen, onClose, rideDetails})=>{
+const CarpoolRideModal = ({handleChats,totalPassenger, filteredCarpoolPassengers, carpoolPassengers,isOpen, onClose, rideDetails})=>{
   if (!isOpen) return null; 
   return (
-    <div className="fixed inset-0 z-50 flex justify-end bg-black bg-opacity-50">
+    <div className="fixed inset-0 z-50 flex justify-end bg-black bg-opacity-50 backdrop-blur-sm ">
     {/* Modal Content */}
-    <div className="bg-white w-full sm:w-3/4 md:w-1/2 h-full shadow-2xl p-8 overflow-y-auto transition-transform transform translate-x-0 rounded-l-xl">
+    <div className="bg-white animate-slideRight w-full sm:w-3/4 md:w-1/2 h-full shadow-2xl p-8 overflow-y-auto transition-transform transform translate-x-0 rounded-l-xl">
       {/* Close Button */}
       <button
         className="absolute top-6 right-6 text-gray-400 hover:text-gray-800 text-2xl"
@@ -129,13 +129,24 @@ const CarpoolRideModal = ({totalPassenger, filteredCarpoolPassengers, carpoolPas
   
       {/* Header */}
       <div className="border-b pb-6 mb-6">
-        <h1 className="text-4xl font-extrabold text-gray-900">Ride Details</h1>
+        <h1 className="text-4xl font-extrabold text-gray-900 mb-3">Ride Details</h1>
+        {
+          (rideDetails?.numSeats-totalPassenger  == 0) &&
+        <Button name='Mark as Completed' variant='contained' size='small'/>
+
+        }
         <p className="text-gray-500 mt-2">Review the details of your carpool ride below.</p>
       </div>
   
       {/* Ride Details */}
       <div className="mb-8">
+        <div className="flex justify-between">
         <h2 className="text-xl font-semibold text-gray-800 mb-4">Route Information</h2>
+       {
+          (rideDetails?.numSeats-totalPassenger  == 0) &&
+           <h2 className="text-xl font-semibold text-red-500 mb-4">Fully Booked!</h2>
+       }
+        </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 p-6 bg-white rounded-lg shadow-md text-gray-700">
         <div className="space-y-1">
           <p className="text-sm font-semibold text-gray-400 uppercase">Pickup Location</p>
@@ -151,7 +162,7 @@ const CarpoolRideModal = ({totalPassenger, filteredCarpoolPassengers, carpoolPas
         </div>
         <div className="space-y-1">
           <p className="text-xs font-semibold text-gray-400 uppercase">Seats Available</p>
-          <p className="text-sm  ">{rideDetails?.numSeats-totalPassenger || "0"}</p>
+          <p className="text-sm  ">{rideDetails?.numSeats-totalPassenger || "0"} out of {rideDetails?.numSeats}</p>
         </div>
         <div className="space-y-1">
           <p className="text-xs font-semibold text-gray-400 uppercase">Price per Person</p>
@@ -178,13 +189,16 @@ const CarpoolRideModal = ({totalPassenger, filteredCarpoolPassengers, carpoolPas
           <div className="flex items-center space-x-4">
             <div className="h-12 w-12 rounded-full bg-gray-100 flex items-center justify-center text-gray-600 font-semibold">
               {passenger.userFn.charAt(0).toUpperCase()}
+              
             </div>
             <div>
               <p className="text-lg font-medium text-gray-800">{passenger.userFn}</p>
               {/* <p className="text-sm text-gray-500">Seat {index + 1}</p> */}
             </div>
           </div>
-          <button className="mt-4 w-full py-2 bg-blue-800 text-white text-sm font-medium rounded-lg hover:bg-gray-700 transition">
+          <button className="mt-4 w-full py-2 bg-blue-800 text-white text-sm font-medium rounded-lg hover:bg-gray-700 transition"
+          onClick={()=>handleChats(passenger.userId)}
+          >
             Chat
           </button>
         </li>

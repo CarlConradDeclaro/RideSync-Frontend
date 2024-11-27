@@ -285,6 +285,8 @@ export const BookRideContextProvider = ({ children }) => {
         try {
             const response = await fetch("http://localhost:8000/api/users/")
             const data = await response.json()
+            console.log("drivers",data);
+            
             setListOfSuggestionDrivers(data)
         } catch (error) {
             console.error("Error fetching request data:", error);

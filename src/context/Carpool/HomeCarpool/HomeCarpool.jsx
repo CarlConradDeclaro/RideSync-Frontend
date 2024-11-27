@@ -6,14 +6,16 @@ import 'leaflet-routing-machine';
 import 'leaflet-control-geocoder/dist/Control.Geocoder.css'; // Geocoder CSS
 import 'leaflet-control-geocoder';
 import dayjs from "dayjs";
-import {  BASEURLDrivers, postRequest } from "../../../utils/Service";
+import {  BASEURL, BASEURLDrivers, postRequest } from "../../../utils/Service";
 import { io } from 'socket.io-client'
+import { useNavigate } from "react-router-dom";
 
 
 
 export const HomeCarpoolContext = createContext()
 export const HomeCarpoolContextProvider = ({children})=>{
-    
+  const navigate = useNavigate();
+
     const [driverInfo, setDriverInfo] = useState(null);
     const mapRef = useRef(); 
     const routingControlRef = useRef();
@@ -321,6 +323,19 @@ export const HomeCarpoolContextProvider = ({children})=>{
           fetchCarpoolPassengers()
       },[driverInfo])
 
+      const handleChats = async (passengerId) => {
+        const user1_Id = passengerId;
+        const user2_Id = driverInfo?.id;
+        try {
+          const response = await postRequest(`${BASEURL}/createChat`, JSON.stringify({ user1_Id, user2_Id }))
+          console.log("handle chat response", response);
+          navigate('/driver/CarpoolMessage');
+        } catch (error) {
+          console.error(error);
+        }
+      }
+    
+
 
 
  
@@ -361,7 +376,8 @@ export const HomeCarpoolContextProvider = ({children})=>{
         handleSetRideInfo,
         carpoolPassengers,
         filteredCarpoolPassengers,
-        totalPassenger
+        totalPassenger,
+        handleChats,
     }}
     >
         {children}
