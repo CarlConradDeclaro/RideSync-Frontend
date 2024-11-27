@@ -81,7 +81,7 @@ const RequestRides = () => {
                 {/* Info Drawer */}
                 {
                     openInfoModal && (
-                        <div className="fixed inset-0 flex justify-end bg-black bg-opacity-50 z-50">
+                        <div className="fixed inset-0 flex justify-end bg-black bg-opacity-50 z-50 backdrop-blur-sm">
                             <div
                                 className={`relative w-full md:w-[500px] h-screen bg-dRouteBG animate-slideRight transform ${openInfoModal ? 'translate-x-0' : 'translate-x-full'
                                     } transition-transform duration-300 ease-in-out`}
@@ -208,7 +208,7 @@ const RequestRides = () => {
                                                         <Button name="Offer Ride" variant="contained" size="large" onClick={handleOfferRide} />
                                                     </div>
                                                     <div className="rounded-lg">
-                                                        <Button name="Reject" variant="contained" size="large" onClick={handleCancelRequest} />
+                                                        {/* <Button name="Reject" variant="contained" size="large" onClick={handleCancelRequest} /> */}
                                                     </div>
                                                 </>
                                                 :
