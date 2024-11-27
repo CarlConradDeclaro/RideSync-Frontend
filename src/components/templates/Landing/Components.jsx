@@ -14,7 +14,7 @@ const Components = () => {
                 <div className="px-6 md:px-32"> 
                     <General />
                 </div>
-                <div className="px-6 md:px-32  bg-colorBlue">
+                <div className="px-6 md:px-32  bg-colorBlue flex">
                     <Services />
                 </div>
                 <div className="px-6 md:px-32">
