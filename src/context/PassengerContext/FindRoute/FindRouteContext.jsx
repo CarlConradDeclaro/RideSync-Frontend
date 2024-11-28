@@ -600,7 +600,7 @@ export const FindRouteContextProvider = ({ children }) => {
     const user2_Id = dId;
     try {
       const response = await postRequest(`${BASEURL}/createChat`, JSON.stringify({ user1_Id, user2_Id }))
-      console.log("responsess", response);
+      console.log("handle chat response", response);
       navigate('/passenger/messageContents');
     } catch (error) {
       console.error(error);
@@ -651,6 +651,7 @@ export const FindRouteContextProvider = ({ children }) => {
         isDriverHasArrive,
         setIsDriverHasArrive,
         driverCoordinates,
+        setDriverCoordinates,
         isRidesCompleted,
         setIsRideCompleted,
         setRouteInfo,

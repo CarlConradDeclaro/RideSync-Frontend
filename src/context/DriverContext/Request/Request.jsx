@@ -277,7 +277,7 @@ export const RequestContextProvider = ({ children }) => {
         const response = await postRequest(`${BASEURLDrivers}/potentialRide`, JSON.stringify(potentialDriversInfo))
         const response2 = await postRequest(`${BASEURLDrivers}/rides`, JSON.stringify(ridesInfo))
         setOfferRide(false)
-
+       
         if (response.status) {
             console.log("Success");
             setIsOfferingRide(true)

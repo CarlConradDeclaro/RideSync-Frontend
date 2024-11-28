@@ -5,12 +5,6 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import { Landing } from './components/templates/Landing';
 
-//TEST
-import Info from './components/organism/Ride-sharing/Info';
-import Faq from './components/organism/Ride-sharing/Faq';
-import { Browse } from './components/molecules/Landing/Footer/Browse';
-import KeyFeatures from './components/organism/Ride-sharing/KeyFeatures';
-
 
 function App() {
 

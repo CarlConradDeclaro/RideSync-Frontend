@@ -15,6 +15,8 @@ export const LoginDriverContextProvider = ({ children }) => {
     const [loading, setLoading] = useState(false);
 
 
+
+
     const loginUser = async (e) => {
         e.preventDefault();
         setLoading(true);
@@ -25,8 +27,15 @@ export const LoginDriverContextProvider = ({ children }) => {
             if (response && response.user && response.token && response.user.userType == "D") {
                 localStorage.setItem("User", JSON.stringify(response.user));
                 localStorage.setItem("Token", response.token);
-                navigate('/driver/requestContents');
-                console.log("Login successful, navigating to requestContents");
+                if(response.user.typeRide == 'carpool'){
+                    navigate('/driver/homeCarpool');
+                    console.log("Login successful, navigating to homeCarpool");
+                }else if(response.user.typeRide == 'rideSharing'){
+                    navigate('/driver/requestContents');
+                    console.log("Login successful, navigating to requestContents");
+                }
+               
+             
 
             } else if (response.user.userType != "D") {
                 throw new Error(response.message || "You have no access to this page");

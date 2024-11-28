@@ -18,6 +18,7 @@ const MapView = () => {
         totalDistance,
         totalDuration,
         driverCoordinates,
+        setDriverCoordinates,
         isDriverHasArrive,
         isRidesCompleted,
         setIsRideCompleted,
@@ -36,7 +37,9 @@ const MapView = () => {
 
     } = useContext(FindRouteContext)
     const handleRefreshPage = () => {
-
+        const map = mapRef.current;
+        map.removeControl(routingControlRef.current);
+        setDriverCoordinates(null)
         setIsRideCompleted(false)
         setRouteInfo([])
         setStep1(false)
@@ -51,8 +54,7 @@ const MapView = () => {
         setTotalDistance()
         setTotalDuration()
         setDrivers([])
-        const map = mapRef.current;
-        map.removeControl(routingControlRef.current);
+       
     }
 
     return (
@@ -89,7 +91,7 @@ const MapView = () => {
                 </div>
 
                 {/* Amount Information - Positioned at the top right corner */}
-                <div className="md:absolute flex items-center gap-2 top-2 right-[10px] p-4 bg-gray-10 shadow-xl z-10 text-center">
+                <div className="md:absolute flex items-center gap-2 top-3 right-[50px] p-2 bg-gray-10 shadow-xl z-10 text-center">
     
                   <p className="text-[18px] font-bold text-back-500 text-black-500">Fare:</p>
                     <h1 className="text-[18px] font-bold text-green-500">

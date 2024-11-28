@@ -16,7 +16,6 @@ export const RegisterContextProvider = ({ children }) => {
     const [demographStat, setDemographStat] = useState('')
     const [password, setPassword] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('')
-
     const handleFirstname = (e) => setFirstname(e.target.value);
     const handleLastname = (e) => setLastname(e.target.value);
     const handleEmail = (e) => setEmail(e.target.value);
@@ -27,7 +26,6 @@ export const RegisterContextProvider = ({ children }) => {
     const handleDemoStat = (e) => setDemographStat(e.target.value);
     const handlePassword = (e) => setPassword(e.target.value);
     const handleConfirmPassword = (e) => setConfirmPassword(e.target.value);
-
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const handleClickShowPassword = () => setShowPassword((show) => !show);
@@ -36,8 +34,29 @@ export const RegisterContextProvider = ({ children }) => {
     const handleMouseUpPassword = (event) => event.preventDefault();
     const handleMouseDownConfPassword = (event) => event.preventDefault();
     const handleMouseUpConfPassword = (event) => event.preventDefault();
-
+    const [additionalDetails,setAdditionalDetails]= useState(false)
     const [errors, setErrors] = useState({});
+
+    // vehicle details
+    const [carType,setCarType] = useState() 
+    const [manufacturerName,setManufacturerName] = useState()
+    const [modelName,setModelName] = useState()
+    const [modelYear,setModelYear] = useState()
+    const [vehiclePlateNum,setVehiclePlateNum] = useState()
+    const [vehicleNumSets,setVehicleNumSets] = useState()
+    const [vehicleColor,setVehicleColor] = useState()
+    const [typeRide,setTypeRide] = useState()
+    
+    const handlCarType = (e) => setCarType(e.target.value);
+    const handlManufacturerNamee = (e) => setManufacturerName(e.target.value);
+    const handlModelName = (e) => setModelName(e.target.value);
+    const handlModelYear = (e) => setModelYear(e.target.value);
+    const handlVehiclePlateNum = (e) => setVehiclePlateNum(e.target.value);
+    const handlVehicleNumSets = (e) => setVehicleNumSets(e.target.value);
+    const handlVehicleColor = (e) => setVehicleColor(e.target.value);
+    const handlTypeRide = (e) => setTypeRide(e.target.value);
+ 
+   
 
     const handleRegister = async () => {
 
@@ -78,7 +97,6 @@ export const RegisterContextProvider = ({ children }) => {
             return;
         }
 
-
         const userInfo = {
             "userLn": firstname,
             "userFn": lastname,
@@ -89,6 +107,14 @@ export const RegisterContextProvider = ({ children }) => {
             "userRating": 5,
             "gender": gender.charAt(0).toUpperCase(),
             "country": country,
+            "carType":carType,
+            "manufacturerName":manufacturerName,
+            "modelName":modelName,
+            "modelYear":modelYear,
+            "vehiclePlateNo":vehiclePlateNum,
+            "vehicleSets":vehicleNumSets,
+            "vehicleColor":vehicleColor,
+            "typeRide":typeRide
         };
         console.log("User Info:", userInfo);
 
@@ -141,9 +167,28 @@ export const RegisterContextProvider = ({ children }) => {
                 handleMouseUpPassword,
                 handleMouseDownConfPassword,
                 handleMouseUpConfPassword,
-
                 handleRegister,
-                errors
+                errors,
+                setAdditionalDetails,
+                additionalDetails,
+
+                carType,
+                manufacturerName,
+                modelName, 
+                modelYear, 
+                vehiclePlateNum, 
+                vehicleNumSets, 
+                vehicleColor,
+                typeRide,
+                handlCarType,
+                handlManufacturerNamee,
+                handlModelName,
+                handlModelYear,
+                handlVehiclePlateNum,
+                handlVehicleNumSets,
+                handlVehicleColor,
+                handlTypeRide
+    
             }}
         >
             {children}

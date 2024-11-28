@@ -13,9 +13,22 @@ const DriverList = () => {
             <Card className="flex flex-col gap-6 sm:w-full w-full max-w-3xl h-[500px] rounded-2xl shadow-lg bg-white p-6">
                 <h1 className="text-2xl font-semibold text-gray-800">Select a Driver</h1>
                 <div className="w-full p-2 overflow-y-auto overflow-x-hidden flex flex-col gap-4  flex-grow">
-                    {drivers.map((driverId, index) => (
-                        <DriverCard key={index} driverId={driverId} handelSelectDriver={handelSelectDriver} />
-                    ))}
+                    {
+                        drivers?.length > 0 ? (
+                        drivers.map((driverId, index) => (
+                            <DriverCard key={index} driverId={driverId} handelSelectDriver={handelSelectDriver} />
+                        ))
+                    )
+                    :
+                    <div className="flex flex-col items-center justify-center h-screen ">
+                        {/* Spinner */}
+                        <div className="relative w-16 h-16 border-4 border-gray-300 border-t-colorBlue rounded-full animate-spin"></div>
+                        {/* Waiting Text */}
+                        <p className="mt-4 text-lg font-semibold text-gray-700 animate-pulse">
+                         Looking for available drivers. Stay tuned!
+                        </p>
+                  </div>
+                    }
                 </div>
                 <div className="flex justify-end">
                     <Button name="Cancel" variant="contained" size="large" onClick={() => handleCancel(false)} className="bg-red-500 hover:bg-red-600 text-white" />

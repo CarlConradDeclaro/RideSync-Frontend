@@ -7,7 +7,7 @@ import Select from '@mui/material/Select';
 export default function CustomSelect({
     label,
     options = [],
-    value,
+    value ='',
     onChange,
     placeholder = 'Select an option',
     size = 'small',

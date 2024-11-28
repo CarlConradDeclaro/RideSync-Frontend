@@ -11,6 +11,8 @@ import { Profile } from '../../components/pages/Passenger/Profile';
 
 import { LoginContext, LoginContextProvider } from '../../context/PassengerContext/Auth/LoginContext';
 import { LandingPage } from '../../components/pages/LandingPage';
+import { PBookCarpool } from '../../components/pages/Carpool/PBookCarpool';
+import { Loading } from '../../components/templates/Carpool/Loading';
 
 
 const routes = [
@@ -21,9 +23,9 @@ const routes = [
   { path: '/viewRideContents', element: <ViewRide />, isProtected: true },
   { path: '/bookRideContents', element: <BookRide />, isProtected: true },
   { path: '/messageContents', element: <Message />, isProtected: true },
-  { path: '/profileContents', element: <Profile />, isProtected: true }
-
-
+  { path: '/profileContents', element: <Profile />, isProtected: true },
+  { path: '/bookCarpoolContents', element: <PBookCarpool />, isProtected: true },
+  { path: '/bookCarpoolConfirmation', element: <Loading />, isProtected: true }
 ]
 
 

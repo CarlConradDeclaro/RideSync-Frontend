@@ -1,6 +1,6 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import { Card } from '../../../../molecules/Card'
-import RideSyncImage from '../../../../../assets/RideSync.png';
+import Driver from '../../../../../assets/driver3.jpg';
 import { TextInput } from '../../../../atoms/TextInput';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
@@ -19,17 +19,15 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { useNavigate } from 'react-router-dom';
 import FormHelperText from '@mui/material/FormHelperText';
+import AdditionalDetails from './AdditionalDetails';
 
 
 const Components = () => {
 
     const navigate = useNavigate();
-
     const handleSignin = () => {
         navigate('/driver/login');
     };
-
-
     const {
         firstname,
         lastname,
@@ -60,19 +58,25 @@ const Components = () => {
         handleMouseDownConfPassword,
         handleMouseUpConfPassword,
         handleRegister,
+        setAdditionalDetails,
+        additionalDetails
     } = useContext(RegisterContext);
 
-
-    const nav = useNavigate()
-    const handleRegisterDriver = () => {
-        handleRegister()
-        nav('/driver/requestContents')
+  
+   
+    const handleNextAdditionalDetails = ()=>{
+        setAdditionalDetails(true)
     }
+
+
+
     return (
         <div className='flex justify-center mt-4'>
-            <Card className="flex flex-col md:flex-row w-full max-w-[95%] md:max-w-[70%] rounded overflow-hidden animate-fadeIn">
+            {
+                !additionalDetails ? 
+                <Card className="flex flex-col md:flex-row w-full max-w-[95%] md:max-w-[70%] rounded overflow-hidden animate-fadeIn">
                 <div className='w-full md:w-[60%] p-5'>
-                    <h1 className='p-5 text-lg md:text-2xl font-bold'>Become Driver Now</h1>
+                    <h1 className='p-3 text-lg md:text-2xl font-bold'>Become Driver Now</h1>
                     <h2 className='text-textPI font-semibold p-3 text-sm md:text-lg'>Personal Information</h2>
                     <div className='grid grid-cols-1 md:grid-cols-2 gap-4 p-4'>
                         <TextInput
@@ -195,37 +199,26 @@ const Components = () => {
                             />
                             {!!errors.confirmPassword && <FormHelperText style={{ color: '#DB2F2F' }}>{errors.confirmPassword}</FormHelperText>}
                         </FormControl>
-
-
-
                     </div>
-                    <div className='m-3'>
-                        <div className='flex items-center text-termsText text-[10px] md:text-[14px]'>
-                            <Checkbox />
-                            <span>I have read, understand, and agree to the</span>
-                            <span className='text-colorBlue ml-1 cursor-pointer'>Agreement.</span>
-                        </div>
-                        <div className='flex items-center text-termsText text-[10px] md:text-[12px]'>
-                            <Checkbox />
-                            <span>I have read, understand, and agree to the</span>
-                            <span className='text-colorBlue cursor-pointer'>Privacy Policy</span> and the
-                            <span className='text-colorBlue cursor-pointer'>Terms of Service</span>.
-                        </div>
-                    </div>
+              
 
                     <div className='pl-3'>
-                        <Button name="Next" variant="contained" size="large" onClick={handleRegisterDriver} />
+                        <Button name="Next" variant="contained" size="large" onClick={handleNextAdditionalDetails} />
                     </div>
-                    <div className='pl-3'>
+                    <div className='pl-3 mt-3'>
                         <p className='text-termsText text-xs md:text-sm'>Already have an account? <span className='text-colorBlue ml-1 cursor-pointer underline' onClick={handleSignin}>Login</span></p>
                     </div>
                 </div>
 
                 <div className='w-full md:w-[40%] flex items-center justify-center p-'>
-                    <img src={RideSyncImage} alt="RideSync Logo" className="w-full max-w-[200px] md:max-w-[400px] h-auto object-contain" />
+                    <img src={Driver} alt="RideSync Logo" className="w-full max-w-[200px] md:max-w-[400px] h-auto object-contain" />
                 </div>
 
             </Card>
+            :
+            <AdditionalDetails/>
+            }
+           
         </div>
     )
 }

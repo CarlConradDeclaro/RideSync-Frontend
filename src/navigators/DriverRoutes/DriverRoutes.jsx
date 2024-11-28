@@ -7,6 +7,11 @@ import { Login } from '../../components/pages/Driver/Auth/Login';
 import { LoginDriverContextProvider } from '../../context/DriverContext/Auth/LoginContext';
 import { ViewRides } from '../../components/pages/Driver/ViewRides';
 import { Message } from '../../components/pages/Driver/Message';
+import { HomeCarpool } from '../../components/pages/Carpool/HomeCarpool';
+import { CreateRides } from '../../components/pages/Carpool/CreateRides';
+
+import { Message as CarpoolMessage } from '../../components/pages/Carpool/Message';
+
 
 const RootNavigators = () => {
     return (
@@ -19,6 +24,12 @@ const RootNavigators = () => {
                     <Route path="/requestContents" element={<Request />} />
                     <Route path="/viewRidesContents" element={<ViewRides />} />
                     <Route path="/messageContents" element={<Message />} />
+
+                    {/* carpool */}
+                    <Route path="/homeCarpool" element={<HomeCarpool />} />
+                    <Route path="/createRide" element={<CreateRides />} />
+                    <Route path="/CarpoolMessage" element={<CarpoolMessage />} />
+
                     <Route path="*" element={<NotFound />} />
                 </Route>
             </Routes>
