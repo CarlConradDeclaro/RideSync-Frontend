@@ -5,6 +5,10 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import { Landing } from './components/templates/Landing';
 
+import KeyFeatures from './components/organism/Ride-sharing/KeyFeatures';
+import { RideSharing } from './components/templates/Ride-sharing';
+
+
 
 function App() {
 
@@ -15,7 +19,7 @@ function App() {
   
       <Routes>
         {/*TEST */}
-        <Route path='/test' element={<KeyFeatures />} />
+        <Route path='/test' element={<RideSharing />} />
 
         <Route path='/' element={<Landing /> } />
         {/* Define Passenger Routes */}
