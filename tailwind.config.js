@@ -73,15 +73,37 @@ export default {
           '0%': { transform: 'translateX(100%)' }, 
           '100%': { transform: 'translateX(0)' }, 
         },
-
+        dropIn: {
+          '0%': {
+            transform: 'translateY(-100%)',
+            opacity: '0',
+          },
+          '100%': {
+            transform: 'translateY(0)',
+            opacity: '1',
+          },
+        },
+        dropOut: {
+          '0%': {
+            transform: 'translateY(0)',
+            opacity: '1',
+          },
+          '100%': {
+            transform: 'translateY(100%)',
+            opacity: '0',
+          },
+        },
       },
+
       animation: {
         fadeIn: 'fadeIn 0.4s ease-in-out',
         slideInFromRight: 'slideInFromRight 0.5s ease-out',
         slideInFromLeft: 'slideInFromLeft 0.5s ease-out',
         slideUp: 'slideUp 0.5s ease-out',
-        slideDown: 'slideDown 0.5s ease-out', // New slide-down animation
+        slideDown: 'slideDown 0.5s ease-out', 
         slideRight: 'slideRight 0.5s ease-out',
+        dropIn: 'dropIn 0.5s ease-out',
+        dropOut: 'dropOut 1s ease-in',
       },
       screens: {
         'sm-500': '500px',

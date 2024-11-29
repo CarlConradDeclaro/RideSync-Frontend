@@ -7,7 +7,7 @@ import { Card } from '../../../molecules/Card';
 export const RecentList = ({ startLocation, endLocation, status, recentRides, handleRecentRide }) => {
 
     return (
-        <div className="p-2 from-white to-gray-50  rounded-lg shadow-md flex  md:flex-nowrap items-center justify-between gap-4 cursor-pointer md:mr-4"
+        <div className="p-2 from-white to-gray-50  rounded-lg shadow-md hover:scale-105 transform transition duration-300 ease-in-out flex  md:flex-nowrap items-center justify-between gap-4 cursor-pointer md:mr-4"
             onClick={() => handleRecentRide(recentRides.startLocation, recentRides.endLocation, recentRides.totalAmount, recentRides.estimatedDuration,
                 recentRides.distance, { lat: recentRides.startLatitude, lon: recentRides.startLongitude }, {
                 lat: recentRides.endLatitude,
@@ -45,7 +45,7 @@ export const RecentList = ({ startLocation, endLocation, status, recentRides, ha
 
 export const UpComingList = ({ anchorEl, setAnchorEl, options, upcomingRides, handleBookingRide }) => {
     return (
-        <Card className="from-white to-gray-50  h-auto w-full md:w-[650px] p-2 mb-2 rounded-lg hover:shadow-xl cursor-pointer transition-shadow duration-300">
+        <Card className="from-white to-gray-50  h-auto w-full md:w-[620px]   p-2 mb-2 rounded-lg  cursor-pointer hover:scale-105 transform transition duration-300 ease-in-out">
             <div className="flex flex-col h-full text-gray-800"
                 onClick={() => handleBookingRide({ lat: upcomingRides.startLatitude, lon: upcomingRides.startLongitude }, { lat: upcomingRides.endLatitude, lon: upcomingRides.endLongitude },
                     upcomingRides.startLocation, upcomingRides.endLocation, upcomingRides.estimatedDuration, upcomingRides.distance, upcomingRides.totalAmount,

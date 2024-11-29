@@ -37,7 +37,7 @@ const Booking = ({
                             onChange={handleChangeTrip}
                             options={[
                                 { value: 'One way', label: 'One way' },
-                                { value: 'Round Trip', label: 'Round Trip' },
+                                // { value: 'Round Trip', label: 'Round Trip' },
                             ]}
                             sx={{ minWidth: 120, backgroundColor: 'white' }}
                         />
@@ -47,10 +47,10 @@ const Booking = ({
                             onChange={handleChangePassenger}
                             options={[
                                 { value: 1, label: '1' },
-                                { value: 2, label: '2' },
-                                { value: 3, label: '3' },
-                                { value: 4, label: '4' },
-                                { value: 5, label: '5' },
+                                // { value: 2, label: '2' },
+                                // { value: 3, label: '3' },
+                                // { value: 4, label: '4' },
+                                // { value: 5, label: '5' },
                             ]}
                             sx={{ minWidth: 70, backgroundColor: 'white' }}
                         />
@@ -60,7 +60,7 @@ const Booking = ({
                             onChange={handleChangeRideTypes}
                             options={[
                                 { value: 'Motorcylce', label: 'Motorcylce' },
-                                { value: 'Car', label: 'Car' },
+                                // { value: 'Car', label: 'Car' },
                             ]}
                             sx={{ minWidth: 120, backgroundColor: 'white' }}
                         />

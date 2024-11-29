@@ -44,6 +44,7 @@ export const FindRouteContextProvider = ({ children }) => {
     const storedValue = localStorage.getItem('isDriverHasArrive');
     return storedValue === 'true';
   });
+  const [warning,setWarning]= useState(false);
   const [isRidesCompleted, setIsRideCompleted] = useState(false)
   const navigate = useNavigate();
 
@@ -341,7 +342,8 @@ export const FindRouteContextProvider = ({ children }) => {
 
   const handleRouteDirection = () => {
     if (!selectedPosition || !selectedPositionDest) {
-      alert("Please ensure both your location and the selected location are set.");
+      //alert("Please ensure both your location and the selected location are set.");
+      setWarning(true)
       return;
     }
 
@@ -436,8 +438,9 @@ export const FindRouteContextProvider = ({ children }) => {
 
   const handleProceed = useCallback(async (v) => {
     if (!userInfo || !searchInput || !searchInputDest || !totalDuration || !totalDistance || !amount) {
-      console.error("All fields must be filled out.");
-      alert("All fields must be filled out.");
+     // console.error("All fields must be filled out.");
+     // alert("All fields must be filled out.");
+     setWarning(true)
       return;
     }
 
@@ -658,7 +661,9 @@ export const FindRouteContextProvider = ({ children }) => {
         setAmout,
         setTotalDistance,
         setTotalDuration,
-        setDrivers
+        setDrivers,
+        setWarning,
+        warning,
       }}
     >
       {children}
