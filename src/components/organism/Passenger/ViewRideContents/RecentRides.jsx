@@ -36,7 +36,7 @@ const RecentRides = ({ mapRef, currentRoute }) => {
                     <h1 className="text-lg font-semibold text-gray-700 mb-4">
                         Recent Rides
                     </h1>
-                    <div className="overflow-y-auto max-h-[80%] space-y-3 custom-scrollbar">
+                    <div className="overflow-y-auto max-h-[90%] space-y-3 p-2 custom-scrollbar">
                         {currentRoute?.length > 0 ? (
                             currentRoute.slice().reverse().map((ride, index) => (
                                 <RecentList

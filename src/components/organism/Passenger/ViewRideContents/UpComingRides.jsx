@@ -23,7 +23,8 @@ const UpComingRides = ({ upcomingRides, anchorEl, setAnchorEl, options, bookingI
                     <h1 className="text-lg font-semibold text-gray-700 mb-4">
                         Booking
                     </h1>
-                    <div className='h-[65vh]  overflow-y-auto custom-scrollbar'>
+                    <div className="overflow-y-auto max-h-[90%] overflow-x-hidden space-y-3 p-2 custom-scrollbar">
+                   
                         {
                             upcomingRides?.slice().reverse().map((upcomingRides) =>
                                 <UpComingList
