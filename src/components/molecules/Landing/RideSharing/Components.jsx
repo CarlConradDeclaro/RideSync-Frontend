@@ -1,7 +1,14 @@
+import { useNavigate } from 'react-router-dom';
 import rideshare from '../../../../assets/rideshare.png'
 const Components = ()=> {
+  const navigate = useNavigate()
+
+  const handleRideShare = () =>{
+    navigate('/our-services/ride-sharing')
+  }
+
     return (
-        <div className="w-80 flex flex-col items-start md:items-center gap-3 group cursor-pointer shrink">
+        <div className="w-80 flex flex-col items-start md:items-center gap-3 group cursor-pointer shrink" onClick={handleRideShare}>
           <div className="bg-stone-100 rounded-full">
             <img
               src={rideshare}

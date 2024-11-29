@@ -1,3 +1,4 @@
+import { useEffect } from "react"
 import { HomeHeader } from "../../molecules/HomeHeader"
 import { BeDriver } from "../../organism/Landing/Driver"
 import {Footer} from "../../organism/Landing/Footer"
@@ -5,6 +6,9 @@ import { General } from "../../organism/Landing/General"
 import { Services } from "../../organism/Landing/Services"
 
 const Components = () => {
+    useEffect(()=>{
+        window.scrollTo(0,0);
+    },[])
     return(
         <div>
             <div className="sticky top-0 z-50">

@@ -4,6 +4,8 @@ import { DriverRoutes } from './navigators/DriverRoutes'
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import { Landing } from './components/templates/Landing';
+import { RideSharing } from './components/templates/Ride-sharing';
+
 
 
 function App() {
@@ -14,7 +16,10 @@ function App() {
     <BrowserRouter>
   
       <Routes>
+
         <Route path='/' element={<Landing /> } />
+        <Route path='/our-services/ride-sharing' element={<RideSharing/>} />
+        
         {/* Define Passenger Routes */}
         <Route path="/passenger/*" element={<PassengerRoutes />} />
 
