@@ -16,7 +16,7 @@ import { Loading } from '../../components/templates/Carpool/Loading';
 
 
 const routes = [
-  { path: '/', element: <LandingPage />, isProtected: false },
+ // { path: '/', element: <LandingPage />, isProtected: false },
   { path: '/register', element: <Register />, isProtected: false },
   { path: '/login', element: <Login />, isProtected: false },
   { path: '/homeContents', element: <Home />, isProtected: true },
