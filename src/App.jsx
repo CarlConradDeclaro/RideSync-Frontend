@@ -3,7 +3,8 @@ import { PassengerRoutes } from './navigators/PassengerRoutes'
 import { DriverRoutes } from './navigators/DriverRoutes'
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Landing } from './components/templates/Landing';
-import { RideSharing } from './components/templates/Ride-sharing';
+import { RideSharing } from './components/templates/Our-services/Ride-sharing';
+import {CarPooling} from './components/templates/Our-services/Car-pooling';
 
 
 
@@ -15,9 +16,9 @@ function App() {
     <BrowserRouter>
   
       <Routes>
-
         <Route path='/' element={<Landing /> } />
         <Route path='/our-services/ride-sharing' element={<RideSharing/>} />
+        <Route path='/our-services/car-pooling' element={<CarPooling/>}/>
         
         {/* Define Passenger Routes */}
         <Route path="/passenger/*" element={<PassengerRoutes />} />
