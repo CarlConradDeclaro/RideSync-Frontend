@@ -11,6 +11,7 @@ import { HomeCarpool } from '../../components/pages/Carpool/HomeCarpool';
 import { CreateRides } from '../../components/pages/Carpool/CreateRides';
 
 import { Message as CarpoolMessage } from '../../components/pages/Carpool/Message';
+import { DummyLoading } from '../../components/molecules/Driver/DummyLoading';
 
 
 const RootNavigators = () => {
@@ -29,6 +30,7 @@ const RootNavigators = () => {
                     <Route path="/homeCarpool" element={<HomeCarpool />} />
                     <Route path="/createRide" element={<CreateRides />} />
                     <Route path="/CarpoolMessage" element={<CarpoolMessage />} />
+                    <Route path="/loading" element={<DummyLoading />} />
 
                     <Route path="*" element={<NotFound />} />
                 </Route>

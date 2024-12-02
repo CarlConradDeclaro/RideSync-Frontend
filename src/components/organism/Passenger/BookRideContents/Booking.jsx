@@ -1,5 +1,6 @@
 import React from 'react'
 import NookRideLight from '../../../../assets/bookRideLight.png';
+import BookBG from '../../../../assets/bookingBg.png';
 import { Card } from '../../../molecules/Card';
 import { SelectTrip } from '../../../atoms/Select';
 import { Button } from '../../../atoms/Button';
@@ -25,11 +26,11 @@ const Booking = ({
     return (
         <div className='w-full'>
             <div className='flex justify-center'>
-                <img src={NookRideLight} className='h-[150px] md:h-[180px] w-[1000px]' />
+                <img src={BookBG} className='h-[150px] md:h-[250px] w-[1000px]' />
             </div>
             <div className='flex justify-center'>
-                <Card className=' m-9 w-[1000px] h-auto md:h-[180px] rounded-lg p-3 relative'>
-                    <div  >
+                <Card className=' m-9 w-[1000px] h-auto md:h-[105px] rounded-lg p-3 relative'>
+                    {/* <div  >
 
                         <SelectTrip
                             label="Select Trip"
@@ -64,7 +65,7 @@ const Booking = ({
                             ]}
                             sx={{ minWidth: 120, backgroundColor: 'white' }}
                         />
-                    </div>
+                    </div> */}
                     <div className="flex flex-col md:flex md:flex-row gap-2 p-2">
                         {/* "Where from?" Input and Suggestions */}
                         <div className="relative">

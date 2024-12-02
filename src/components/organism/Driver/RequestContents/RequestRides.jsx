@@ -49,7 +49,9 @@ const RequestRides = () => {
                     <Card className="h-full rounded-2xl shadow-lg overflow-y-auto p-5 bg-white">
                         <h1 className="text-xl font-semibold mb-3">Requests Rides</h1>
                         <div className="flex flex-col space-y-4">
-                            {request.map((req, index) => (
+                            {
+                            request.length > 0 ?
+                            request.map((req, index) => (
                                 <RouteList
                                     key={index}
                                     userId={req.userId}
@@ -63,7 +65,18 @@ const RequestRides = () => {
                                     endLatitude={req.endLatitude}
                                     endLongitude={req.endLongitude}
                                 />
-                            ))}
+                            ))
+                            :
+                            <div className="flex flex-col items-center justify-center mt-[90px] ">
+                                {/* Spinner */}
+                                <div className="relative w-16 h-16 border-4 border-gray-300 border-t-colorBlue rounded-full animate-spin"></div>
+                                {/* Waiting Text */}
+                                <p className="mt-4 text-lg font-semibold text-gray-700 animate-pulse">
+                                Looking for available rides. Stay tuned!
+                            </p>
+                      </div>
+                        
+                        }
                         </div>
                     </Card>
                 </div>

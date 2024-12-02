@@ -28,7 +28,7 @@ import { BASEURL, updateRequest } from '../../../../utils/Service';
 
 const PassengerApproval = ({ }) => {
     const { driverInfo, socket, isRideCancelled, currentRide, passengerInfo, passengerApproval, driverMap, selectedPosition, selectedPositionDest,
-        setSelectedPosition, setStep2, setStep1, customIcon, routingControlRef, request } = useContext(RequestContext);
+        setSelectedPosition, setStep2, setStep1, customIcon, routingControlRef, request,handleChats } = useContext(RequestContext);
 
     const [driverToPassenger, setDriverToPassenger] = useState(false)
     const [initialPosition, setInitialPosition] = useState(selectedPosition);
@@ -433,7 +433,7 @@ const PassengerApproval = ({ }) => {
                             <span className="text-sm font-medium text-gray-700">Arrived at Pickup Location</span>
                             <label className="relative inline-flex items-center cursor-pointer">
                                 <input type="checkbox" className="sr-only peer" />
-                                <div className="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center peer-checked:bg-green-500 transition-colors"
+                                <div className="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center  transition-colors"
                                     onClick={handleDriverHasArrived}
                                 >
                                     <span className="text-white text-xl mb-2 font-bold peer-checked:block">✔</span>
@@ -441,10 +441,10 @@ const PassengerApproval = ({ }) => {
                             </label>
                         </div>
                         <div className="flex items-center justify-between">
-                            <span className="text-sm font-medium text-gray-700">Arrived at Destination</span>
+                            <span className="text-sm font-medium text-gray-700">Arrived at Destination </span>
                             <label className="relative inline-flex items-center cursor-pointer">
                                 <input type="checkbox" className="sr-only peer" />
-                                <div className="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center peer-checked:bg-green-500 transition-colors"
+                                <div className="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center  transition-colors"
                                     onClick={() => setPaymentModal(true)}
                                 >
                                     <span className="text-white text-xl font-bold peer-checked:block">✔</span>
@@ -457,7 +457,7 @@ const PassengerApproval = ({ }) => {
                                     className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
                                     style={{ margin: 0, padding: 0 }}
                                 >
-                                    <Payment setPaymentModal={setPaymentModal} handlePayment={handlePayment} />
+                                    <Payment  routeRequest={routeRequest} setPaymentModal={setPaymentModal} handlePayment={handlePayment} />
                                 </div>
                             )
                         }
@@ -473,6 +473,7 @@ const PassengerApproval = ({ }) => {
                                 fontColor="#fff"
                                 width="130px"
                                 className="bg-blue-600 hover:bg-blue-700 transition-all rounded-lg px-4 py-2"
+                               onClick={()=>handleChats(passengerInfo?.userId)}
                             />
                         </div>
                         <div className="text-center">

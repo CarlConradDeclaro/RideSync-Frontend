@@ -71,7 +71,7 @@ const SelectedDriver = () => {
                 <h1 className="text-2xl font-semibold text-gray-800">Driver</h1>
                 <span>
                     {isDriverComming ? "Your driver is comming!" :
-                        isDriverHasArrive ? "Your driver have arrived!" : ""
+                        isDriverHasArrive ? "Your driver has arrived!" : ""
                     }
 
                 </span>
@@ -81,7 +81,7 @@ const SelectedDriver = () => {
                         <img src={DefaultProfile} className="max-w-[80px] max-h-[80px] rounded-full border-2 border-gray-300" alt="Driver Profile" />
                     </div>
                     <div className="w-full flex flex-col items-end justify-between">
-                        <h1 className="font-bold text-lg text-right">{driverInfo?.userFn || 'Driver Name'}</h1>
+                        <h1 className="font-bold text-lg text-right">{driverInfo?.userLn.toUpperCase()+"  "|| 'Driver Name'}   {driverInfo?.userFn.toUpperCase() || 'Driver Name'}</h1>
                         <div className="flex items-center justify-start text-yellow-500">
                             <Ratings value={val} />
                             <span className="ml-2 text-gray-600">(5.0)</span>
@@ -104,7 +104,7 @@ const SelectedDriver = () => {
                     </div>
                 </div>
                 <div className="flex justify-center gap-5">
-                    <Button name="Message" variant="contained" size="large" onClick={handleChats} />
+                    <Button name="Message" variant="contained" size="large" onClick={()=>handleChats(driverInfo?.userId)} />
                     {
                         !isDriverHasArrive && <Button name="Cancel" variant="contained" size="large" bgColor="red" onClick={() => handleCancelRide(false)} />
                     }

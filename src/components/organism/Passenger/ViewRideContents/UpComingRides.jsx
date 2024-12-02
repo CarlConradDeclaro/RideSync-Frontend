@@ -9,20 +9,31 @@ import Location from '../../../../assets/location.png';
 import { UpComingList } from './List';
 
 
-const UpComingRides = ({ upcomingRides, anchorEl, setAnchorEl, options, bookingInfo, handleBookingRide, upComingRidesInfo, mapRef, customIcon, pickUp, destination }) => {
+const UpComingRides = ({ upcomingRides, anchorEl, setAnchorEl, options, 
+    bookingInfo, handleBookingRide, upComingRidesInfo, mapRef, customIcon,
+     pickUp, destination,setIsInCarpools,handleCancelBooking,handleChats}) => {
     const [isExpanded, setIsExpanded] = useState(false);
 
     const toggleDetails = () => {
         setIsExpanded(!isExpanded);
     };
+    const isCancellable = (travelDate) => {
+        const currentTime = new Date(); // Current time
+        const travelDateTime = new Date(travelDate); // Travel date/time
+        const cancelDeadline = new Date(travelDateTime);
+        cancelDeadline.setHours(cancelDeadline.getHours() - 1); // Subtract 1 hour from travel time
+        return currentTime < cancelDeadline;
+    };
     return (
         <Card className="mt-5 p-4 flex flex-col md:flex-col gap-6 items-start w-full shadow-lg rounded-lg md:justify-center">
-
             <div className="flex flex-col w-full md:flex-row md:justify-center gap-5">
                 <Card className="h-[70vh] w-full md:w-[700px] p-2 md:p-5 rounded-lg shadow-md bg-white overflow-hidden">
+                   <div className='flex justify-between'>
                     <h1 className="text-lg font-semibold text-gray-700 mb-4">
                         Booking
                     </h1>
+                     
+                   </div>
                     <div className="overflow-y-auto max-h-[90%] overflow-x-hidden space-y-3 p-2 custom-scrollbar">
                    
                         {
@@ -41,7 +52,10 @@ const UpComingRides = ({ upcomingRides, anchorEl, setAnchorEl, options, bookingI
 
                 </Card>
                 <Card className="w-full hidden md:block mt-[20px] md:mt-0 md:w-[500px] p-6 md:h-[70vh] overflow-auto custom-scrollbar rounded-xl shadow-lg bg-gradient-to-b from-white to-gray-50 border border-gray-200">
-                    <div>
+                    {
+                        upComingRidesInfo?.startLocation
+                        &&
+                        <div>
                         {/* Header */}
                         <div className="text-center mb-6">
                             <h2 className="text-2xl font-extrabold text-gray-800">Booking Details</h2>
@@ -51,6 +65,7 @@ const UpComingRides = ({ upcomingRides, anchorEl, setAnchorEl, options, bookingI
                         {/* Trip Details */}
                         <div className="mb-6">
                             <h3 className="text-lg font-semibold text-gray-700 mb-3">🛣️ Trip Information</h3>
+                            id {upComingRidesInfo?.routeId}
                             <div className="space-y-4">
                                 <div className="flex flex-col">
                                     <span className="text-sm text-gray-500">Start Location:</span>
@@ -88,6 +103,7 @@ const UpComingRides = ({ upcomingRides, anchorEl, setAnchorEl, options, bookingI
                         {/* User Details */}
                         <div className="mb-6">
                             <h3 className="text-lg font-semibold text-gray-700 mb-3">👤 Driver Details</h3>
+                            id {upComingRidesInfo?.userId}
                             <div className="space-y-4">
                                 <div className="flex justify-between items-center">
                                     <span className="text-sm text-gray-500">Name:</span>
@@ -125,17 +141,25 @@ const UpComingRides = ({ upcomingRides, anchorEl, setAnchorEl, options, bookingI
                                 name="Contact"
                                 variant="contained"
                                 size="medium"
+                                onClick={()=> handleChats(upComingRidesInfo?.userId)}
                             />
 
                             {/* Cancel Booking Button */}
-                            <Button
-                                name="Cancel"
-                                variant="contained"
-                                size="medium"
-                                bgColor="red"
-                            />
+                            {isCancellable(upComingRidesInfo?.travelDate) ? (
+                                <Button
+                                    name="Cancel"
+                                    variant="contained"
+                                    size="medium"
+                                    bgColor="red"
+                                    onClick={() => handleCancelBooking(upComingRidesInfo?.routeId,upComingRidesInfo?.userId)}
+                                />
+                            ) : (
+                               <></>
+                            )}
                         </div>
                     </div>
+                    }
+                 
                 </Card>
             </div>
         </Card>

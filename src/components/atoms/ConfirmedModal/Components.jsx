@@ -1,11 +1,12 @@
 import { useState } from "react";
 
-const BookingConfirmedModal = ({setIsBooking,title,message}) => {
+const BookingConfirmedModal = ({setIsBooking,title,message,handleEvent}) => {
     const [isOpen, setIsOpen] = useState(true);
     const handleOpen = () => setIsOpen(true);
     const handleClose = () => {
         setIsBooking(false)
         setIsOpen(false)
+        handleEvent()
     };
   
     return (

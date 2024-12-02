@@ -8,7 +8,6 @@ export const PBookCarpoolContext = createContext()
 export const PBookCarpoolContextProvider = ({children})=>{
     const navigate = useNavigate();
     const [passengerInfo, setPassengerInfo] = useState(null);
-    const [carpoolRides,setCarpoolRides]= useState([])
     const [users,setUsers] = useState([])
     const [driverData,setDriverData]= useState()
     const [numberOfPassengers, setNumberOfPassengers] = useState(1);
@@ -17,8 +16,14 @@ export const PBookCarpoolContextProvider = ({children})=>{
     const [socketID, setSocketID] = useState()
     const [onlineUsers, setOnlineUsers] = useState([])
 
-
-  
+    const [carpoolRides,setCarpoolRides]= useState([])
+    const [filteredRides, setFilteredRides] = useState([]);
+    const [leavingFrom, setLeavingFrom] = useState('');
+    const [goingTo, setGoingTo] = useState('');
+    const [selectedDate, setSelectedDate] = useState('');
+    const [suggestions, setSuggestions] = useState([]);
+    const [suggestionsDest, setSuggestionsDest] = useState([]);
+   
     useEffect(() => {
         const newSocket = io("http://localhost:8000")
         setSocket(newSocket)
@@ -72,10 +77,83 @@ export const PBookCarpoolContextProvider = ({children})=>{
           console.log("carpool",data);
           
           setCarpoolRides(data)
+          setFilteredRides(data);
         } catch (error) {
           console.error("Error fetching carpool rides:", error);
         }
     };
+
+    const handleSearchInput = async (e) => {
+        const query = e.target.value;
+        setLeavingFrom(query);
+
+        if (query.length > 2) {
+            const response = await fetch(`http://localhost:8000/api/users/search?query=${encodeURIComponent(query)}`);
+
+            if (!response.ok) {
+                console.error('Failed to fetch suggestions');
+                return;
+            }
+            const data = await response.json();
+            console.log("Fetched Data: ", data);
+            setSuggestions(data);
+        } else {
+            setSuggestions([]);
+        }
+
+    };
+
+    const handleSearchInputDest = async (e) => {
+        const query = e.target.value;
+        setGoingTo(query);
+
+        if (query.length > 2) {
+            const response = await fetch(`http://localhost:8000/api/users/search?query=${encodeURIComponent(query)}`);
+
+            if (!response.ok) {
+                console.error('Failed to fetch suggestions');
+                return;
+            }
+            const data = await response.json();
+            console.log("Fetched Data destination: ", data);
+            setSuggestionsDest(data);
+        } else {
+            setSuggestionsDest([]);
+        }
+
+    };
+    
+
+    const handleSelectSuggestion = (lat, lon, display_name) => {
+        setLeavingFrom(display_name);
+        setSuggestions([]);
+
+    };
+    const handleSelectSuggestionDest = (lat, lon, display_name) => {
+        setGoingTo(display_name);
+        setSuggestionsDest([]);
+
+    };
+
+    const handleSearch = () => {
+        const filtered = carpoolRides.filter((ride) => {
+          const matchesStartLocation = ride.startLocation
+            ?.toLowerCase()
+            .includes(leavingFrom.toLowerCase());
+          const matchesEndLocation = ride.endLocation
+            ?.toLowerCase()
+            .includes(goingTo.toLowerCase());
+          const matchesDate =
+            selectedDate === '' ||
+            (ride.travelDateTime &&
+              new Date(ride.travelDateTime).toLocaleDateString() ===
+                new Date(selectedDate).toLocaleDateString());
+    
+          return matchesStartLocation && matchesEndLocation && matchesDate;
+        });
+        setFilteredRides(filtered);
+      };
+
     const fetchALlUsers = async()=>{
         try {
             const response = await fetch(`${BASEURL}/`)
@@ -199,7 +277,19 @@ export const PBookCarpoolContextProvider = ({children})=>{
             setTotalAmount,
             handleConfirmBooking,
             isBooked,
-            bookedBa
+            bookedBa,
+            handleSearch,
+            filteredRides,
+            leavingFrom,
+            goingTo,
+            selectedDate,
+            handleSearchInput,
+            handleSearchInputDest,
+            setSelectedDate,
+            suggestions,
+            suggestionsDest,
+            handleSelectSuggestion,
+            handleSelectSuggestionDest
         }}
         >
             {children}

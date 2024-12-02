@@ -597,10 +597,10 @@ export const FindRouteContextProvider = ({ children }) => {
     fetchYourDriver()
   }, [userInfo])
 
-  const handleChats = async () => {
+  const handleChats = async (driverId) => {
     await fetchYourDriver()
     const user1_Id = userInfo?.id;
-    const user2_Id = dId;
+    const user2_Id = driverId;
     try {
       const response = await postRequest(`${BASEURL}/createChat`, JSON.stringify({ user1_Id, user2_Id }))
       console.log("handle chat response", response);
