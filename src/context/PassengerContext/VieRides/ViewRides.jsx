@@ -6,26 +6,35 @@ import L from 'leaflet';
 import 'leaflet-routing-machine';
 import 'leaflet-control-geocoder/dist/Control.Geocoder.css'; // Geocoder CSS
 import 'leaflet-control-geocoder'; // Geocoder JS
+import { useNavigate } from 'react-router-dom';  
+import { io } from 'socket.io-client'
+
+
 export const ViewRidesContext = createContext();
 export const ViewRidesContextProvider = ({ children }) => {
 
     const mapRef = useRef(null);
-
+    const navigate = useNavigate();  
+    const [socket, setSocket] = useState(null)
+    const [onlineUsers, setOnlineUsers] = useState([])
     const routingControlRef = useRef(null);
     const [isInRecentRide, setIsInRecentRides] = useState(true);
     const [isInUpComingRides, setIsInUpComingRides] = useState(false);
     const [isInInCancelledRides, setIsInCancelledRides] = useState(false);
+    const [isInCarpool,setIsInCarpools] =useState(false)
     const [userInfo, setUserInfo] = useState();
-
     const [currentRoute, setCurrentRoute] = useState();
     const [upcomingRides, setUpComingRides] = useState()
     const [cancelledRoutes, setCancelledRoutes] = useState();
+    const [bookedCarpools,setBookCarpools]=useState()
     const [anchorEl, setAnchorEl] = useState(null);
     const options = ['Cancel'];
+    const [rateModal,setRateModal] = useState(false)
 
     const [pickUp, setPickUp] = useState()
     const [destination, setDestination] = useState()
     const [recentRides, setRecentRides] = useState({
+        userId:null,
         startLocation: null,
         endLocation: null,
         totalAmount: null,
@@ -36,9 +45,12 @@ export const ViewRidesContextProvider = ({ children }) => {
         userFn: null,
         userLn: null,
         userRatings: null,
-        status: null
+        status: null,
+        vehicleColor:null
     })
     const [upComingRidesInfo, setUpComingRidesInfo] = useState({
+        userId:null,
+        routeId:null,
         startLocation: null,
         endLocation: null,
         duration: null,
@@ -50,6 +62,7 @@ export const ViewRidesContextProvider = ({ children }) => {
         userEmail: null,
         userPhone: null,
         userRatings: null,
+        vPlateNum:null,
     })
 
 
@@ -68,54 +81,116 @@ export const ViewRidesContextProvider = ({ children }) => {
         }
     }, []);
 
-    useEffect(() => {
-        const fetchCurrentRide = async () => {
-            if (userInfo && userInfo.id) {
-                const userId = userInfo.id;
-                const routeRequest = await postRequest(`${BASEURL}/getRecentRide`, JSON.stringify({ userId }));
-                if (routeRequest && routeRequest.length > 0) {
-                    setCurrentRoute(routeRequest);
-                }
+    const fetchCurrentRide = async () => {
+        if (userInfo && userInfo.id) {
+            const userId = userInfo.id;
+            const routeRequest = await postRequest(`${BASEURL}/getRecentRide`, JSON.stringify({ userId }));
+            console.log("recentRides",routeRequest);
+            
+            if (routeRequest && routeRequest.length > 0) {
+                setCurrentRoute(routeRequest);
             }
-        };
+        }
+    };
+    useEffect(() => {
+      
         fetchCurrentRide();
 
     }, [userInfo]);
 
+    
     useEffect(() => {
-        const fetchUpComingRides = async () => {
+        const newSokcet = io("http://localhost:8000")
+        setSocket(newSokcet)
+        newSokcet.on("connect", () => {
+            console.log("from frontend message page", newSokcet.id);
             if (userInfo && userInfo.id) {
-                const userId = userInfo.id;
-                const upComingRideRequest = await postRequest(`${BASEURL}/getBookings`, JSON.stringify({ userId }))
-                if (upComingRideRequest && upComingRideRequest.length > 0) {
-                    setUpComingRides(upComingRideRequest)
-                }
+                newSokcet.emit("addNewUser", userInfo.id, newSokcet.id)
+            }
+        })
+
+        newSokcet.on('refreshRides',(routeId)=>{
+            console.log('refreshRides recieved');
+            
+            setUpComingRides((prevRides) =>
+                prevRides.filter((ride) => ride.routeId !== routeId)
+            );
+            fetchCurrentRide()
+            fetchUpComingRides()
+            fetchCancelledRoutes()
+            fetchBookedCarpools()
+        })
+
+        newSokcet.on("getOnlineUsers", (users) => {
+            setOnlineUsers(users)
+        })
+       
+    }, [userInfo])
+
+    const fetchUpComingRides = async () => {
+        if (userInfo && userInfo.id) {
+            const userId = userInfo.id;
+            const upComingRideRequest = await postRequest(`${BASEURL}/getBookings`, JSON.stringify({ userId }))
+            if (upComingRideRequest && upComingRideRequest.length > 0) {
+                setUpComingRides(upComingRideRequest)
             }
         }
+    }
+    useEffect(() => {
+      
 
         fetchUpComingRides()
     }, [userInfo])
 
-    useEffect(() => {
-        const fetchCancelledRoutes = async () => {
-            if (userInfo && userInfo.id) {
-                const userId = userInfo.id;
-                const cancelledRoutes = await postRequest(`${BASEURL}/getCancelledRoutes`, JSON.stringify({ userId }));
-                if (cancelledRoutes && cancelledRoutes.length > 0) {
-                    setCancelledRoutes(cancelledRoutes);
-                }
+    const [refreshBookings,setRefreshBookings]= useState(false)
+    useEffect(()=>{
+        fetchUpComingRides()
+    },[refreshBookings])
+
+    const fetchCancelledRoutes = async () => {
+        if (userInfo && userInfo.id) {
+            const userId = userInfo.id;
+            const cancelledRoutes = await postRequest(`${BASEURL}/getCancelledRoutes`, JSON.stringify({ userId }));
+            if (cancelledRoutes && cancelledRoutes.length > 0) {
+                setCancelledRoutes(cancelledRoutes);
             }
-        };
+        }
+    };
+    useEffect(() => {
+      
         fetchCancelledRoutes();
     }, [userInfo]);
+
+    const fetchBookedCarpools = async()=>{
+        if (userInfo && userInfo.id) {
+            const userId = userInfo.id;
+            const cancelledRoutes = await postRequest(`${BASEURL}/fetchBookedCarpools`, JSON.stringify({ userId }));
+            if (cancelledRoutes && cancelledRoutes.length > 0) {
+                setBookCarpools(cancelledRoutes);
+            }
+        }
+    }
+    useEffect(()=>{
+       
+        fetchBookedCarpools()
+    },[userInfo])
+
+
+    useEffect(()=>{
+        console.log("Bookes Carpools", bookedCarpools);
+        
+    },[bookedCarpools])
+
+
 
     const selectedPosition = currentRoute?.[0] ? { lat: currentRoute[0].startLatitude, lon: currentRoute[0].startLongitude } : null;
     const selectedPositionDest = currentRoute?.[0] ? { lat: currentRoute[0].endLatitude, lon: currentRoute[0].endLongitude } : null;
 
 
 
-    const handleRecentRide = (startLocation, endLocation, totalAmount, duration, distance, pickUp, destination, userFn, userLn, userRatings, status) => {
+    const handleRecentRide = (userId,startLocation, endLocation, totalAmount, duration, distance, pickUp, destination, userFn, userLn, userRatings, status,vehicleColor,vPlateNum) => {
         setRecentRides({
+            userId:userId,
             startLocation: startLocation,
             endLocation: endLocation,
             totalAmount: totalAmount,
@@ -124,7 +199,9 @@ export const ViewRidesContextProvider = ({ children }) => {
             userFn: userFn,
             userLn: userLn,
             userRatings: userRatings,
-            status: status
+            status: status,
+            vehicleColor:vehicleColor,
+            vPlateNum:vPlateNum
         })
 
         setPickUp(pickUp);
@@ -152,10 +229,12 @@ export const ViewRidesContextProvider = ({ children }) => {
 
     }
 
-    const handleBookingRide = (pickUp, destination, startLocation, endLocation, duration, distance, totalAmount, travelDate, userFn, userLn, userEmail, userPhone, userRatings) => {
+    const handleBookingRide = (userId,routeId,pickUp, destination, startLocation, endLocation, duration, distance, totalAmount, travelDate, userFn, userLn, userEmail, userPhone, userRatings) => {
         setPickUp(pickUp);
         setDestination(destination);
         setUpComingRidesInfo({
+            userId:userId,
+            routeId:routeId,
             startLocation: startLocation,
             endLocation: endLocation,
             duration: duration,
@@ -169,6 +248,8 @@ export const ViewRidesContextProvider = ({ children }) => {
             userRatings: userRatings,
         })
 
+    
+
         const map = mapRef.current;
         if (routingControlRef.current)
             map.removeControl(routingControlRef.current);
@@ -188,6 +269,20 @@ export const ViewRidesContextProvider = ({ children }) => {
             },
         }).addTo(map);
     }
+    const handleCancelBooking = async(routeId,userId)=>{
+        console.log("route userId",routeId,userId);
+        
+        try {
+           const response = await postRequest(`${BASEURL}/cancelBooking`,JSON.stringify({routeId}))
+           setRefreshBookings(!refreshBookings)
+           socket.emit('refresh',userId,routeId)
+           navigate('/passenger/loading?route=/passenger/viewRideContents&active=viewRides');
+           console.log(response);
+          
+        } catch (error) {
+           console.log("Error updating routes and booking");
+        }
+  }
 
 
     const handleNav = (nav) => {
@@ -195,14 +290,22 @@ export const ViewRidesContextProvider = ({ children }) => {
             setIsInRecentRides(true);
             setIsInUpComingRides(false);
             setIsInCancelledRides(false);
+            setIsInCarpools(false)
         } else if (nav === 'upcoming') {
             setIsInRecentRides(false);
             setIsInUpComingRides(true);
             setIsInCancelledRides(false);
+            setIsInCarpools(false)
         } else if (nav === 'cancelled') {
             setIsInRecentRides(false);
             setIsInUpComingRides(false);
             setIsInCancelledRides(true);
+            setIsInCarpools(false)
+        }else if(nav === 'carpools'){
+            setIsInRecentRides(false);
+            setIsInUpComingRides(false);
+            setIsInCancelledRides(false);
+            setIsInCarpools(true)
         }
     };
 
@@ -212,6 +315,29 @@ export const ViewRidesContextProvider = ({ children }) => {
         iconAnchor: [19, 38],
         popupAnchor: [0, -38],
     });
+
+
+    
+    const handleChats = async (dId) => {
+        const user1_Id = userInfo?.id;
+        const user2_Id = dId;
+        try {
+          const response = await postRequest(`${BASEURL}/createChat`, JSON.stringify({ user1_Id, user2_Id }))
+          console.log("handle chat response", response);
+          navigate('/passenger/messageContents');
+        } catch (error) {
+          console.error(error);
+        }
+      }
+
+      const handleRateUser= async(user_id,rating)=>{
+            try {
+                await postRequest(`${BASEURL}/rateUser`,JSON.stringify({user_id,rating}))
+            } catch (error) {
+                console.log("Error rating user");
+                
+            }
+      }
 
 
     return (
@@ -225,9 +351,11 @@ export const ViewRidesContextProvider = ({ children }) => {
                 isInRecentRide,
                 isInUpComingRides,
                 isInInCancelledRides,
+                isInCarpool,
                 setIsInRecentRides,
                 setIsInUpComingRides,
                 setIsInCancelledRides,
+                setIsInCarpools,
                 customIcon,
                 handleNav,
                 selectedPosition,
@@ -241,7 +369,13 @@ export const ViewRidesContextProvider = ({ children }) => {
                 pickUp,
                 destination,
                 handleBookingRide,
-                upComingRidesInfo
+                upComingRidesInfo,
+                bookedCarpools,
+                handleCancelBooking,
+                handleChats,
+                rateModal, 
+                setRateModal,
+                handleRateUser
             }}
         >
             {children}

@@ -1,13 +1,21 @@
 import { Children, createContext, useEffect, useRef, useState } from "react";
-import { BASEURLDrivers, postRequest } from "../../../utils/Service";
+import { BASEURL, BASEURLDrivers, postRequest } from "../../../utils/Service";
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-routing-machine/dist/leaflet-routing-machine.css';
 import L from 'leaflet';
 import 'leaflet-routing-machine';
 import 'leaflet-control-geocoder/dist/Control.Geocoder.css'; // Geocoder CSS
 import 'leaflet-control-geocoder'; // Geocoder JS
+import { useNavigate } from 'react-router-dom';  
+import { io } from 'socket.io-client';
+
+
+
 export const ViewRidesContext = createContext();
 export const ViewRidesContextProvider = ({ children }) => {
+    const navigate = useNavigate();  
+    const [socket, setSocket] = useState(null);
+    const [onlineUsers, setOnlineUsers] = useState([])
 
     const [userInfo, setUserInfo] = useState();
     const mapRef = useRef(null);
@@ -28,6 +36,8 @@ export const ViewRidesContextProvider = ({ children }) => {
         distance: null,
     });
     const [bookingInfo, setBookingInfo] = useState({
+        userId:null,
+        routeId:null,
         startLocation: null,
         endLocation: null,
         duration: null,
@@ -65,33 +75,114 @@ export const ViewRidesContextProvider = ({ children }) => {
     }, [])
 
     useEffect(() => {
-        const fetchRecentRides = async () => {
-            if (userInfo && userInfo.id) {
-                const userId = userInfo.id;
-                const routeRequest = await postRequest(`${BASEURLDrivers}/recentRides`, JSON.stringify({ userId }));
-                if (routeRequest && routeRequest.length > 0) {
-                    setCurrentRoute(routeRequest);
-                    console.log(routeRequest);
+        const newSocket = io("http://localhost:8000");
+        setSocket(newSocket);
 
-                }
+        newSocket.on("connect", () => {
+            console.log("from frontend driver: " + newSocket.id);
+
+            if (userInfo?.id) {
+                newSocket.emit("addNewUser", userInfo.id, newSocket.id);
+            }
+        });
+
+        newSocket.on('refreshMyRides',(routeId)=>{
+            console.log("refreshMyRides recieved");
+            
+            setBookings((prevRides) =>
+                prevRides.filter((ride) => ride.routeId !== routeId)
+            )
+            fetchRecentRides()
+            fetchBookingRides()
+            fetchCancelledRides()
+        })
+
+        newSocket.on("getOnlineUsers", (users) => {
+            setOnlineUsers(users);
+        });
+
+        // Cleanup socket on component unmount
+        return () => {
+            newSocket.disconnect();
+        };
+    }, [userInfo]);
+
+
+    const fetchRecentRides = async () => {
+        if (userInfo && userInfo.id) {
+            const userId = userInfo.id;
+            const routeRequest = await postRequest(`${BASEURLDrivers}/recentRides`, JSON.stringify({ userId }));
+            if (routeRequest && routeRequest.length > 0) {
+                setCurrentRoute(routeRequest);
+                console.log(routeRequest);
+
             }
         }
+    }
+    useEffect(() => {
+     
         fetchRecentRides()
     }, [userInfo])
 
-    useEffect(() => {
-        const fetchBookingRides = async () => {
-            if (userInfo && userInfo.id) {
-                const userId = userInfo.id;
-                const routeRequest = await postRequest(`${BASEURLDrivers}/bookingRides`, JSON.stringify({ userId }));
-                if (routeRequest && routeRequest.length > 0) {
-                    setBookings(routeRequest);
-                    console.log("booking", routeRequest);
-                }
+    const fetchBookingRides = async () => {
+        if (userInfo && userInfo.id) {
+            const userId = userInfo.id;
+            const routeRequest = await postRequest(`${BASEURLDrivers}/bookingRides`, JSON.stringify({ userId }));
+            if (routeRequest && routeRequest.length > 0) {
+                setBookings(routeRequest);
+                console.log("booking", routeRequest);
             }
         }
+    }
+
+    const fetchCancelledRides = async()=>{
+        if (userInfo && userInfo.id) {
+            const userId = userInfo.id;
+            const routeRequest = await postRequest(`${BASEURLDrivers}/fetchCancelledRides`, JSON.stringify({ userId }));
+            if (routeRequest && routeRequest.length > 0) {
+                setCancelledRoutes(routeRequest);
+                console.log("booking", routeRequest);
+            }
+        }
+    }
+
+    useEffect(() => {
         fetchBookingRides()
+        fetchCancelledRides()
     }, [userInfo])
+
+    const [refreshBookings,setRefreshBookings]= useState(false)
+
+    useEffect(()=>{
+        fetchBookingRides()
+    },[refreshBookings])
+
+    const markBookingAsDone = async(routeId,userId)=>{
+        try {
+           const response = await postRequest(`${BASEURL}/markBookingAsDone`,JSON.stringify({routeId}))
+           setRefreshBookings(!refreshBookings)
+           socket.emit('refreshViewRides',userId,routeId)
+           navigate('/driver/loading?route=/driver/viewRidesContents&active=viewRides');
+        } catch (error) {
+           console.log("Error updating routes and booking");
+           
+        }
+    }
+
+
+    const handleCancelBooking = async(routeId,userId)=>{
+        console.log("routeId", routeId,"userId",userId);
+       
+        try {
+           const response = await postRequest(`${BASEURL}/cancelBooking`,JSON.stringify({routeId}))
+           setRefreshBookings(!refreshBookings)
+           socket.emit('refreshViewRides',userId,routeId)
+           navigate('/driver/loading?route=/driver/viewRidesContents&active=viewRides');
+        } catch (error) {
+           console.log("Error updating routes and booking");
+           
+        }
+  }
 
 
 
@@ -130,12 +221,14 @@ export const ViewRidesContextProvider = ({ children }) => {
         }).addTo(map);
     };
 
-    const handleBookingRideInfo = (pickUp, destination, startLocation, endLocation, duration, distance, totalAmount, travelDate,
+    const handleBookingRideInfo = (userId,routeId,pickUp, destination, startLocation, endLocation, duration, distance, totalAmount, travelDate,
         userFn, userLn, userEmail, userRatings
     ) => {
         setPickUp(pickUp);
         setDestination(destination);
         setBookingInfo({
+            userId:userId,
+            routeId:routeId,
             startLocation: startLocation,
             endLocation: endLocation,
             duration: duration,
@@ -204,7 +297,10 @@ export const ViewRidesContextProvider = ({ children }) => {
                 userFn,
                 bookings,
                 handleBookingRideInfo,
-                bookingInfo
+                bookingInfo,
+                cancelledRoutes,
+                handleCancelBooking,
+                markBookingAsDone
             }}
         >
             {children}

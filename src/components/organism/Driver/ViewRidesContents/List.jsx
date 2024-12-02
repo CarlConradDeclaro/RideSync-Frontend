@@ -12,7 +12,7 @@ export const RecentList = ({ startLocation, endLocation, status, startLatitude, 
         <div className="   p-4 mb-4 hover:shadow-xl cursor-pointer transition-shadow duration-300 bg-gradient-to-b  to-gray-50   rounded-lg shadow-md flex md:flex-nowrap items-center gap-4"
             onClick={() => handleRecentRideInfo({ lat: startLatitude, lon: startLongitude }, { lat: endLatitude, lon: endLongitude }, routes.userFn, routes.userLn, routes.userPhone, routes.userRating, startLocation, endLocation, routes.totalAmount, routes.estimatedDuration, routes.distance)}
         >
-
+            
             <div className="flex items-start gap-4">
 
                 <div className="flex flex-col justify-center items-center space-y-1">
@@ -45,11 +45,11 @@ export const BookingList = ({ travelDate, totalAmount, startLocation, endLocatio
     return (
         <Card className=" from-white to-gray-50  h-auto w-full md:w-auto p-4 mb-4 rounded-lg hover:shadow-2xl transition-shadow duration-300 ease-in-out cursor-pointer">
             <div className="flex flex-col  text-gray-800"
-                onClick={() => handleBookingRideInfo({ lat: bookings.startLatitude, lon: bookings.startLongitude }, { lat: bookings.endLatitude, lon: bookings.endLongitude }, bookings.startLocation,
+                onClick={() => handleBookingRideInfo(bookings.userId,bookings.routeId,{ lat: bookings.startLatitude, lon: bookings.startLongitude }, { lat: bookings.endLatitude, lon: bookings.endLongitude }, bookings.startLocation,
                     bookings.endLocation, bookings.estimatedDuration, bookings.distance, bookings.totalAmount, bookings.travelDate, bookings.userFn, bookings.userLn, bookings.userEmail, bookings.userRating
                 )}
             >
-
+                id{bookings?.routeId}
                 <div className="flex justify-between items-center  ">
                     <div className="text-sm font-semibold text-gray-600">
                         <span className="text-gray-400 mr-2">Trip Date:</span>
@@ -96,7 +96,7 @@ export const CancenlledList = ({ startLocation, endLocation, status }) => {
             <div>
                 <h2 className="font-medium text-gray-700">{endLocation}</h2>
                 <p className="text-sm text-gray-500">{startLocation}</p>
-                <p className="text-xs text-gray-400">12 October 2024, 2:30 pm /{status}</p>
+                <p className="text-xs text-gray-400">12 October 2024, 2:30 pm /<span className="text-red-600">{status}</span></p>
             </div>
             <button className="text-gray-500">
                 •••

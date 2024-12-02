@@ -5,7 +5,7 @@ import { Loading } from '../../../molecules/Loading';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
  
 
-const Components = () => {
+const Components = ({route}) => {
 
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate(); // Initialize useNavigate
