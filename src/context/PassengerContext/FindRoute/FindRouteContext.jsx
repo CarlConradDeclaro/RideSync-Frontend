@@ -440,7 +440,7 @@ export const FindRouteContextProvider = ({ children }) => {
     if (!userInfo || !searchInput || !searchInputDest || !totalDuration || !totalDistance || !amount) {
      // console.error("All fields must be filled out.");
      // alert("All fields must be filled out.");
-     setWarning(true)
+    setWarning(true)
       return;
     }
 
@@ -475,11 +475,8 @@ export const FindRouteContextProvider = ({ children }) => {
 
 
   const handelSelectDriver = async (v, driverId) => {
-
-
     if (userInfo && userInfo.id) {
       const userId = userInfo.id;
-
       try {
         const data = await updateRequest(`${BASEURL}/selectedDriver`, JSON.stringify({ userId, driverId }));
 
@@ -489,7 +486,6 @@ export const FindRouteContextProvider = ({ children }) => {
           return;
         }
 
-
         setStep3(v)
         setStep1(true)
         setStep2(true)
@@ -498,9 +494,7 @@ export const FindRouteContextProvider = ({ children }) => {
         //console.log("passenger", driverId, userInfo.id);
         setYourDriver(driverId)
         socket.emit("passenger", userInfo.id, driverId)
-
       } catch {
-
       }
     }
 
@@ -519,8 +513,6 @@ export const FindRouteContextProvider = ({ children }) => {
         JSON.stringify({ driversIds: drivers })
       );
 
-
-      console.log("Response from routeRequest:", response);
       setDrivers([])
       setRouteInfo([])
       setAmout()

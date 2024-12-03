@@ -335,7 +335,17 @@ export const HomeCarpoolContextProvider = ({children})=>{
         }
       }
     
+     const handleMarkCarpoolCompleted = async(routeId)=>{
+        try {
+             const response = await postRequest(`${BASEURLDrivers}/markCarpoolCompleted`,JSON.stringify({routeId}))
+             console.log(response);
+           navigate('/driver/Carpoollooading?route=/driver/homeCarpool&active=request');
 
+        } catch (error) {
+            console.log("error updating carpool route");
+            
+        }
+     }
 
 
  
@@ -378,6 +388,7 @@ export const HomeCarpoolContextProvider = ({children})=>{
         filteredCarpoolPassengers,
         totalPassenger,
         handleChats,
+        handleMarkCarpoolCompleted
     }}
     >
         {children}
