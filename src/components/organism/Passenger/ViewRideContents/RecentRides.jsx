@@ -130,16 +130,16 @@ const RecentRides = ({ mapRef, currentRoute }) => {
                         </Card>
                         :
                         
-                        <Card className=" h-[70vh]  w-full md:w-[500px] p-4 rounded-xl shadow-lg bg-white overflow-y-auto space-y-4 custom-scrollbar ">
+                        <Card className=" h-[70vh]  w-full md:w-[500px] p-4 rounded-xl shadow-lg bg-gradient-to-b from-white to-gray-50   overflow-y-auto space-y-4 custom-scrollbar ">
                             <h1 className='mb-2'>Thank you for choosing rideSync</h1>
                             driverid {recentRides?.userId}
-                            <Card className='flex flex-col items-center p-2'>
+                            <Card className='flex flex-col items-center p-2 bg-gradient-to-b from-white to-gray-50 border border-gray-200'>
                                 <h1>Your order was fulfilled by <span className='font-bold'>{(recentRides?.userFn || recentRides?.userLn) ? recentRides?.userFn + " " + recentRides?.userLn : "Kennetee James Doz"}</span>  on a  </h1>
                                 <h1>{recentRides?.vehicleColor} Motorcycle, license plate number <span className='font-bold'>{recentRides?.vPlateNum}</span>.</h1>
                                 <img src={DefaultProfile} className='w-[80px] max-h-[80px]' />
                                 <HalfRating value={recentRides?.userRatings} />({recentRides?.userRatings}/5)
                             </Card>
-                            <Card className="flex  items-center justify-between p-4 shadow-lg rounded-lg">
+                            <Card className="flex bg-gradient-to-b from-white to-gray-50 border border-gray-200  items-center justify-between p-4 shadow-lg rounded-lg">
                                 <div className="flex items-center">
 
                                     <div className="flex flex-col items-center mr-4">

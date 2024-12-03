@@ -58,7 +58,9 @@ const Carpools = () => {
       <div className="flex-1 h-[100vh] bg-white shadow-lg rounded-lg p-6 overflow-y-auto transition-all duration-500 ease-in-out transform hover:shadow-2xl">
         <h2 className="text-2xl font-semibold mb-6 text-blue-700">Your Carpools</h2>
         <div className="space-y-4">
-          {bookedCarpools.map((item, index) => (
+          {bookedCarpools
+          // .filter((b)=> b.status === 'pending')
+          .map((item, index) => (
             <BookingCard
               key={index}
               booking={item}
@@ -85,110 +87,139 @@ const Carpools = () => {
 };
 
 
-const BookingCard = ({ handleMapRoute,booking, isSelected, onSelect }) => {
-  return(
- <div
- onClick={()=>handleMapRoute(booking)}
- >
-       <div
-    className={`p-6 rounded-lg border cursor-pointer shadow-md transition duration-300 ease-in-out transform ${
-      isSelected
-        ? "border-blue-500 bg-blue-50 scale-105 shadow-xl"
-        : "border-gray-200 bg-white hover:bg-gray-50"
-    } hover:shadow-2xl hover:scale-105`}
-    onClick={onSelect}
-    
-  >
-    <div className="flex justify-between items-center"
-  
+ const BookingCard = ({ handleMapRoute, booking, isSelected, onSelect }) => {
+  return (
+    <div
+      onClick={() => handleMapRoute(booking)}
+      className="focus:outline-none" // Removes the blue glow when clicked
     >
-      <p className="text-gray-700 font-semibold">
-        <strong>Date:</strong>{" "}
-        <span className="text-red-500">
-          {new Date(booking?.travelDateTime).toLocaleString()}
-        </span>
-      </p>
-      <p className="text-green-600 font-semibold">
-        ₱{booking?.pricePerPerson.toFixed(2)}
-      </p>
+      <div
+        className={`p-6 rounded-lg border cursor-pointer shadow-md transition duration-300 ease-in-out transform ${
+          isSelected
+            ? "border-blue-500   scale-105 shadow-xl"
+            : "border-gray-200 bg-white hover:bg-gray-50"
+        } hover:shadow-2xl hover:scale-105`}
+        onClick={onSelect}
+      >
+        <div className="flex justify-between items-center">
+          <p className="text-gray-700 font-semibold">
+            <span role="img" aria-label="calendar">📅</span>
+            <strong>Date:</strong>{" "}
+            <span className="text-red-500">
+              {new Date(booking?.travelDateTime).toLocaleString()}
+            </span>
+          </p>
+          <p className="text-green-600 font-semibold">
+            <span role="img" aria-label="currency">💵</span>
+            ₱{booking?.pricePerPerson.toFixed(2)}
+          </p>
+        </div>
+        <div className="mt-4">
+          <p className="text-gray-700">
+            <span role="img" aria-label="location">📍</span>
+            <strong>From:</strong> {booking?.startLocation}
+          </p>
+          <p className="text-gray-700">
+            <span role="img" aria-label="location">🎯</span>
+            <strong>To:</strong> {booking?.endLocation}
+          </p>
+        </div>
+        <div>
+          <span role="img" aria-label="status">🔖</span>
+          <span>Status: </span>
+          <span
+            className={`${
+              booking?.status === 'Completed'
+                ? 'text-green-500'
+                : booking?.status === 'Pending'
+                ? 'text-yellow-500'
+                : 'text-gray-500'
+            }`}
+          >
+            {booking?.status}
+          </span>
+        </div>
+      </div>
     </div>
-    <div className="mt-4">
-      <p className="text-gray-700">
-        <strong>From:</strong> {booking?.startLocation}
-      </p>
-      <p className="text-gray-700">
-        <strong>To:</strong> {booking?.endLocation}
-      </p>
-    </div>
-  </div>
- </div>
-  )
+  );
 };
 
-const BookingDetails = ({mapRef, booking ,customIcon}) => (
-  <div className="space-y-6"
-   
-  
->
+
+const BookingDetails = ({ mapRef, booking, customIcon }) => (
+  <div className="space-y-6">
+
     {/* Trip Information Section */}
-    <div className="bg-gradient-to-r from-purple-50 via-indigo-50 to-blue-50 p-6 rounded-lg shadow-lg">
-      <h3 className="text-xl font-semibold text-gray-800 mb-4">Trip Information</h3>
+   <div className="bg-gradient-to-b from-white to-gray-50 border border-gray-200 p-6 rounded-lg shadow-lg transition-all duration-300 hover:shadow-xl">
+
+      <h3 className="text-2xl font-semibold text-gray-800 mb-4 flex items-center gap-2">
+        <span role="img" aria-label="travel">🚗</span> Trip Information
+      </h3>
       <div className="flex flex-col gap-3">
         <p className="text-gray-700">
-          <strong>Start Location:</strong> {booking?.startLongititude}
+          <span role="img" aria-label="start-location">📍</span> <strong>Start Location:</strong> {booking?.startLongitude}, {booking?.startLatitude}
         </p>
         <p className="text-gray-700">
-          <strong>End Location:</strong> {booking?.endLocation}
+          <span role="img" aria-label="end-location">📍</span> <strong>End Location:</strong> {booking?.endLocation}
         </p>
         <p className="text-gray-700">
-          <strong>Vehicle:</strong> {booking?.modelName}
+          <span role="img" aria-label="vehicle">🚘</span> <strong>Vehicle:</strong> {booking?.modelName}
         </p>
         <p className="text-gray-700">
-          <strong>Estimated Duration:</strong> {booking?.duration} mins
+          <span role="img" aria-label="clock">⏱️</span> <strong>Estimated Duration:</strong> {booking?.duration} mins
         </p>
         <p className="text-gray-700">
-          <strong>Distance:</strong> {booking?.distance} km
+          <span role="img" aria-label="distance">📏</span> <strong>Distance:</strong> {booking?.distance} km
         </p>
         <p className="text-gray-700">
-          <strong>Total Amount:</strong>{" "}
-          <span className="text-green-600 font-bold">
-            ₱{booking?.totalAmount.toFixed(2)}
-          </span>
+          <span role="img" aria-label="amount">💰</span> <strong>Total Amount:</strong>{" "}
+          <span className="text-green-600 font-bold">₱{booking?.totalAmount.toFixed(2)}</span>
         </p>
         <p className="text-gray-700">
-          <strong>Travel Date:</strong>{" "}
+          <span role="img" aria-label="calendar">📅</span> <strong>Travel Date:</strong>{" "}
           {new Date(booking?.travelDateTime).toLocaleString()}
         </p>
       </div>
     </div>
 
     {/* Driver Details Section */}
-    <div className="bg-gradient-to-r from-yellow-50 via-orange-50 to-red-50 p-6 rounded-lg shadow-lg">
-      <h3 className="text-xl font-semibold text-gray-800 mb-4">Driver Information</h3>
+    <div className="bg-gradient-to-b from-white to-gray-50 border border-gray-200  p-6 rounded-lg shadow-lg transition-all duration-300 hover:shadow-xl">
+      <h3 className="text-2xl font-semibold text-gray-800 mb-4 flex items-center gap-2">
+        <span role="img" aria-label="driver">👨‍✈️</span> Driver Information
+      </h3>
       <div className="flex flex-col gap-3">
         <p className="text-gray-700">
-          <strong>Name:</strong> {booking?.userLn} {booking?.userFn}
+          <span role="img" aria-label="person">👤</span> <strong>Name:</strong> {booking?.userLn} {booking?.userFn}
         </p>
         <p className="text-gray-700">
-          <strong>Email:</strong> {booking?.userEmail}
+          <span role="img" aria-label="email">📧</span> <strong>Email:</strong> {booking?.userEmail}
         </p>
         <p className="text-gray-700">
-          <strong>Phone Number:</strong> {booking?.userPhone}
+          <span role="img" aria-label="phone">📞</span> <strong>Phone Number:</strong> {booking?.userPhone}
         </p>
         <p className="text-gray-700">
-          <strong>Rating:</strong>{" "}
+          <span role="img" aria-label="star">⭐</span> <strong>Rating:</strong>{" "}
           <span className="text-yellow-500 font-semibold">{booking?.userRating}</span>
         </p>
       </div>
     </div>
-    <div>
-        <Map height='500px'
-         mapRef={mapRef}
-         selectedPosition={{lat:booking?.startLatitude,lon:booking?.startLongitude}}
-         selectedPositionDest={{lat:booking?.endLatitude,lon:booking?.endLongitude}}
-         customIcon={customIcon} />
+
+    {/* Map Section */}
+    <div className="bg-white p-6 rounded-lg shadow-lg mt-6">
+      <h3 className="text-2xl font-semibold text-gray-800 mb-4 flex items-center gap-2">
+        <span role="img" aria-label="map">🗺️</span> Trip Map
+      </h3>
+      <Map
+        height="500px"
+        mapRef={mapRef}
+        selectedPosition={{ lat: booking?.startLatitude, lon: booking?.startLongitude }}
+        selectedPositionDest={{ lat: booking?.endLatitude, lon: booking?.endLongitude }}
+        customIcon={customIcon}
+      />
     </div>
+    
   </div>
 );
+
+
 
 export default Carpools;

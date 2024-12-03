@@ -10,7 +10,6 @@ import { Button } from '../../../atoms/Button'
 import { FindRouteContext } from '../../../../context/PassengerContext/FindRoute/FindRouteContext';
 import {useNavigate} from 'react-router-dom'
 import { WarningModal } from '../../../atoms/WarningModal';
- 
 
 
 const CreateRides = () => {
@@ -136,8 +135,4 @@ const CreateRides = () => {
     )
 }
 
- 
-
-
- 
 export default CreateRides
