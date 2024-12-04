@@ -37,6 +37,7 @@ const UpComingRides = ({ upcomingRides, anchorEl, setAnchorEl, options,
                     <div className="overflow-y-auto max-h-[90%] overflow-x-hidden space-y-3 p-2 custom-scrollbar">
                    
                         {
+                            upcomingRides ?
                             upcomingRides?.slice().reverse().map((upcomingRides) =>
                                 <UpComingList
                                     key={upcomingRides.routeId}
@@ -47,6 +48,8 @@ const UpComingRides = ({ upcomingRides, anchorEl, setAnchorEl, options,
                                     handleBookingRide={handleBookingRide}
                                 />
                             )
+                           :
+                           <p>No current booking available</p> 
                         }
                     </div>
 
