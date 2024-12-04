@@ -39,6 +39,8 @@ export const HomeCarpoolContextProvider = ({children})=>{
     const [socket, setSocket] = useState(null)
     const [socketID, setSocketID] = useState()
     const [onlineUsers, setOnlineUsers] = useState([])
+    const [registeredVehicle,setRegisterdVehicle] = useState()
+
   
 
     useEffect(() => {
@@ -74,6 +76,30 @@ export const HomeCarpoolContextProvider = ({children})=>{
       };
       });
     },[driverInfo])
+
+
+      
+
+    const getDriverVehicle =async()=>{
+        try { 
+            if(driverInfo && driverInfo.id){
+                const result  = await fetch("http://localhost:8000/api/users")
+                const users = await result.json()
+                const filtered = users.filter((u)=> u.userId == driverInfo?.id)
+                setRegisterdVehicle(filtered[0].modelName)
+            }
+        } catch (error) {
+            console.log("error fecthing users");
+            
+        }
+    }
+
+    useEffect(()=>{
+      getDriverVehicle()
+    },[driverInfo])
+
+
+
     
  
     useEffect(() => {
@@ -388,7 +414,8 @@ export const HomeCarpoolContextProvider = ({children})=>{
         filteredCarpoolPassengers,
         totalPassenger,
         handleChats,
-        handleMarkCarpoolCompleted
+        handleMarkCarpoolCompleted,
+        registeredVehicle
     }}
     >
         {children}

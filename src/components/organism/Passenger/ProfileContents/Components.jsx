@@ -43,7 +43,7 @@ const Components = () => {
 
 
             {/* Profile Form */}
-            <Card className="flex-1  w-full  rounded-lg p-6">
+            <Card className="flex-1  w-full h-screen  rounded-lg p-6">
                 {
                     (openProfileSettings == 'profileSettings') ?
                         <Profile /> :

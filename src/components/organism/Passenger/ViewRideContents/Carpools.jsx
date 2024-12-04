@@ -55,12 +55,14 @@ const Carpools = () => {
   return (
     <div className="flex flex-col md:flex-row p-6 min-h-screen gap-4 ">
       {/* Left Section: Booking List */}
-      <div className="flex-1 h-[100vh] bg-white shadow-lg rounded-lg p-6 overflow-y-auto transition-all duration-500 ease-in-out transform hover:shadow-2xl">
+      <div className="flex-1 h-[100vh] w-[900px] bg-white shadow-lg rounded-lg p-6 overflow-y-auto transition-all duration-500 ease-in-out transform hover:shadow-2xl">
         <h2 className="text-2xl font-semibold mb-6 text-blue-700">Your Carpools</h2>
         <div className="space-y-4">
-          {bookedCarpools
+          {
+          bookedCarpools ?  
+          bookedCarpools
           // .filter((b)=> b.status === 'pending')
-          .map((item, index) => (
+          ?.map((item, index) => (
             <BookingCard
               key={index}
               booking={item}
@@ -69,7 +71,12 @@ const Carpools = () => {
               carpoolIndex = {index}
               onSelect={() => setSelectedBooking(index)}
             />
-          ))}
+          ))
+
+          :
+          <p>No current carpools available</p>
+          
+          }
         </div>
       </div>
 

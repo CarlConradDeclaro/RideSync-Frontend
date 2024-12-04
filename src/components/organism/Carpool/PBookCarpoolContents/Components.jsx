@@ -5,7 +5,7 @@ import { Button } from '../../../atoms/Button';
 import DefaultProfile from '../../../../assets/DefaultProfile.png';
 import { PBookCarpoolContext } from '../../../../context/Carpool/PBookCarpool/PBookCarpool';
 import { SelectTrip as SelectPayment} from '../../../atoms/Select';
- 
+import carpoolBg from '../../../../assets/carpoolBg.jpg'
 
 
 const Components = () => {
@@ -32,9 +32,11 @@ const Components = () => {
   
   }
   return (
-    <div className="flex w-auto flex-col items-center justify-center p-5 space-y-8 ">
+    <div className="flex w-auto flex-col items-center justify-center p-5 animate-fadeIn">
         {/* Main Card with Inputs */}
-        <div className="flex flex-col md:flex-row md:w-[1000px] w-full rounded-xl shadow-lg p-5 gap-4 md:items-center">
+          <img src={carpoolBg} className='md:h-[400px] md:w-[1100px]' />
+     
+        <div className="mb-3 border  flex flex-col md:flex-row md:w-[1000px] w-full rounded-xl shadow-lg p-5 gap-4 md:items-center">
           <div className='md:w-[90%]'>
           <TextInput
           label="Leaving from"
@@ -42,18 +44,18 @@ const Components = () => {
           value={leavingFrom}
           onChange={handleSearchInput}
         />
-         {suggestions.length > 0 && (
-               <ul className="absolute   bg-white border border-gray-300 rounded shadow-md max-h-40 overflow-y-auto z-10">
-                 {suggestions.map((suggestion) => (
-                   <li
+        {suggestions.length > 0 && (
+            <ul className="absolute   bg-white border border-gray-300 rounded shadow-md max-h-40 overflow-y-auto z-10">
+                {suggestions.map((suggestion) => (
+                  <li
                     key={suggestion.place_id}
                       className="px-4 py-2 cursor-pointer hover:bg-gray-200 transition-colors"
-                   onClick={() => handleSelectSuggestion(suggestion.lat, suggestion.lon, suggestion.display_name)}
+                  onClick={() => handleSelectSuggestion(suggestion.lat, suggestion.lon, suggestion.display_name)}
                     >
                     {suggestion.display_name}
                     </li>
-                   ))}
-                </ul>
+                  ))}
+            </ul>
           )}
           </div>
           <span className="hidden md:block text-gray-400">|</span>

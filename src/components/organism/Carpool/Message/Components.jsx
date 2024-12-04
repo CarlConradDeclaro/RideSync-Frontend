@@ -74,7 +74,7 @@ const Components = ( ) => {
                                     <h2 className="text-lg font-bold text-gray-800">
                                         {driverName && driverName}
                                     </h2>
-                                    <p className="text-sm text-gray-500">Driver</p>
+                                    <p className="text-sm text-gray-500">Passenger</p>
                                 </div>
                             </div>
                             <div className="flex items-center space-x-4">

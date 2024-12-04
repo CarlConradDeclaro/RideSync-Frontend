@@ -62,9 +62,9 @@ export const RegisterContextProvider = ({ children }) => {
 
         if (!gender) newErrors.gender = "Gender is required";
 
-        if (!country) newErrors.country = "Country is required";
+        // if (!country) newErrors.country = "Country is required";
 
-        if (!demographStat) newErrors.demographStat = "Demographic Status is required"
+        // if (!demographStat) newErrors.demographStat = "Demographic Status is required"
 
         if (!password) newErrors.password = "Password is required";
         else if (password.length < 8) newErrors.password = "Password must be at least 8 characters long";
@@ -85,6 +85,7 @@ export const RegisterContextProvider = ({ children }) => {
             "userFn": lastname,
             "userEmail": email,
             "userPhone": phone,
+            "userAge":age,
             "userPassword": password,
             "userType": "P",
             "userRating": 5,

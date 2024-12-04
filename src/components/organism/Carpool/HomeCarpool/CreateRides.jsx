@@ -1,15 +1,13 @@
-import React, { useContext ,useState} from "react";
+ import React, { useContext, useState } from "react";
 import { Button } from "../../../atoms/Button";
 import { TextInput } from "../../../atoms/TextInput";
 import { DatePicker } from "../../../atoms/DatePicker";
 import { SelectTrip as Select } from "../../../atoms/Select";
 import { Map } from "../../../molecules/Map";
 import { HomeCarpoolContext } from "../../../../context/Carpool/HomeCarpool/HomeCarpool";
-import CarpoolConfirmationModal  from './CarpoolConfirmationModal'
+import CarpoolConfirmationModal from './CarpoolConfirmationModal';
 import { useNavigate } from 'react-router-dom';
-
-
-
+import { FaCar, FaMoneyBillAlt, FaCalendarAlt, FaMapMarkerAlt } from 'react-icons/fa';
 
 const CreateRides = () => {
   const navigate = useNavigate();
@@ -41,15 +39,15 @@ const CreateRides = () => {
     handleRouteDirection,
     selectedPosition,
     selectedPositionDest,
-    totalDuration, 
-    totalDistance
+    totalDuration,
+    totalDistance,
+    registeredVehicle
   } = useContext(HomeCarpoolContext);
 
   const handleCreateClick = () => {
-
-    if(!searchInput || !searchInputDest ||  !travelDate || !numSeats || !vehicle || !pricePerPerson || !paymentMethod){
-        alert("Please fill all the fields")
-        return
+    if (!searchInput || !searchInputDest || !travelDate || !numSeats || !vehicle || !pricePerPerson || !paymentMethod) {
+      alert("Please fill all the fields");
+      return;
     }
 
     setRideDetails({
@@ -62,33 +60,34 @@ const CreateRides = () => {
       paymentMethod,
     });
     setIsModalOpen(true);
- 
   };
 
   const handleConfirm = () => {
-    handleCreateCarpoolRide()
+    handleCreateCarpoolRide();
     setIsModalOpen(false);
-    handleNavigation()
+    handleNavigation();
   };
- 
+
   const handleNavigation = () => {
-      navigate('/driver/homeCarpool');
+    navigate('/driver/homeCarpool');
   };
+
   const handleCancel = () => {
     navigate('/driver/homeCarpool');
-};
-
+  };
 
   return (
-    <div className="pl-6 pr-6 pt-2">
+    <div className="pl-6 pr-6 pt-4">
       {/* Header Section */}
-      <div className="flex justify-between items-center ">
-        <Button name="Back" variant="outlined" onClick={handleNavigation}/>
-        <h1 className="text-2xl font-bold">Create a Ride</h1>
+      <div className="flex justify-between items-center mb-6">
+        <Button name="Back" variant="outlined" onClick={handleNavigation} />
+        <h1 className="text-2xl font-bold text-indigo-600 flex items-center">
+          <FaCar className="mr-2 text-3xl" /> Create a Ride
+        </h1>
       </div>
 
       {/* Content Section */}
-      <div className="flex  flex-wrap lg:flex-nowrap gap-6">
+      <div className="flex flex-wrap lg:flex-nowrap gap-6">
         {/* Ride Details Form */}
         <div className="flex flex-col bg-white shadow-lg rounded-lg p-6 w-full lg:w-[50%] space-y-5">
           {/* Pickup Location */}
@@ -96,7 +95,7 @@ const CreateRides = () => {
             <TextInput
               value={searchInput}
               onChange={handleSearchInput}
-              label="Pickup Location"
+              label={<div className="flex"><FaMapMarkerAlt className="mr-2 text-xl text-green-500" /> Pickup Location</div>}
               size="small"
             />
             {suggestions.length > 0 && (
@@ -125,7 +124,7 @@ const CreateRides = () => {
             <TextInput
               value={searchInputDest}
               onChange={handleSearchInputDest}
-              label="Dropoff Location"
+              label={<div className="flex"><FaMapMarkerAlt className="mr-2 text-xl text-red-500" /> Dropoff Location</div>}
               size="small"
             />
             {suggestionsDest.length > 0 && (
@@ -153,7 +152,7 @@ const CreateRides = () => {
           <DatePicker
             value={travelDate}
             onChange={handleSetTravelDate}
-            label="Ride Date"
+            label={<div className="flex"><FaCalendarAlt className="mr-2 text-xl text-purple-500" /> Ride Date</div>}
           />
 
           {/* Vehicle and Seats */}
@@ -173,24 +172,25 @@ const CreateRides = () => {
           </div>
 
           {/* Price and Payment */}
-          <div className="flex flex-grow gap-4">
+          <div className="flex gap-4 ">
            
              <Select
               value={vehicle}
               onChange={handleSelectVehicle}
               label="Select Vehicle"
-              options={[{ value: "Honda", label: "Honda" }]}
-              sx={{width:'200px'}}
+              options={[{ value: registeredVehicle, label: registeredVehicle }]}
+              sx={{width:'150px'}}
             />
+         
             <Select
               value={paymentMethod}
               onChange={handlePaymentMethond}
               label="Payment Method"
               options={[
-                { value: "cash", label: "Cash" },
-                { value: "paypal", label: "PayPal" },
+                { value: "cash", label: "Cash 💵" },
+                { value: "paypal", label: "PayPal 💳" },
               ]}
-              sx={{width:'200px'}}
+              sx={{width:'170px'}}
             />
           </div>
 
@@ -200,45 +200,43 @@ const CreateRides = () => {
             <Button name="Create" variant="contained" onClick={handleCreateClick} />
           </div>
         </div>
+
+        {/* Carpool Confirmation Modal */}
         <CarpoolConfirmationModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        onConfirm={handleConfirm}
-        rideDetails={rideDetails}
-      />
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          onConfirm={handleConfirm}
+          rideDetails={rideDetails}
+        />
 
         {/* Map Section */}
         <div className="relative bg-white shadow-lg rounded-lg w-full overflow-hidden">
-  {/* Text Above the Map */}
-  <div className="flex  gap-5 absolute top-4 left-[55px] shadow-lg right-0 z-10 px-4  mr-[55px]">
-  <h1 className="text-sm  md:text-2xl font-bold text-gray-800">
-    {totalDuration ? `${totalDuration} mins` : "0 min"}
-  </h1>
-  
-  {/* Distance */}
-  <h1 className="text-sm  md:text-2xl font-bold text-red-800">
-    {totalDistance ? `${totalDistance} km` : "0 km"}
-  </h1>
-  </div>
-  
-  {/* Map Component */}
-  <div className="relative z-0">
-    <Map 
-      height="80vh" 
-      selectedPosition={selectedPosition} 
-      selectedPositionDest={selectedPositionDest}  
-      mapRef={mapRef} 
-      routingControlRef={routingControlRef} 
-      customIcon={customIcon} 
-    />
-  </div>
-</div>
+          {/* Text Above the Map */}
+          <div className="flex gap-5 absolute top-4 left-[55px] shadow-lg right-0 z-10 px-4 mr-[55px]">
+            <h1 className="text-sm md:text-2xl font-bold text-gray-800">
+              {totalDuration ? `${totalDuration} mins` : "0 min"}
+            </h1>
+            <h1 className="text-sm md:text-2xl font-bold text-red-800">
+              {totalDistance ? `${totalDistance} km` : "0 km"}
+            </h1>
+          </div>
 
+          {/* Map Component */}
+          <div className="relative z-0">
+            <Map
+              height="80vh"
+              selectedPosition={selectedPosition}
+              selectedPositionDest={selectedPositionDest}
+              customIcon={customIcon}
+              routingControlRef={routingControlRef}
+              mapRef={mapRef}
+              handleRouteDirection={handleRouteDirection}
+             />
+          </div>
+        </div>
       </div>
     </div>
   );
 };
-
- 
 
 export default CreateRides;

@@ -16,8 +16,8 @@ const Components = () => {
     }, []);
 
     return (
-        <div className='flex h-full '>
-            <div className='h-screen '>
+        <div className='flex  '>
+            <div className='h-screen sticky top-0 z-50'>
                 <Sidebar active="message" />
             </div>
             <div className='w-full '>
