@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext,useState } from 'react'
 import { Card } from '../../../molecules/Card';
 import Circle from '../../../../assets/circle.png'
 import Dots from '../../../../assets/dots.png'
@@ -8,9 +8,12 @@ import CarIcon from '../../../../assets/CarIcon.png'
 import { TextInput } from '../../../atoms/TextInput'
 import { Button } from '../../../atoms/Button'
 import { FindRouteContext } from '../../../../context/PassengerContext/FindRoute/FindRouteContext';
+import {useNavigate} from 'react-router-dom'
+import { WarningModal } from '../../../atoms/WarningModal';
+
 
 const CreateRides = () => {
-
+    const navigate = useNavigate();
     const {
         searchInput,
         suggestions,
@@ -21,24 +24,33 @@ const CreateRides = () => {
         handleSearchInputDest,
         handleSelectSuggestionDest,
         handleRouteDirection,
-
+        setWarning,
+        warning,
         setStep1,
         setStep2,
         handleProceed,
     } = useContext(FindRouteContext)
 
+    const handleCarpoolClick = ()=>{
+        navigate('/passenger/bookCarpoolContents')
+    }
+
+    const handleBookRideClick = ()=>{
+        navigate('/passenger/bookRideContents')
+    }
 
     return (
         <div className="flex flex-col md:w-[500px]">
-
             <div className="flex gap-4 justify-start w-full max-w-md mb-6">
                 <button
                     className="w-full px-6 py-3 bg-gradient-to-r from-sky-500 to-sky-400 text-white text-sm font-medium rounded-lg shadow-lg hover:from-sky-600 hover:to-sky-500 hover:shadow-xl transition-all duration-200 ease-in-out"
+                onClick={handleCarpoolClick}
                 >
                     Carpool
                 </button>
                 <button
                     className="w-full px-6 py-3 bg-gradient-to-r from-teal-500 to-teal-400 text-white text-sm font-medium rounded-lg shadow-lg hover:from-teal-600 hover:to-teal-500 hover:shadow-xl transition-all duration-200 ease-in-out"
+                onClick={handleBookRideClick}
                 >
                     Schedule a ride now!
                 </button>
@@ -109,6 +121,12 @@ const CreateRides = () => {
                             <Button name="Find Route" variant="contained" size="large" onClick={handleRouteDirection} />
                             <Button name="Procced" variant="contained" size="large" onClick={() => handleProceed(true)} />
                         </div>
+                        {
+                            warning && 
+                            <WarningModal 
+                            message="Please Enter Pickup Location And Destination to continue! "
+                            setWarning={setWarning}/>
+                        }
                     </div>
                 </div>
             </Card>

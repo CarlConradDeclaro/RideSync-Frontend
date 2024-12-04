@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { RequestContext } from '../../../../context/DriverContext/Request/Request';
 
-const Payment = ({ setPaymentModal, handlePayment }) => {
+const Payment = ({ setPaymentModal, handlePayment,routeRequest }) => {
     const [selectedPayment, setSelectedPayment] = useState('');
     const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
 
@@ -33,16 +33,16 @@ const Payment = ({ setPaymentModal, handlePayment }) => {
                     <h3 className="text-lg font-semibold text-gray-700 mb-3">Ride Summary</h3>
                     <ul className="text-sm text-gray-700 space-y-3">
                         <li className="flex justify-between">
-                            <span className="font-medium">Pickup:</span> <span>123 Main St.</span>
+                            <span className="font-medium">Pickup:</span> <span>{routeRequest[0]?.startLocation.slice(0, 40)}...</span>
                         </li>
                         <li className="flex justify-between">
-                            <span className="font-medium">Destination:</span> <span>456 Elm St.</span>
+                            <span className="font-medium">Destination:</span> <span>{routeRequest[0]?.endLocation.slice(0, 40)}...</span>
                         </li>
                         <li className="flex justify-between">
-                            <span className="font-medium">Distance:</span> <span>12.5 km</span>
+                            <span className="font-medium">Distance:</span> <span>{routeRequest[0]?.distance} km</span>
                         </li>
                         <li className="flex justify-between">
-                            <span className="font-medium">ETA:</span> <span>25 min</span>
+                            <span className="font-medium">ETA:</span> <span>{routeRequest[0]?.estimatedDuration} mins</span>
                         </li>
                     </ul>
                 </div>
@@ -52,16 +52,16 @@ const Payment = ({ setPaymentModal, handlePayment }) => {
                     <h3 className="text-lg font-semibold text-gray-700 mb-3">Payment Summary</h3>
                     <ul className="text-sm text-gray-700 space-y-3">
                         <li className="flex justify-between">
-                            <span className="font-medium">Base Fare:</span> <span>₱10.00</span>
+                            <span className="font-medium">Fare:</span> <span>₱{routeRequest[0]?.totalAmount}</span>
+                        </li>
+                        {/* <li className="flex justify-between">
+                            <span className="font-medium">Distance :</span> <span>₱12</span>
                         </li>
                         <li className="flex justify-between">
-                            <span className="font-medium">Distance Fare:</span> <span>₱8.50</span>
-                        </li>
-                        <li className="flex justify-between">
-                            <span className="font-medium">Service Fee:</span> <span>₱1.50</span>
-                        </li>
+                            <span className="font-medium">Flagdown:</span> <span>₱5.00</span>
+                        </li> */}
                         <li className="flex justify-between text-lg font-bold text-gray-900">
-                            <span>Total:</span> <span className="text-green-500">₱20.00</span>
+                            <span>Total:</span> <span className="text-green-500">₱{routeRequest[0]?.totalAmount}</span>
                         </li>
                     </ul>
                 </div>

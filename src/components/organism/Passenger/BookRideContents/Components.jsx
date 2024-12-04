@@ -11,7 +11,9 @@ const Components = () => {
         handleBooking, searchInput, searchInputDest, handleSearchInput, suggestions,
         handleSearchInputDest, suggestionsDest, handleSelectSuggestion, handleSelectSuggestionDest,
         selectedPosition, selectedPositionDest, customIcon, handleRouteDirection, handleSubmitBooking,
-        fetchDrivers, listOfSuggestionDrivers, handleSelectedDriver, handleExploreDestinations, setIsBooking } = useContext(BookRideContext)
+        fetchDrivers, listOfSuggestionDrivers, handleSelectedDriver, handleExploreDestinations, setIsBooking,
+        setWarning,warning, isBookingConfirmed, setIsBookingConfirmed,amt,   totalDistance, estDuration,
+    } = useContext(BookRideContext)
 
     return (
         <div className='animate-fadeIn'>
@@ -27,7 +29,8 @@ const Components = () => {
                         selectedPosition={selectedPosition} selectedPositionDest={selectedPositionDest} customIcon={customIcon}
                         handleRouteDirection={handleRouteDirection} handleSubmitBooking={handleSubmitBooking} fetchDrivers={fetchDrivers}
                         listOfSuggestionDrivers={listOfSuggestionDrivers} handleSelectedDriver={handleSelectedDriver}
-                        setIsBooking={setIsBooking}
+                        setIsBooking={setIsBooking}  warning={warning} setWarning={setWarning} isBookingConfirmed={isBookingConfirmed}
+                        setIsBookingConfirmed={setIsBookingConfirmed} amt={amt}   totalDistance={totalDistance} estDuration={estDuration}
                     />
 
 

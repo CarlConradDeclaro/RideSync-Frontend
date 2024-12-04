@@ -1,4 +1,4 @@
-import React, { useContext, useRef } from 'react';
+import React, { useContext, useRef,useState } from 'react';
 import { Card } from '../../../molecules/Card';
 import { RecentList } from './List';
 import DefaultProfile from '../../../../assets/DefaultProfile.png';
@@ -19,24 +19,45 @@ import Mapa from './MAPA.JSX';
 import HalfRating from '../../../atoms/Ratings/Components';
 import Rating from '@mui/material/Rating';
 import TextField from '@mui/material/TextField';
+import { BookingConfirmedModal as RateConfirmationModal} from '../../../atoms/ConfirmedModal';
+import { useNavigate } from 'react-router-dom';  
 
 
 const RecentRides = ({ mapRef, currentRoute }) => {
-    const { customIcon, handleRecentRide,
-        recentRides, pickUp,
-        destination } = useContext(ViewRidesContext);
+    const navigate = useNavigate();  
+    const { 
+        customIcon, 
+        handleRecentRide,
+        recentRides,
+         pickUp,
+        destination,
+        rateModal, 
+        setRateModal,
+        handleRateUser
+    } = useContext(ViewRidesContext);
 
-
-    const firstRoute = currentRoute && currentRoute.length > 0 ? currentRoute[0] : null;
-
+        const firstRoute = currentRoute && currentRoute.length > 0 ? currentRoute[0] : null;
+    const [ratings,setRatings] =useState(5)
+    const handleRatingChange = (event, newValue) => {
+        setRatings(newValue); 
+    };
+     const handleRateSubmit = (userId,rating)=>{
+        console.log('user rating:',ratings);
+        setRateModal(!rateModal)
+        handleRateUser(userId,rating)
+     } 
+     const handleRefresh = ()=>{
+        navigate('/passenger/loading?route=/passenger/viewRideContents&active=viewRides');
+     }
     return (
-        <Card className="mt-5 p-4 flex flex-col md:flex-col gap-6 items-start w-full shadow-lg rounded-lg md:justify-center">
-            <div className="flex flex-col w-full md:flex-row md:justify-center gap-5">
-                <Card className="h-[70vh] w-full md:w-[700px] p-2 md:p-5 rounded-lg shadow-md bg-white overflow-hidden">
+       
+       <Card className=" mt-5 p-4 flex flex-col md:flex-col gap-6 items-start w-full shadow-lg rounded-lg md:justify-center ">
+            <div className="flex flex-col w-full md:flex-row md:justify-center gap-5 ">
+                <Card className="h-[70vh]  w-full md:w-[700px] p-2 md:p-5 rounded-lg shadow-md bg-white overflow-hidden">
                     <h1 className="text-lg font-semibold text-gray-700 mb-4">
                         Recent Rides
                     </h1>
-                    <div className="overflow-y-auto max-h-[80%] space-y-3 custom-scrollbar">
+                    <div className="overflow-y-auto   max-h-[90%] space-y-3 p-2 custom-scrollbar">
                         {currentRoute?.length > 0 ? (
                             currentRoute.slice().reverse().map((ride, index) => (
                                 <RecentList
@@ -98,8 +119,8 @@ const RecentRides = ({ mapRef, currentRoute }) => {
                                 <h3 className="text-lg font-medium text-gray-800">Driver Information</h3>
                                 <div className="flex flex-col items-center space-y-3 text-center">
                                     <p className="text-sm text-gray-700">
-                                        <span className="font-semibold text-gray-900">{recentRides?.userFn + " " + recentRides?.userLn}</span> on a Black Motorcycle,
-                                        license plate <span className="font-semibold text-gray-900">G990IV</span>.
+                                        <span className="font-semibold text-gray-900">{recentRides?.userFn + " " + recentRides?.userLn}</span> on a {recentRides?.vehicleColor} Motorcycle,
+                                        license plate <span className='font-bold'>{recentRides?.vPlateNum}</span>.
                                     </p>
                                     <img src={DefaultProfile} alt="driver profile" className="w-20 h-20 rounded-full shadow-md" />
                                     <Ratings value={recentRides?.userRatings} />
@@ -108,15 +129,17 @@ const RecentRides = ({ mapRef, currentRoute }) => {
                             </div>
                         </Card>
                         :
-                        <Card className="h-[70vh] w-full md:w-[500px] p-4 rounded-xl shadow-lg bg-white overflow-y-auto space-y-4 custom-scrollbar">
+                        
+                        <Card className=" h-[70vh]  w-full md:w-[500px] p-4 rounded-xl shadow-lg bg-gradient-to-b from-white to-gray-50   overflow-y-auto space-y-4 custom-scrollbar ">
                             <h1 className='mb-2'>Thank you for choosing rideSync</h1>
-                            <Card className='flex flex-col items-center p-2'>
+                            driverid {recentRides?.userId}
+                            <Card className='flex flex-col items-center p-2 bg-gradient-to-b from-white to-gray-50 border border-gray-200'>
                                 <h1>Your order was fulfilled by <span className='font-bold'>{(recentRides?.userFn || recentRides?.userLn) ? recentRides?.userFn + " " + recentRides?.userLn : "Kennetee James Doz"}</span>  on a  </h1>
-                                <h1>Black Motorcycle, license plate number <span className='font-bold'>G990IV</span>.</h1>
+                                <h1>{recentRides?.vehicleColor} Motorcycle, license plate number <span className='font-bold'>{recentRides?.vPlateNum}</span>.</h1>
                                 <img src={DefaultProfile} className='w-[80px] max-h-[80px]' />
                                 <HalfRating value={recentRides?.userRatings} />({recentRides?.userRatings}/5)
                             </Card>
-                            <Card className="flex items-center justify-between p-4 shadow-lg rounded-lg">
+                            <Card className="flex bg-gradient-to-b from-white to-gray-50 border border-gray-200  items-center justify-between p-4 shadow-lg rounded-lg">
                                 <div className="flex items-center">
 
                                     <div className="flex flex-col items-center mr-4">
@@ -140,9 +163,8 @@ const RecentRides = ({ mapRef, currentRoute }) => {
                                     <span className="text-xs text-gray-500">in cash</span>
                                 </div>
                             </Card>
-                            <div>
+                            <div className='relative z-0' >
                                 <Map mapRef={mapRef} height="500px" selectedPosition={pickUp} selectedPositionDest={destination} customIcon={customIcon} />
-
                             </div>
                             <Card className="w-full max-w-md bg-blue-50 shadow-lg rounded-lg p-6 space-y-6">
                                 {/* Header */}
@@ -152,7 +174,12 @@ const RecentRides = ({ mapRef, currentRoute }) => {
                                 <div className="bg-white rounded-lg p-4 shadow-md">
                                     <h3 className="text-lg font-medium text-gray-700 mb-2 text-center">How was your ride?</h3>
                                     <div className="flex justify-center">
-                                        <Rating name="ride-rating" defaultValue={4} size="large" />
+                                    <Rating
+                                        name="ride-rating"
+                                        value={ratings}
+                                        size="large"
+                                        onChange={handleRatingChange}
+                                    />
                                     </div>
                                 </div>
 
@@ -176,6 +203,7 @@ const RecentRides = ({ mapRef, currentRoute }) => {
                                         variant="contained"
                                         size="meduim"
                                         className="mt-4"
+                                       onClick={()=>handleRateSubmit(recentRides?.userId,ratings)}
                                     />
                                     <Button
                                         name="Maybe Later"
@@ -183,16 +211,26 @@ const RecentRides = ({ mapRef, currentRoute }) => {
                                         className="mt-4"
                                     />
                                 </div>
+                                {
+                                    rateModal &&
+                                  
+                                     <RateConfirmationModal 
+                                    title='Thank You for Rating!' 
+                                    message="Your feedback helps us improve our drivers' service. We appreciate your time!" 
+                                     setIsBooking={setRateModal}
+                                     handleEvent={handleRefresh}
+                                      />
+                                 
+                                
+                                
+                                }
                             </Card>
-
-
-
                         </Card>
-
+                       
                 }
-
             </div>
         </Card>
+       
     );
 };
 

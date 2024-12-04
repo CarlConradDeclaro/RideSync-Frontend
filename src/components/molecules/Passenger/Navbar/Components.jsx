@@ -13,7 +13,9 @@ const Components = () => {
     const onUpcomingRideClick = () => {
         handleNav('upcoming');
     };
-
+    const onCarpoolClick = () => {
+        handleNav('carpools');
+    };
     const onCancelledRideClick = () => {
         handleNav('cancelled');
     };
@@ -46,6 +48,13 @@ const Components = () => {
                         <h1 className="text-xs md:text-sm font-medium text-gray-700"
 
                         >Booking</h1>
+                    </div>
+                    <div className="flex justify-center items-center rounded-lg cursor-pointer p-3 h-[35px] bg-gradient-to-b from-white   border-gray-200 hover:bg-gray-200 transition duration-200 ease-in-out shadow-md w-full sm:w-auto"
+                        onClick={onCarpoolClick}
+                    >
+                        <h1 className="text-xs md:text-sm font-medium text-gray-700"
+
+                        >Carpools</h1>
                     </div>
 
                     <div className="flex justify-center items-center rounded-lg cursor-pointer p-3 h-[35px] bg-gradient-to-b from-white   border-gray-200 hover:bg-gray-200 transition duration-200 ease-in-out shadow-md w-full sm:w-auto"

@@ -63,7 +63,7 @@ const Components = () => {
 
 
   return (
-    <div className='flex justify-center mt-4'>
+    <div className='flex justify-center mt-9'>
       <Card className="flex flex-col md:flex-row w-full max-w-[95%] md:max-w-[70%] rounded overflow-hidden animate-fadeIn">
         {/* Form Section */}
         <div className='w-full md:w-[60%] p-5'>
@@ -133,14 +133,14 @@ const Components = () => {
               {!!errors.gender && <FormHelperText style={{ color: '#DB2F2F' }}>{errors.gender}</FormHelperText>}
             </FormControl>
 
-            <FormControl>
+            {/* <FormControl>
               <SelectCountries handleCountry={handleCountry} />
               {!!errors.country && <FormHelperText style={{ color: '#DB2F2F' }}>{errors.country}</FormHelperText>}
-            </FormControl>
-            <FormControl>
-              <DemoStat demographStat={demographStat} handleDemoStat={handleDemoStat} />
-              {!!errors.demographStat && <FormHelperText style={{ color: '#DB2F2F' }}>{errors.demographStat}</FormHelperText>}
-            </FormControl>
+            </FormControl> */}
+            {/* <FormControl>
+                <DemoStat demographStat={demographStat} handleDemoStat={handleDemoStat} />
+              {!!errors.demographStat && <FormHelperText style={{ color: '#DB2F2F' }}>{errors.demographStat}</FormHelperText>} 
+            </FormControl>  */}
 
             <FormControl size='small' variant="outlined">
               <InputLabel htmlFor="outlined-adornment-password">Password*</InputLabel>

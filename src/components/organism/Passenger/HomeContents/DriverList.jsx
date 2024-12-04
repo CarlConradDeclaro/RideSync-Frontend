@@ -10,12 +10,25 @@ const DriverList = () => {
 
     return (
         <div className="flex flex-col items-center animate-slideInFromRight  md:w-[600px] ">
-            <Card className="flex flex-col gap-6 sm:w-full w-full max-w-3xl h-[500px] rounded-2xl shadow-lg bg-white p-6">
+            <Card className="flex flex-col gap-6 sm:w-full w-full max-w-3xl h-[500px] rounded-2xl shadow-lg bg-white p-4">
                 <h1 className="text-2xl font-semibold text-gray-800">Select a Driver</h1>
-                <div className="w-full p-2 overflow-y-auto overflow-x-hidden flex flex-col gap-4  flex-grow">
-                    {drivers.map((driverId, index) => (
-                        <DriverCard key={index} driverId={driverId} handelSelectDriver={handelSelectDriver} />
-                    ))}
+                <div className="w-full  overflow-y-auto overflow-x-hidden flex flex-col gap-4  flex-grow">
+                    {
+                        drivers?.length > 0 ? (
+                        drivers.map((driverId, index) => (
+                            <DriverCard key={index} driverId={driverId} handelSelectDriver={handelSelectDriver} />
+                        ))
+                    )
+                    :
+                    <div className="flex flex-col items-center justify-center h-screen ">
+                        {/* Spinner */}
+                        <div className="relative w-16 h-16 border-4 border-gray-300 border-t-colorBlue rounded-full animate-spin"></div>
+                        {/* Waiting Text */}
+                        <p className="mt-4 text-lg font-semibold text-gray-700 animate-pulse">
+                         Looking for available drivers. Stay tuned!
+                        </p>
+                  </div>
+                    }
                 </div>
                 <div className="flex justify-end">
                     <Button name="Cancel" variant="contained" size="large" onClick={() => handleCancel(false)} className="bg-red-500 hover:bg-red-600 text-white" />
@@ -82,8 +95,8 @@ const DriverCard = ({ driverId, handelSelectDriver }) => {
                         <img src={driverData.profileImage || DefaultProfile} alt="Driver Profile" className="object-cover w-full h-full" />
                     </div>
                     <div className="flex-1">
-                        <h2 className="text-lg font-medium text-gray-800">{driverData.userFn || "Unknown Driver"}</h2>
-                        <p className="text-sm text-gray-600">License Plate No: <span className="font-bold text-gray-800">{driverData.licensePlate || "N/A"}</span></p>
+                        <h2 className="text-lg font-medium text-gray-800">{driverData?.userLn.toUpperCase()+"  "} {driverData?.userFn.toUpperCase() || "Unknown Driver"}</h2>
+                        <p className="text-sm text-gray-600">License Plate No: <span className="font-bold text-gray-800">{driverData.vehiclePlateNo || "Na/A"}</span></p>
                         <Ratings value={driverData.userRating} />
                     </div>
                 </div>
@@ -108,8 +121,8 @@ const DriverModal = ({ driver, isOpen, onClose }) => {
     if (!isOpen) return null;
 
     return (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-70 z-50">
-            <div className="bg-white rounded-lg shadow-2xl w-full max-w-md mx-4">
+        <div className="fixed inset-0 flex items-center justify-center bg-gray-600 backdrop-blur-sm bg-opacity-50  z-50">
+            <div className="bg-white animate-dropIn rounded-lg shadow-2xl w-full max-w-md mx-4">
                 {/* Modal Header */}
                 <div className="bg-gradient-to-r from-blue-500 to-blue-600 text-white p-6 rounded-t-lg flex items-center justify-between">
                     <h2 className="text-xl font-bold">Driver Details</h2>
@@ -141,7 +154,7 @@ const DriverModal = ({ driver, isOpen, onClose }) => {
                     <div className="space-y-4">
                         <div className="flex justify-between items-center">
                             <span className="text-gray-500 font-medium">Plate Number:</span>
-                            <span className="text-gray-800">N/A</span>
+                            <span className="text-gray-800">{driver?.vehiclePlateNo}</span>
                         </div>
                         <div className="flex justify-between items-center">
                             <span className="text-gray-500 font-medium">Rating:</span>

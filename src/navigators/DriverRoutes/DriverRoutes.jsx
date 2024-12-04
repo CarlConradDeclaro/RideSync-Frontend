@@ -9,6 +9,13 @@ import { ViewRides } from '../../components/pages/Driver/ViewRides';
 import { Message } from '../../components/pages/Driver/Message';
 import { HomeCarpool } from '../../components/pages/Carpool/HomeCarpool';
 import { CreateRides } from '../../components/pages/Carpool/CreateRides';
+import { ViewRideCarpool } from '../../components/pages/Carpool/ViewRideCarpool';
+
+
+import { Message as CarpoolMessage } from '../../components/pages/Carpool/Message';
+import { DummyLoading } from '../../components/molecules/Driver/DummyLoading';
+import { CarpoolLoading } from '../../components/molecules/Carpool/DummyLoading';
+
 
 const RootNavigators = () => {
     return (
@@ -25,6 +32,11 @@ const RootNavigators = () => {
                     {/* carpool */}
                     <Route path="/homeCarpool" element={<HomeCarpool />} />
                     <Route path="/createRide" element={<CreateRides />} />
+                     <Route path="/carpoolViewRides" element={<ViewRideCarpool />} />
+                    <Route path="/CarpoolMessage" element={<CarpoolMessage />} />
+                    <Route path="/loading" element={<DummyLoading />} />
+                    <Route path="/Carpoollooading" element={<CarpoolLoading />} />
+
                     <Route path="*" element={<NotFound />} />
                 </Route>
             </Routes>

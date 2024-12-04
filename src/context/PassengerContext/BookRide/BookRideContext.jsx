@@ -1,7 +1,7 @@
 import { createContext, useEffect, useRef, useState } from "react";
 import { BASEURL, postRequest } from "../../../utils/Service";
 import { json } from "react-router-dom";
-
+ 
 export const BookRideContext = createContext()
 
 
@@ -9,9 +9,9 @@ export const BookRideContextProvider = ({ children }) => {
 
     const mapRef = useRef();
     const routingControlRef = useRef();
-    const [trip, setTrip] = useState('');
-    const [rideType, setRideType] = useState('');
-    const [passenger, setPassenger] = useState('');
+    const [trip, setTrip] = useState('One way');
+    const [rideType, setRideType] = useState('Motorcylce');
+    const [passenger, setPassenger] = useState(1);
     const [selectedDate, setSelectedDate] = useState(null);
     const [searchInput, setSearchInput] = useState('');
     const [searchInputDest, setSearchInputDest] = useState('');
@@ -26,6 +26,8 @@ export const BookRideContextProvider = ({ children }) => {
     const [driverId, setDriverId] = useState()
     const [userInfo, setUserInfo] = useState()
     const [isBooking, setIsBooking] = useState(false);
+    const [warning,setWarning]= useState(false)
+    const [isBookingConfirmed,setIsBookingConfirmed] = useState(false)
 
 
     const handleChangeTrip = (event) => {
@@ -223,7 +225,8 @@ export const BookRideContextProvider = ({ children }) => {
         // Validate required fields
         if (!trip || !passenger || !rideType || !selectedDate || !driverId) {
             console.error("Please complete all required fields.");
-            alert("Please complete all required fields.");
+            setWarning(true)
+           // alert("Please complete all required fields.");
             return;
         }
 
@@ -251,7 +254,9 @@ export const BookRideContextProvider = ({ children }) => {
 
         try {
             const response = await postRequest(`${BASEURL}/booking`, JSON.stringify(bookingInfo));
-            setIsBooking(false)
+
+          //  setIsBooking(false)
+            setIsBookingConfirmed(true)
             setTrip('')
             setRideType('')
             setPassenger('')
@@ -285,6 +290,8 @@ export const BookRideContextProvider = ({ children }) => {
         try {
             const response = await fetch("http://localhost:8000/api/users/")
             const data = await response.json()
+            console.log("drivers",data);
+            
             setListOfSuggestionDrivers(data)
         } catch (error) {
             console.error("Error fetching request data:", error);
@@ -311,6 +318,9 @@ export const BookRideContextProvider = ({ children }) => {
                 passenger,
                 selectedDate,
                 isBooking,
+                amt,
+                totalDistance,
+                estDuration,
                 handleChangeTrip,
                 handleChangeRideTypes,
                 handleChangePassenger,
@@ -336,7 +346,11 @@ export const BookRideContextProvider = ({ children }) => {
                 handleSelectedDriver,
                 driverId,
                 handleExploreDestinations,
-                setIsBooking
+                setIsBooking,
+                setWarning,
+                warning,
+                isBookingConfirmed,
+                setIsBookingConfirmed,
             }}
         >
             {children}

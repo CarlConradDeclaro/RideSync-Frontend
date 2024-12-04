@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Card } from '../../../molecules/Card';
 import { SelectTrip } from '../../../atoms/Select';
 import { Button } from '../../../atoms/Button';
@@ -8,6 +8,8 @@ import { DatePicker } from '../../../atoms/DatePicker'; // Assuming you are usin
 import L from 'leaflet';
 import 'leaflet-routing-machine/dist/leaflet-routing-machine.css';
 import DefaultProfile from '../../../../assets/DefaultProfile.png'
+import { WarningModal } from '../../../atoms/WarningModal';
+import { BookingConfirmedModal } from '../../../atoms/ConfirmedModal';
 
 
 const Booking2 = ({
@@ -38,7 +40,14 @@ const Booking2 = ({
     fetchDrivers,
     listOfSuggestionDrivers,
     handleSelectedDriver,
-    setIsBooking
+    setIsBooking,
+    setWarning,
+    warning,
+    isBookingConfirmed,
+    setIsBookingConfirmed,
+    amt,
+    totalDistance,
+    estDuration
 }) => {
 
 
@@ -54,15 +63,15 @@ const Booking2 = ({
     }, [selectedPosition, selectedPositionDest]);
 
     return (
-        <div className='w-full flex flex-col md:flex md:flex-row'>
+        <div className='w-full flex flex-col md:flex md:flex-row mt-11 md:mt-0'>
 
-            <div className='flex flex-col items-center w-full md:w-[500px] h-screen mt-5 '>
-                <div className='cursor-pointer'
+            <div className='relative flex flex-col items-center w-full md:w-[500px]  mt-5'>
+                <div className='cursor-pointer absolute left-5'
                     onClick={() => setIsBooking(false)}
                 >
                     Back
                 </div>
-                <div className='flex' >
+                {/* <div className='flex mt-5 ' >
 
                     <SelectTrip
                         label="Trip"
@@ -80,10 +89,10 @@ const Booking2 = ({
                         onChange={handleChangePassenger}
                         options={[
                             { value: 1, label: '1' },
-                            { value: 2, label: '2' },
-                            { value: 3, label: '3' },
-                            { value: 4, label: '4' },
-                            { value: 5, label: '5' },
+                            // { value: 2, label: '2' },
+                            // { value: 3, label: '3' },
+                            // { value: 4, label: '4' },
+                            // { value: 5, label: '5' },
 
                         ]}
                         sx={{ minWidth: 70, backgroundColor: 'white' }}
@@ -94,12 +103,12 @@ const Booking2 = ({
                         onChange={handleChangeRideTypes}
                         options={[
                             { value: 'Motorcylce', label: 'Motorcylce' },
-                            { value: 'Car', label: 'Car' },
+                            // { value: 'Car', label: 'Car' },
                         ]}
                         sx={{ minWidth: 100, backgroundColor: 'white' }}
                     />
-                </div>
-                <div className='flex flex-col gap-2 p-2'>
+                </div> */}
+                <div className='flex flex-col gap-2 p-2 mt-10'>
                     <div className='flex gap-2'>
                         <div className="relative">
                             <TextInput
@@ -163,7 +172,7 @@ const Booking2 = ({
                     <div className='flex flex-col gap-2 p-2 md:ml-4'>
                         {
                             listOfSuggestionDrivers
-                                .filter(driver => driver.userType === 'D')
+                                .filter(driver => driver.userType == 'D' &&  driver.typeRide == 'rideSharing')
                                 .slice(0, 5)
                                 .map((driver) => (
                                     <DriverCard
@@ -181,10 +190,46 @@ const Booking2 = ({
                 <div className='mt-5'>
                     <Button name="Confirm Booking" variant="contained" size="large" borderRadius="20px" onClick={handleSubmitBooking} />
                 </div>
+                {
+                    warning && <WarningModal setWarning={setWarning} message="Please Complete all the fields to continue" />
+                }
+                {
+                    isBookingConfirmed && 
+                   <BookingConfirmedModal 
+                   title='Booking Confirmed' 
+                   message="Your booking has been successfully confirmed!." 
+                   setIsBooking={setIsBooking}/>
+                }
             </div>
-            <div className='w-full h-screen '>
-                <Map mapRef={mapRef} height="100vh" selectedPosition={selectedPosition} selectedPositionDest={selectedPositionDest} customIcon={customIcon} />
-            </div>
+            <div className='relative w-full h-screen z-0 '>
+                    {/* Fare Estimates Section */}
+                    <div className='md:absolute flex  top-5 pt-5 pb-5 pr-5 left-[65px] shadow-lg   z-20'>
+                        <h1 className='text-large font-semibold flex items-center'>
+                            <span className='text-green-500 mr-2'>💸</span> {/* Icon for Fare */}
+                            Fare: <span className='ml-2 text-blue-500'>{amt ? amt : '0'}</span>
+                        </h1>
+                        <h1 className='text-large font-semibold flex items-center'>
+                            <span className='text-yellow-500 mr-2'>📍</span> {/* Icon for Distance */}
+                            Total Distance: <span className='ml-2 text-gray-700'>{totalDistance ? totalDistance+" km" : '0 km'}</span>
+                        </h1>
+                        <h1 className='text-large font-semibold flex items-center'>
+                            <span className='text-orange-500 mr-2'>⏱️</span> {/* Icon for Estimation */}
+                            Est: <span className='ml-2 text-gray-700'>{estDuration ? estDuration + " mins": '0 min'}</span>
+                        </h1>
+                    </div>
+
+
+                {/* Map */}
+                <div className='absolute  w-full h-full z-10 p-3'>
+                    <Map 
+                    mapRef={mapRef} 
+                    height="95vh" 
+                    selectedPosition={selectedPosition} 
+                    selectedPositionDest={selectedPositionDest} 
+                    customIcon={customIcon} 
+                    />
+                </div>
+          </div>
         </div>
     )
 }
@@ -209,5 +254,7 @@ const DriverCard = ({ driverName, plateNo, ratings, handleSelectedDriver, driver
 
     )
 }
+
+
 
 export default Booking2

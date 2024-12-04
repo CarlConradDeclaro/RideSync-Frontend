@@ -19,9 +19,12 @@ const RequestRides = () => {
 
 
     const handleCancelRequest = () => {
-         
         setOpenInfoModal(false)
         setIsOfferingRide(true)
+    }
+    const handleCancelClose = () => {
+        setOpenInfoModal(false)
+        
     }
 
     useEffect(() => {
@@ -46,7 +49,9 @@ const RequestRides = () => {
                     <Card className="h-full rounded-2xl shadow-lg overflow-y-auto p-5 bg-white">
                         <h1 className="text-xl font-semibold mb-3">Requests Rides</h1>
                         <div className="flex flex-col space-y-4">
-                            {request.map((req, index) => (
+                            {
+                            request.length > 0 ?
+                            request.map((req, index) => (
                                 <RouteList
                                     key={index}
                                     userId={req.userId}
@@ -60,7 +65,18 @@ const RequestRides = () => {
                                     endLatitude={req.endLatitude}
                                     endLongitude={req.endLongitude}
                                 />
-                            ))}
+                            ))
+                            :
+                            <div className="flex flex-col items-center justify-center mt-[90px] ">
+                                {/* Spinner */}
+                                <div className="relative w-16 h-16 border-4 border-gray-300 border-t-colorBlue rounded-full animate-spin"></div>
+                                {/* Waiting Text */}
+                                <p className="mt-4 text-lg font-semibold text-gray-700 animate-pulse">
+                                Looking for available rides. Stay tuned!
+                            </p>
+                      </div>
+                        
+                        }
                         </div>
                     </Card>
                 </div>
@@ -78,7 +94,7 @@ const RequestRides = () => {
                 {/* Info Drawer */}
                 {
                     openInfoModal && (
-                        <div className="fixed inset-0 flex justify-end bg-black bg-opacity-50 z-50">
+                        <div className="fixed inset-0 flex justify-end bg-black bg-opacity-50 z-50 backdrop-blur-sm">
                             <div
                                 className={`relative w-full md:w-[500px] h-screen bg-dRouteBG animate-slideRight transform ${openInfoModal ? 'translate-x-0' : 'translate-x-full'
                                     } transition-transform duration-300 ease-in-out`}
@@ -87,13 +103,25 @@ const RequestRides = () => {
                                     {/* Close Button */}
 
                                     <div className="flex  ">
-                                        <button
+                                        {
+                                            isOfferingRide ?
+                                            <button
 
                                             onClick={handleCancelRequest}
                                             className="absolute top-4 right-4 text-white text-xl font-bold bg-gray-800 rounded-full w-8 h-8 flex items-center justify-center"
                                         >
-                                            &times;
+                                            &times;/
                                         </button>
+                                        :
+                                        <button
+
+                                        onClick={handleCancelClose}
+                                        className="absolute top-4 right-4 text-white text-xl font-bold bg-gray-800 rounded-full w-8 h-8 flex items-center justify-center"
+                                    >
+                                        &times;
+                                    </button>
+                                        }
+                                       
                                     </div>
                                     {
                                         !isOfferingRide ?
@@ -193,7 +221,7 @@ const RequestRides = () => {
                                                         <Button name="Offer Ride" variant="contained" size="large" onClick={handleOfferRide} />
                                                     </div>
                                                     <div className="rounded-lg">
-                                                        <Button name="Reject" variant="contained" size="large" onClick={handleCancelRequest} />
+                                                        {/* <Button name="Reject" variant="contained" size="large" onClick={handleCancelRequest} /> */}
                                                     </div>
                                                 </>
                                                 :
