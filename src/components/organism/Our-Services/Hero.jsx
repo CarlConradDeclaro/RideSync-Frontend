@@ -8,9 +8,9 @@ const Hero = ({text, imgSrc}) => {
                     animate={{opacity: 1, y:0}}
                     transition={{duration: 0.3, ease:"easeIn", delay:0.3}}
                     className="pl-0 lg:pl-28 w-full">
-                    <p className=' text-[2rem] text-center sm:text-left sm:text-[4rem] font-bold'>
+                    <h1 className=' text-[2rem] text-center sm:text-left sm:text-[4rem] font-bold'>
                         {text}
-                    </p>
+                    </h1>
                 </motion.div>
             </div>
             <div className="w-full lg:w-1/2 flex justify-center animate-slideInFromRight">
