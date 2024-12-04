@@ -9,9 +9,9 @@ export const BookRideContextProvider = ({ children }) => {
 
     const mapRef = useRef();
     const routingControlRef = useRef();
-    const [trip, setTrip] = useState('');
-    const [rideType, setRideType] = useState('');
-    const [passenger, setPassenger] = useState('');
+    const [trip, setTrip] = useState('One way');
+    const [rideType, setRideType] = useState('Motorcylce');
+    const [passenger, setPassenger] = useState(1);
     const [selectedDate, setSelectedDate] = useState(null);
     const [searchInput, setSearchInput] = useState('');
     const [searchInputDest, setSearchInputDest] = useState('');

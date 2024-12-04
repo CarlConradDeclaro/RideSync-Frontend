@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react'
-import { UserHeader } from '../../../molecules/Passenger/UserHeader'
-import { BookRideContents } from '../../../organism/Passenger/BookRideContents'
-import { Sidebar } from '../../../molecules/Passenger/SIdebar'
+import { UserHeader } from '../../../molecules/Driver/UserHeader'
+import { ViewRides } from '../../../organism/Carpool/ViewRides'
+import { Sidebar } from '../../../molecules/Carpool/Sidebar'
 import { Loading } from '../../../molecules/Loading'
-
 
 const Components = () => {
 
@@ -18,13 +17,13 @@ const Components = () => {
 
     return (
         <div className='flex h-full '>
-            <div className='h-screen sticky top-0 z-50'>
-                <Sidebar active="bookRide" />
+            <div className='h-screen '>
+                <Sidebar active="viewRides" />
             </div>
             <div className='w-full '>
-                {/* <UserHeader /> */}
+                <UserHeader />
                 <div>
-                    {loading ? <Loading /> : <BookRideContents />}
+                    {loading ? <Loading /> : <ViewRides />}
 
                 </div>
             </div>

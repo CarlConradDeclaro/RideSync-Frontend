@@ -11,7 +11,20 @@ import { SelectTrip as SelectPayment} from '../../../atoms/Select';
 const Components = () => {
   
   const {handleConfirmBooking, users,passengerInfo,carpoolRides,handleClickCarpool,
-    rideInfo,numberOfPassengers,setNumberOfPassengers,totalAmount,setTotalAmount,isBooked,bookedBa} = useContext(PBookCarpoolContext)
+    rideInfo,numberOfPassengers,setNumberOfPassengers,totalAmount,setTotalAmount,isBooked,bookedBa,
+    handleSearch,
+    filteredRides,
+    leavingFrom,
+    goingTo,
+    selectedDate,
+    handleSearchInput,
+    handleSearchInputDest,
+    setSelectedDate,
+    suggestions,
+    suggestionsDest,
+    handleSelectSuggestion,
+    handleSelectSuggestionDest
+  } = useContext(PBookCarpoolContext)
   const [isOpen,setIsOpen]= useState(false)
   const handleOpenModal =()=>{
     setIsOpen(true)
@@ -22,15 +35,57 @@ const Components = () => {
     <div className="flex w-auto flex-col items-center justify-center p-5 space-y-8 ">
         {/* Main Card with Inputs */}
         <div className="flex flex-col md:flex-row md:w-[1000px] w-full rounded-xl shadow-lg p-5 gap-4 md:items-center">
-          <TextInput label="Leaving from" size="large" />
+          <div className='md:w-[90%]'>
+          <TextInput
+          label="Leaving from"
+          size="large"
+          value={leavingFrom}
+          onChange={handleSearchInput}
+        />
+         {suggestions.length > 0 && (
+               <ul className="absolute   bg-white border border-gray-300 rounded shadow-md max-h-40 overflow-y-auto z-10">
+                 {suggestions.map((suggestion) => (
+                   <li
+                    key={suggestion.place_id}
+                      className="px-4 py-2 cursor-pointer hover:bg-gray-200 transition-colors"
+                   onClick={() => handleSelectSuggestion(suggestion.lat, suggestion.lon, suggestion.display_name)}
+                    >
+                    {suggestion.display_name}
+                    </li>
+                   ))}
+                </ul>
+          )}
+          </div>
           <span className="hidden md:block text-gray-400">|</span>
-          <TextInput label="Going to" size="large" />
+      <div className='md:w-[90%]'>
+      <TextInput
+          label="Going to"
+          size="large"
+          value={goingTo}
+          onChange={handleSearchInputDest}
+        />
+         {suggestionsDest.length > 0 && (
+                 <ul className="absolute  bg-white border border-gray-300 rounded shadow-md max-h-40 overflow-y-auto w-full z-10">
+                  {suggestionsDest.map((suggestion) => (
+                   <li
+                      key={suggestion.place_id}
+                        className="px-4 py-2 cursor-pointer hover:bg-gray-200 transition-colors"
+                         onClick={() => handleSelectSuggestionDest(suggestion.lat, suggestion.lon, suggestion.display_name)}
+                    >
+                    {suggestion.display_name}
+                  </li>
+                 ))}
+                 </ul>
+              )}
+      </div>
           <span className="hidden md:block text-gray-400">|</span>
 
           <div className="w-full md:w-[700px]">
-            <DatePicker />
+          <DatePicker
+            onChange={(date) => setSelectedDate(date)}
+          />
           </div>
-          <Button name="Search" variant="contained" size="large" />
+          <Button name="Search" variant="contained" size="large" onClick={handleSearch} />
         </div>
       {/* Available Carpool Section */}
       <div className="flex flex-col lg:flex-row gap-8 w-full">
@@ -39,8 +94,13 @@ const Components = () => {
           <h2 className="text-2xl font-bold text-gray-800">Available Carpool:</h2>
           <div className="overflow-y-auto max-h-[600px] p-4 overflow-x-hidden custom-scrollbar space-y-5">
             {
-              carpoolRides && 
-              carpoolRides.slice().reverse().map((rides,index)=>(
+              filteredRides  && 
+              filteredRides.filter((rides)=>{
+                const today = new Date();
+                today.setHours(0,0,0,0)
+                const rideDateTime = new Date(rides.travelDateTime)
+                return rideDateTime>=today
+              }).slice().reverse().map((rides,index)=>(
                 <CarpoolCardRides
                 isBooked={isBooked}
                 key={index}
@@ -110,7 +170,6 @@ const CarpoolCardRides = ({isBooked,rides,handleClickCarpool, startLocation, end
     </div>
   );
 };
-
 const CarpoolCardDetails = ({bookedBa,isBooked,handleOpenModal,rideInfo,setNumberOfPassengers,totalAmount,setTotalAmount}) => {
   return (
     <div className="bg-white p-6 rounded-lg shadow-lg space-y-6 animate-fadeIn">
@@ -191,7 +250,6 @@ const CarpoolCardDetails = ({bookedBa,isBooked,handleOpenModal,rideInfo,setNumbe
     </div>
   );
 };
-
 const Counter = ({totalAmount,pricePerPerson, initialValue = 1, minValue = 0, maxValue,setNumberOfPassengers,setTotalAmount }) => {
   const [value, setValue] = useState(initialValue);
  
@@ -233,8 +291,6 @@ const Counter = ({totalAmount,pricePerPerson, initialValue = 1, minValue = 0, ma
     </div>
   );
 };
-
-
 const ConfirmationModal = ({handleConfirmBooking, isOpen, onClose, rideInfo, totalAmount, numberOfPassengers, onConfirm }) => {
   if (!isOpen) return null;
 

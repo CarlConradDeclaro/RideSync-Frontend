@@ -13,7 +13,9 @@ const Rides = () => {
     navigate("/driver/createRide");
   };
 
-  const {carpoolRides,rideInfo,handleSetRideInfo,totalPassenger,carpoolPassengers,filteredCarpoolPassengers,handleChats} = useContext(HomeCarpoolContext)
+  const {carpoolRides,rideInfo,handleSetRideInfo,
+  totalPassenger,carpoolPassengers,filteredCarpoolPassengers,
+  handleChats,handleMarkCarpoolCompleted} = useContext(HomeCarpoolContext)
 
  
   const [isModalOpen, setModalOpen] =  useState(false);
@@ -27,7 +29,7 @@ const Rides = () => {
       <div className="border ">
         
       </div>
-      <CarpoolRideModal handleChats={handleChats} totalPassenger={totalPassenger} filteredCarpoolPassengers={filteredCarpoolPassengers} carpoolPassengers={carpoolPassengers} isOpen={isModalOpen} onClose={() => setModalOpen(false)} rideDetails={rideInfo}/>
+      <CarpoolRideModal handleMarkCarpoolCompleted={handleMarkCarpoolCompleted} handleChats={handleChats} totalPassenger={totalPassenger} filteredCarpoolPassengers={filteredCarpoolPassengers} carpoolPassengers={carpoolPassengers} isOpen={isModalOpen} onClose={() => setModalOpen(false)} rideDetails={rideInfo}/>
 
       {/* Rides Grid */}
        <div className="w-full h-[75vh] overflow-y-auto">
@@ -35,7 +37,9 @@ const Rides = () => {
             {/* Example rides */}
             {
               carpoolRides && 
-              carpoolRides.map((rideDetails,index)=>(
+              carpoolRides
+               .filter(ride => ride.status === 'pending').slice().reverse()
+              .map((rideDetails,index)=>(
                 <CarpoolCardRide
                 key={index}
                  rideDetails={rideDetails} 
@@ -112,7 +116,7 @@ const CarpoolCardRide = ({ rideDetails,setModalOpen ,handleSetRideInfo}) => {
 };
 
 
-const CarpoolRideModal = ({handleChats,totalPassenger, filteredCarpoolPassengers, carpoolPassengers,isOpen, onClose, rideDetails})=>{
+const CarpoolRideModal = ({handleMarkCarpoolCompleted,handleChats,totalPassenger, filteredCarpoolPassengers, carpoolPassengers,isOpen, onClose, rideDetails})=>{
   if (!isOpen) return null; 
   return (
     <div className="fixed inset-0 z-50 flex justify-end bg-black bg-opacity-50 backdrop-blur-sm ">
@@ -129,10 +133,15 @@ const CarpoolRideModal = ({handleChats,totalPassenger, filteredCarpoolPassengers
   
       {/* Header */}
       <div className="border-b pb-6 mb-6">
-        <h1 className="text-4xl font-extrabold text-gray-900 mb-3">Ride Details</h1>
+        <h1 className="text-4xl font-extrabold text-gray-900 mb-3">Ride Details id{rideDetails.routeId}</h1>
         {
           (rideDetails?.numSeats-totalPassenger  == 0) &&
-        <Button name='Mark as Completed' variant='contained' size='small'/>
+        <Button 
+        name='Mark as Completed' 
+        variant='contained' 
+        size='small'
+        onClick={()=>handleMarkCarpoolCompleted(rideDetails.routeId)}
+        />
 
         }
         <p className="text-gray-500 mt-2">Review the details of your carpool ride below.</p>

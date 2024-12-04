@@ -7,15 +7,15 @@ import { Card } from '../../../molecules/Card';
 export const RecentList = ({ startLocation, endLocation, status, recentRides, handleRecentRide }) => {
 
     return (
-        <div className="p-2 from-white to-gray-50  rounded-lg shadow-md hover:scale-105 transform transition duration-300 ease-in-out flex  md:flex-nowrap items-center justify-between gap-4 cursor-pointer md:mr-4"
-            onClick={() => handleRecentRide(recentRides.startLocation, recentRides.endLocation, recentRides.totalAmount, recentRides.estimatedDuration,
+        <div className="p-2 from-white to-gray-50  rounded-lg shadow-md hover:scale-105 transform transition duration-300 ease-in-out flex  md:flex-nowrap items-center justify-between gap-4 cursor-pointer md:mr-4 "
+            onClick={() => handleRecentRide(recentRides?.driverId,recentRides.startLocation, recentRides.endLocation, recentRides.totalAmount, recentRides.estimatedDuration,
                 recentRides.distance, { lat: recentRides.startLatitude, lon: recentRides.startLongitude }, {
                 lat: recentRides.endLatitude,
                 lon: recentRides.endLongitude
-            }, recentRides.userFn, recentRides.userLn, recentRides.userRating, recentRides.status)}
+            }, recentRides.userFn, recentRides.userLn, recentRides.userRating, recentRides.status,recentRides.vehicleColor,recentRides.vehiclePlateNo)}
         >
             {/* Left Section: Icons and Text */}
-            <div className="flex items-start gap-4">
+            <div className="flex items-start gap-4 ">
                 {/* Icon Column */}
                 <div className="flex flex-col justify-center items-center space-y-2">
                     <img src={Circle} alt="circle" className="w-4 h-4 sm:w-6 sm:h-6 md:max-w-6 md:max-h-6 lg:w-5 lg:h-5" />
@@ -46,8 +46,9 @@ export const RecentList = ({ startLocation, endLocation, status, recentRides, ha
 export const UpComingList = ({ anchorEl, setAnchorEl, options, upcomingRides, handleBookingRide }) => {
     return (
         <Card className="from-white to-gray-50  h-auto w-full md:w-[620px]   p-2 mb-2 rounded-lg  cursor-pointer hover:scale-105 transform transition duration-300 ease-in-out">
+            id{upcomingRides?.routeId}
             <div className="flex flex-col h-full text-gray-800"
-                onClick={() => handleBookingRide({ lat: upcomingRides.startLatitude, lon: upcomingRides.startLongitude }, { lat: upcomingRides.endLatitude, lon: upcomingRides.endLongitude },
+                onClick={() => handleBookingRide(upcomingRides.driverId,upcomingRides.routeId,{ lat: upcomingRides.startLatitude, lon: upcomingRides.startLongitude }, { lat: upcomingRides.endLatitude, lon: upcomingRides.endLongitude },
                     upcomingRides.startLocation, upcomingRides.endLocation, upcomingRides.estimatedDuration, upcomingRides.distance, upcomingRides.totalAmount,
                     upcomingRides.travelDate, upcomingRides.userFn, upcomingRides.userLn, upcomingRides.userEmail, upcomingRides.userPhone, upcomingRides.userRating)}
             >

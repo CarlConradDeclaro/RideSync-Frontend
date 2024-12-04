@@ -71,7 +71,7 @@ const Booking2 = ({
                 >
                     Back
                 </div>
-                <div className='flex mt-5 ' >
+                {/* <div className='flex mt-5 ' >
 
                     <SelectTrip
                         label="Trip"
@@ -107,8 +107,8 @@ const Booking2 = ({
                         ]}
                         sx={{ minWidth: 100, backgroundColor: 'white' }}
                     />
-                </div>
-                <div className='flex flex-col gap-2 p-2'>
+                </div> */}
+                <div className='flex flex-col gap-2 p-2 mt-10'>
                     <div className='flex gap-2'>
                         <div className="relative">
                             <TextInput

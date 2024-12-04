@@ -21,6 +21,9 @@ const Components = () => {
         handleRecentRideInfo,
         passengerInfo,
         handleBookingRideInfo,
+        handleCancelBooking,
+        cancelledRoutes,
+        markBookingAsDone,
         bookingInfo } = useContext(ViewRidesContext)
 
     return (
@@ -31,10 +34,13 @@ const Components = () => {
                 {
                     isInBooking ? (
                         <Booking mapRefBooking={mapRefBooking} pickUp={pickUp}
-                            destination={destination} bookings={bookings} bookingInfo={bookingInfo} handleBookingRideInfo={handleBookingRideInfo} />
+                            destination={destination} bookings={bookings} bookingInfo={bookingInfo} 
+                            handleBookingRideInfo={handleBookingRideInfo} handleCancelBooking={handleCancelBooking}
+                            markBookingAsDone={markBookingAsDone}
+                            />
                     ) :
                         isInInCancelledRides ? (
-                            <CancelledRides />
+                            <CancelledRides cancelledRoutes={cancelledRoutes} />
                         ) : (
                             <RecentRides
                                 mapRef={mapRef}

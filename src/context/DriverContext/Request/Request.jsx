@@ -7,10 +7,11 @@ import 'leaflet-control-geocoder/dist/Control.Geocoder.css'; // Geocoder CSS
 import 'leaflet-control-geocoder'; // Geocoder JS
 import { io } from 'socket.io-client';
 import { BASEURL, BASEURLDrivers, postRequest } from "../../../utils/Service";
+import { useNavigate } from 'react-router-dom';
 
 export const RequestContext = createContext();
 export const RequestContextProvider = ({ children }) => {
-
+    const navigate = useNavigate();
     const [driverInfo, setDriverInfo] = useState(null);
     const [socket, setSocket] = useState(null);
     const driverMap = useRef();
@@ -176,6 +177,7 @@ export const RequestContextProvider = ({ children }) => {
             setCurrentRide(null)
             setPassengerInfo(null)
             setPassengerApproval(false)
+            setIsOfferingRide(false)
 
             const map = driverMap.current;
             if (routingControlRef.current) {
@@ -210,7 +212,7 @@ export const RequestContextProvider = ({ children }) => {
             setStep2(false)
             setSelectedPosition(null)
             setSelectedPositionDest(null)
-
+            setIsOfferingRide(false)
         })
 
 
@@ -277,7 +279,7 @@ export const RequestContextProvider = ({ children }) => {
         const response = await postRequest(`${BASEURLDrivers}/potentialRide`, JSON.stringify(potentialDriversInfo))
         const response2 = await postRequest(`${BASEURLDrivers}/rides`, JSON.stringify(ridesInfo))
         setOfferRide(false)
-       
+
         if (response.status) {
             console.log("Success");
             setIsOfferingRide(true)
@@ -295,7 +297,7 @@ export const RequestContextProvider = ({ children }) => {
             map.removeControl(routingControlRef.current);
         }
 
-        routingControlRef.current = L.Routing.control({
+            routingControlRef.current = L.Routing.control({
             waypoints: [
                 L.latLng(startLatitude, startLongitude),
                 L.latLng(endLatitude, endLongitude)
@@ -337,6 +339,20 @@ export const RequestContextProvider = ({ children }) => {
 
     };
 
+    
+const handleChats = async (passengerId) => {
+        const user2_Id = driverInfo?.id;
+        const user1_Id = passengerId;
+        try {
+        const response = await postRequest(`${BASEURL}/createChat`, JSON.stringify({ user1_Id, user2_Id }))
+        console.log("handle chat response", response);
+        navigate('/driver/messageContents');
+        } catch (error) {
+        console.error(error);
+        }
+}
+
+
 
 
 
@@ -373,7 +389,8 @@ export const RequestContextProvider = ({ children }) => {
                 currentRide,
                 getPassengerInfo,
                 setRequest,
-                setCurrentRide
+                setCurrentRide,
+                handleChats
 
 
             }}

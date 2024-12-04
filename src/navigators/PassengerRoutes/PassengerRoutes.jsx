@@ -7,16 +7,17 @@ import { ViewRide } from '../../components/pages/Passenger/ViewRide';
 import { BookRide } from '../../components/pages/Passenger/BookRide';
 import { Message } from '../../components/pages/Passenger/Message';
 import { Profile } from '../../components/pages/Passenger/Profile';
+import { useLocation } from 'react-router-dom';
 
 
 import { LoginContext, LoginContextProvider } from '../../context/PassengerContext/Auth/LoginContext';
 import { LandingPage } from '../../components/pages/LandingPage';
 import { PBookCarpool } from '../../components/pages/Carpool/PBookCarpool';
 import { Loading } from '../../components/templates/Carpool/Loading';
-
+import { DummyLoading } from '../../components/molecules/Passenger/DummyLoading';
 
 const routes = [
-  { path: '/', element: <LandingPage />, isProtected: false },
+ // { path: '/', element: <LandingPage />, isProtected: false },
   { path: '/register', element: <Register />, isProtected: false },
   { path: '/login', element: <Login />, isProtected: false },
   { path: '/homeContents', element: <Home />, isProtected: true },
@@ -25,7 +26,9 @@ const routes = [
   { path: '/messageContents', element: <Message />, isProtected: true },
   { path: '/profileContents', element: <Profile />, isProtected: true },
   { path: '/bookCarpoolContents', element: <PBookCarpool />, isProtected: true },
-  { path: '/bookCarpoolConfirmation', element: <Loading />, isProtected: true }
+  { path: '/bookCarpoolConfirmation', element: <Loading />, isProtected: true },
+  { path: '/loading', element: <DummyLoading />, isProtected: false },
+
 ]
 
 

@@ -67,6 +67,8 @@ const Components = ({ active }) => {
 
                     {[{ name: 'Home', icon: RequestRide, key: 'request', route: '/driver/homeCarpool' },
                     // { name: 'View Rides', icon: BookRide, key: 'viewrides', route: '/driver/viewRidesContents' },
+                    { name: 'View rides', icon: ViewRides, key: 'viewRides', route: '/driver/carpoolViewRides' },
+
                     { name: 'Message', icon: Message, key: 'message', route: '/driver/CarpoolMessage' },
                     { name: 'Profile', icon: Profile, key: 'profile', route: '' }
                     ].map(({ name, icon, key, route }) => (

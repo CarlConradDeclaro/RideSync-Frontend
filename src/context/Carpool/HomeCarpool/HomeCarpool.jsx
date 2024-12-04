@@ -9,7 +9,7 @@ import dayjs from "dayjs";
 import {  BASEURL, BASEURLDrivers, postRequest } from "../../../utils/Service";
 import { io } from 'socket.io-client'
 import { useNavigate } from "react-router-dom";
-
+// testing
 
 
 export const HomeCarpoolContext = createContext()
@@ -335,7 +335,17 @@ export const HomeCarpoolContextProvider = ({children})=>{
         }
       }
     
+     const handleMarkCarpoolCompleted = async(routeId)=>{
+        try {
+             const response = await postRequest(`${BASEURLDrivers}/markCarpoolCompleted`,JSON.stringify({routeId}))
+             console.log(response);
+           navigate('/driver/Carpoollooading?route=/driver/homeCarpool&active=request');
 
+        } catch (error) {
+            console.log("error updating carpool route");
+            
+        }
+     }
 
 
  
@@ -378,6 +388,7 @@ export const HomeCarpoolContextProvider = ({children})=>{
         filteredCarpoolPassengers,
         totalPassenger,
         handleChats,
+        handleMarkCarpoolCompleted
     }}
     >
         {children}
