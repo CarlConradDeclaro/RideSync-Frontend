@@ -10,11 +10,15 @@ import { Message } from '../../components/pages/Driver/Message';
 import { HomeCarpool } from '../../components/pages/Carpool/HomeCarpool';
 import { CreateRides } from '../../components/pages/Carpool/CreateRides';
 import { ViewRideCarpool } from '../../components/pages/Carpool/ViewRideCarpool';
+import { Profile } from '../../components/pages/Driver/Profile';
 
 
 import { Message as CarpoolMessage } from '../../components/pages/Carpool/Message';
 import { DummyLoading } from '../../components/molecules/Driver/DummyLoading';
 import { CarpoolLoading } from '../../components/molecules/Carpool/DummyLoading';
+import { Profile as CarpoolProfile } from '../../components/pages/Carpool/Profile';
+
+
 
 
 const RootNavigators = () => {
@@ -28,14 +32,19 @@ const RootNavigators = () => {
                     <Route path="/requestContents" element={<Request />} />
                     <Route path="/viewRidesContents" element={<ViewRides />} />
                     <Route path="/messageContents" element={<Message />} />
+                     <Route path="/profileContents" element={<Profile />} />
 
                     {/* carpool */}
                     <Route path="/homeCarpool" element={<HomeCarpool />} />
                     <Route path="/createRide" element={<CreateRides />} />
-                     <Route path="/carpoolViewRides" element={<ViewRideCarpool />} />
+                    <Route path="/carpoolViewRides" element={<ViewRideCarpool />} />
                     <Route path="/CarpoolMessage" element={<CarpoolMessage />} />
+                    <Route path="/CarpoolProfile" element={<CarpoolProfile />} />
+
                     <Route path="/loading" element={<DummyLoading />} />
                     <Route path="/Carpoollooading" element={<CarpoolLoading />} />
+
+                    
 
                     <Route path="*" element={<NotFound />} />
                 </Route>

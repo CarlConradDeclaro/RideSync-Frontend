@@ -70,7 +70,7 @@ const Components = ({ active }) => {
                     { name: 'View rides', icon: ViewRides, key: 'viewRides', route: '/driver/carpoolViewRides' },
 
                     { name: 'Message', icon: Message, key: 'message', route: '/driver/CarpoolMessage' },
-                    { name: 'Profile', icon: Profile, key: 'profile', route: '' }
+                    { name: 'Profile', icon: Profile, key: 'profile', route: '/driver/CarpoolProfile' }
                     ].map(({ name, icon, key, route }) => (
                         <div
                             key={key}

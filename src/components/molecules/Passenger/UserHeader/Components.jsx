@@ -3,6 +3,8 @@ import { jwtDecode } from 'jwt-decode';  // Use named import instead of default 
 import DefaultProfile from '../../../../assets/DefaultProfile.png';
 import Location from '../../../../assets/HLocationIcon.png';
 import HTime from '../../../../assets/HTime.png';
+import clock from '../../../../assets/clock.png';
+import locationIconHeader from '../../../../assets/locationIconHeader.png';
 
 const Components = () => {
   const [userProfileImage, setUserProfileImage] = useState();
@@ -55,7 +57,7 @@ const Components = () => {
       <div className="flex items-center space-x-6">
         <div className="hidden sm:flex items-center space-x-2">
           <img
-            src={HTime}
+            src={clock}
             className="w-5 h-5 md:w-6 md:h-6 rounded-full object-cover"
             alt="Time Icon"
           />
@@ -64,7 +66,7 @@ const Components = () => {
 
         <div className="hidden sm:flex items-center space-x-2">
           <img
-            src={Location}
+            src={locationIconHeader}
             className="w-5 h-5 md:w-6 md:h-6 rounded-full object-cover"
             alt="Location Icon"
           />
