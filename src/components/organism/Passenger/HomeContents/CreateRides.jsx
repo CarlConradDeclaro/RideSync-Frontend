@@ -10,6 +10,8 @@ import { Button } from '../../../atoms/Button'
 import { FindRouteContext } from '../../../../context/PassengerContext/FindRoute/FindRouteContext';
 import {useNavigate} from 'react-router-dom'
 import { WarningModal } from '../../../atoms/WarningModal';
+import CarpoolAnimation from '../../../../assets/carpool.gif'
+import ScheduleAnimation from '../../../../assets/calendar.gif'
 
 
 const CreateRides = () => {
@@ -41,20 +43,42 @@ const CreateRides = () => {
 
     return (
         <div className="flex flex-col md:w-[500px]">
-            <div className="flex gap-4 justify-start w-full max-w-md mb-6">
-                <button
-                    className="w-full px-6 py-3 bg-gradient-to-r from-sky-500 to-sky-400 text-white text-sm font-medium rounded-lg shadow-lg hover:from-sky-600 hover:to-sky-500 hover:shadow-xl transition-all duration-200 ease-in-out"
-                onClick={handleCarpoolClick}
-                >
-                    Carpool
-                </button>
-                <button
-                    className="w-full px-6 py-3 bg-gradient-to-r from-teal-500 to-teal-400 text-white text-sm font-medium rounded-lg shadow-lg hover:from-teal-600 hover:to-teal-500 hover:shadow-xl transition-all duration-200 ease-in-out"
-                onClick={handleBookRideClick}
-                >
-                    Schedule a ride now!
-                </button>
-            </div>
+             
+            <div className="flex flex-row gap-6 items-center justify-start w-full max-w-md ml-5 mb-6">
+                    {/* Carpool Section */}
+                    <div 
+                        className="flex flex-col items-center cursor-pointer hover:scale-105 transition-transform duration-300"
+                        onClick={handleCarpoolClick}
+                    >
+                        <img
+                        src={CarpoolAnimation}
+                        alt="Carpool Animation"
+                        className="w-14 h-14"
+                        />
+                        <h1 className="mt-2 text-lg font-bold text-gray-800 hover:text-blue-600">
+                        Carpool
+                        </h1>
+                    </div>
+
+                    {/* Divider (Optional for better separation) */}
+                    <div className="w-1 h-12 bg-gray-300"></div>
+
+                    {/* Schedule Ride Section */}
+                    <div 
+                        className="flex flex-col items-center cursor-pointer hover:scale-105 transition-transform duration-300"
+                        onClick={handleBookRideClick}
+                    >
+                        <img
+                        src={ScheduleAnimation}
+                        alt="Schedule Animation"
+                        className="w-14 h-14"
+                        />
+                        <h1 className="mt-2 text-lg font-bold text-gray-800 hover:text-green-600">
+                        Schedule a Ride
+                        </h1>
+                    </div>
+                    </div>
+
             <Card className="flex flex-col gap-5  items-start w-full md:w-[400px] h-[300px] md:h-[300px] rounded-2xl p-5">
 
                 <div className="flex items-center mb-5 space-x-4">
@@ -64,6 +88,7 @@ const CreateRides = () => {
                     <div className="hover:shadow-2xl p-2 rounded-full cursor-pointer">
                     </div>
                 </div>
+               
 
                 <div className='flex  justify-center w-full'>
                     <div>

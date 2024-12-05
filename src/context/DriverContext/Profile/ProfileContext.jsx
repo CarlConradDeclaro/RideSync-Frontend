@@ -73,7 +73,8 @@ export const ProfileContextProvider = ({ children }) => {
             const response = await postRequest(`${BASEURL}/updateProfile`,JSON.stringify({firstname,lastname,
                 email,
                 phonNum, userId:userInfo.id}))
-            navigate('/passenger/loading?route=/passenger/profileContents&active=profile');
+           navigate('/driver/loading?route=/driver/profileContents&active=profile');
+
 
         } catch (error) {
              console.error('Error updating profile:', error);

@@ -1,13 +1,13 @@
  import React, { useContext, useState } from "react";
 import DefaultProfile from "../../../../assets/DefaultProfile.png";
 import { Button } from "../../../atoms/Button";
-import { ProfileContext } from "../../../../context/PassengerContext/Profile/ProfileContext";
 import { AiOutlineCar, AiOutlineStar, AiOutlineMail } from "react-icons/ai";
 import { MdVerified, MdPhone, MdLocationOn } from "react-icons/md";
 import { Ratings } from "../../../atoms/Ratings";
+import { ProfileContext } from "../../../../context/Carpool/Profile/ProfileContext";
 
 const Profile = () => {
-  const { userData } = useContext(ProfileContext);
+   const { userData } = useContext(ProfileContext);
   const [isEditing, setIsEditing] = useState(false);
 
   return (
@@ -123,7 +123,7 @@ const Profile = () => {
 };
 
 
-const EditProfile = ({ userData, onClose }) => {
+const EditProfile = ({onClose}) => {
   
   const {
     firstname,

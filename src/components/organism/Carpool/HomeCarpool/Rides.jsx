@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { HomeCarpoolContext } from "../../../../context/Carpool/HomeCarpool/HomeCarpool";
 import StartCarpoolLoc from '../../../../assets/startCarpoolLoc.png'
 import DropCarpoolLoc from '../../../../assets/dropCarpoolLoc.png'
+import NoRides from '../../../../assets/noRides.gif'
 
 
 
@@ -33,22 +34,40 @@ const Rides = () => {
 
       {/* Rides Grid */}
        <div className="w-full h-[75vh] overflow-y-auto">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-5 ">
+          <div className="relative grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-5 ">
             {/* Example rides */}
-            {
-              carpoolRides && 
-              carpoolRides
-               .filter(ride => ride.status === 'pending').slice().reverse()
-              .map((rideDetails,index)=>(
-                <CarpoolCardRide
-                key={index}
-                 rideDetails={rideDetails} 
-                 setModalOpen={setModalOpen}
-                 handleSetRideInfo={handleSetRideInfo}
-                 />
+           {
+              carpoolRides.length &&
+                carpoolRides.filter(ride => ride.status === 'pending').length > 0 ? (
+                  carpoolRides
+                    .filter(ride => ride.status === 'pending')
+                    .slice()
+                    .reverse()
+                    .map((rideDetails, index) => (
+                      <CarpoolCardRide
+                        key={index}
+                        rideDetails={rideDetails}
+                        setModalOpen={setModalOpen}
+                        handleSetRideInfo={handleSetRideInfo}
+                      />
+                    ))
+                ) : (
+                  <div className="absolute flex-col left-[450px] top-[200px] flex items-center space-x-4">
+                    <img
+                      src={NoRides}
+                      alt="No rides available"
+                      className="w-[150px] h-[120px]"
+                    />
+                    <h1 className="text-xl font-bold text-gray-700 text-start">
+                      No pending rides available
+                    </h1>
+                  </div>
 
-              ))
+                )
+              
             }
+
+
           
           </div>
        </div>
@@ -134,16 +153,17 @@ const CarpoolRideModal = ({handleMarkCarpoolCompleted,handleChats,totalPassenger
       {/* Header */}
       <div className="border-b pb-6 mb-6">
         <h1 className="text-4xl font-extrabold text-gray-900 mb-3">Ride Details id{rideDetails.routeId}</h1>
-        {
+        {/* {
           (rideDetails?.numSeats-totalPassenger  == 0) &&
-        <Button 
+       
+
+        } */}
+         <Button 
         name='Mark as Completed' 
         variant='contained' 
         size='small'
         onClick={()=>handleMarkCarpoolCompleted(rideDetails.routeId)}
         />
-
-        }
         <p className="text-gray-500 mt-2">Review the details of your carpool ride below.</p>
       </div>
   
