@@ -5,6 +5,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Landing } from './components/templates/Landing';
 import { RideSharing } from './components/templates/Our-services/Ride-sharing';
 import {CarPooling} from './components/templates/Our-services/Car-pooling';
+import {AboutUs} from './components/templates/About-us'
+
 
 
 
@@ -16,7 +18,9 @@ function App() {
     <BrowserRouter>
   
       <Routes>
+
         <Route path='/' element={<Landing /> } />
+        <Route path='/about-us' element={<AboutUs/>}/>
         <Route path='/our-services/ride-sharing' element={<RideSharing/>} />
         <Route path='/our-services/car-pooling' element={<CarPooling/>}/>
         
