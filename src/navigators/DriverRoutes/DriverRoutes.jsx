@@ -11,8 +11,6 @@ import { HomeCarpool } from '../../components/pages/Carpool/HomeCarpool';
 import { CreateRides } from '../../components/pages/Carpool/CreateRides';
 import { ViewRideCarpool } from '../../components/pages/Carpool/ViewRideCarpool';
 import { Profile } from '../../components/pages/Driver/Profile';
-
-
 import { Message as CarpoolMessage } from '../../components/pages/Carpool/Message';
 import { DummyLoading } from '../../components/molecules/Driver/DummyLoading';
 import { CarpoolLoading } from '../../components/molecules/Carpool/DummyLoading';
