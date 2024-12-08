@@ -9,7 +9,6 @@ import { Message } from '../../components/pages/Passenger/Message';
 import { Profile } from '../../components/pages/Passenger/Profile';
 import { useLocation } from 'react-router-dom';
 
-
 import { LoginContext, LoginContextProvider } from '../../context/PassengerContext/Auth/LoginContext';
 import { LandingPage } from '../../components/pages/LandingPage';
 import { PBookCarpool } from '../../components/pages/Carpool/PBookCarpool';
