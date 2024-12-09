@@ -62,12 +62,28 @@ const SelectedDriver = () => {
     }, [driverId, route]);
 
 
-
+    const [profileImage,setProfileImage]= useState()
+     useEffect(() => {
+        if (driverInfo && driverInfo?.userId) { 
+            
+                const interval = setTimeout(async() => {
+                const cloudinaryUrl = `https://res.cloudinary.com/drvtezcke/image/upload/v1/${driverInfo?.userId}?${new Date().getTime()}`;
+                const response = await fetch(cloudinaryUrl)
+                if(response.ok){
+                setProfileImage(cloudinaryUrl);
+                }else{
+                setProfileImage(DefaultProfile) 
+                }
+                },1); 
+                return () => clearInterval(interval);
+            
+        }
+        }, [driverInfo]);
 
 
     return (
         <div className="flex flex-col items-center animate-slideInFromRight">
-            <Card className="flex flex-col gap-6 sm:w-full md:w-[450px] rounded-2xl shadow-lg bg-white p-5">
+            <div className="flex   flex-col gap-6 sm:w-full md:w-[450px] rounded p-5">
                 <h1 className="text-2xl font-semibold text-gray-800">Driver</h1>
                 <span>
                     {isDriverComming ? "Your driver is comming!" :
@@ -77,9 +93,14 @@ const SelectedDriver = () => {
                 </span>
 
                 <div className="w-full flex flex-col sm:flex-row justify-around gap-4  bg-gradient-to-b from-white to-gray-50 border border-gray-200 p-5 rounded-lg">
-                    <div className="flex justify-center items-center">
-                        <img src={DefaultProfile} className="max-w-[80px] max-h-[80px] rounded-full border-2 border-gray-300" alt="Driver Profile" />
+                    <div className="flex justify-center  md:mt-[90px]">
+                        <img
+                            src={profileImage}
+                            className="w-[100px] h-[100px] md:w-[105px] md:h-[80px] rounded-full border-2 border-blue-500 shadow-lg"
+                            alt="Driver Profile"
+                        />
                     </div>
+
                     <div className="w-full flex flex-col items-end justify-between">
                         <h1 className="font-bold text-lg text-right">{driverInfo?.userLn.toUpperCase()+"  "|| 'Driver Name'}   {driverInfo?.userFn.toUpperCase() || 'Driver Name'}</h1>
                         <div className="flex items-center justify-start text-yellow-500">
@@ -110,7 +131,7 @@ const SelectedDriver = () => {
                     }
 
                 </div>
-            </Card>
+            </div>
         </div>
     );
 };

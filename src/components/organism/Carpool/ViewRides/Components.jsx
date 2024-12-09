@@ -3,6 +3,9 @@ import { Card } from '../../../molecules/Card';
 import Avatar from '@mui/material/Avatar';
 import AvatarGroup from '@mui/material/AvatarGroup';
 import { ViewRideCarpoolContext } from '../../../../context/Carpool/ViewRideCarpool/ViewRideCarpool';
+import DefaultProfile from '../../../../assets/DefaultProfile.png';
+
+
 
 const Components = () => {
 
@@ -14,7 +17,37 @@ const Components = () => {
   passengersByCarpool,
   }=useContext(ViewRideCarpoolContext)
 
-   const[carpoolRide,setCarpoolRide]= useState()
+  const[carpoolRide,setCarpoolRide]= useState()
+
+  const [profileImages, setProfileImages] = useState({}); // Store user profiles
+  const fetchProfileImage = (userId) => {
+        if (!userId) return DefaultProfile;
+
+        // Check if the image is already cached
+        if (profileImages[userId]) {
+            return profileImages[userId];
+        }
+
+        // Generate Cloudinary URL
+        const cloudinaryUrl = `https://res.cloudinary.com/drvtezcke/image/upload/v1/${userId}?${new Date().getTime()}`;
+
+        // Use setTimeout to simulate async update and delay setting the image
+        setTimeout(async () => {
+            try {
+                const response = await fetch(cloudinaryUrl, { method: "HEAD" });
+                if (response.ok) {
+                    setProfileImages((prev) => ({ ...prev, [userId]: cloudinaryUrl }));
+                } else {
+                    throw new Error("Image not found");
+                }
+            } catch (error) {
+                // Fallback to default if the image does not exist
+                setProfileImages((prev) => ({ ...prev, [userId]: DefaultProfile }));
+            }
+        }, 1);
+
+        return DefaultProfile; // Show default image while loading
+    };
 
   return (
     <div className="flex flex-col items-center px-5 w-full">
@@ -28,11 +61,13 @@ const Components = () => {
             </div>
             {
               completedCarpools.length > 0 ? 
-                completedCarpools
+                completedCarpools.filter(ride => ride.status === 'completed').length > 0  ?
+                completedCarpools 
                   .filter(ride => ride.status === 'completed') // Filter only completed carpools
                   .slice().reverse().map((ride, index) => (
                     <CarpoolList
                       key={index}
+                      fetchProfileImage={fetchProfileImage}
                       carpoolPassengers={carpoolPassengers}
                       users={users}
                       ride={ride}
@@ -41,15 +76,18 @@ const Components = () => {
                       passengersByCarpool={passengersByCarpool}
                     />
                   ))
-              : <>No carpools</>
+              : <div className='flex justify-center items-center h-[65vh]'>You have no completed carpool</div> 
+              : <div className='flex justify-center items-center h-full'>You have no completed carpool</div> 
             }
 
           </div>
           <div className="flex w-[50%] flex-col items-center border overflow-y-auto mt-5 md:mt-0">
             {/* other details are here */}
             {
-              carpoolRide?.routeId &&
-                <OtherDetails carpoolRide={carpoolRide} passengersByCarpool={passengersByCarpool}/>
+              carpoolRide?.routeId ?
+                <OtherDetails fetchProfileImage={fetchProfileImage} carpoolRide={carpoolRide} passengersByCarpool={passengersByCarpool}/>
+              :
+            <div className='flex justify-center items-center h-full'>Select a ride</div>
             }
           </div>
         </Card>
@@ -58,7 +96,7 @@ const Components = () => {
   );
 };
 
-const CarpoolList = ({ carpoolPassengers, users, ride, setCarpoolRide, getPassengerByCarpool, passengersByCarpool }) => {
+const CarpoolList = ({ fetchProfileImage,carpoolPassengers, users, ride, setCarpoolRide, getPassengerByCarpool, passengersByCarpool }) => {
   const [filteredPassengers, setFilteredPassengers] = useState([]);
 
   useEffect(() => {
@@ -123,7 +161,7 @@ const CarpoolList = ({ carpoolPassengers, users, ride, setCarpoolRide, getPassen
             {/* Example avatars, replace with dynamic data */}
             {
               filteredPassengers?.map((u)=>(
-                <Avatar alt={u.userFn.charAt(0).toUpperCase()} src="/static/images/avatar/1.jpg" />
+                <Avatar alt={u.userFn.charAt(0).toUpperCase()} src={fetchProfileImage(u?.userId)} />
               ))
             }
          
@@ -141,7 +179,7 @@ const CarpoolList = ({ carpoolPassengers, users, ride, setCarpoolRide, getPassen
 
 
 
-const OtherDetails = ({carpoolRide,passengersByCarpool}) => {
+const OtherDetails = ({fetchProfileImage,carpoolRide,passengersByCarpool}) => {
   return (
     <div className="flex  flex-col w-full p-5 gap-6 bg-gray-50 rounded-lg shadow-lg">
       <h2 className="text-2xl font-bold text-gray-800 mb-3 flex items-center gap-2">
@@ -184,16 +222,12 @@ const OtherDetails = ({carpoolRide,passengersByCarpool}) => {
               key={index}
               className="flex flex-col items-center bg-white p-3 rounded-lg shadow-md border border-gray-200 transition-transform duration-200 hover:scale-105"
             >
-              {/* <img
-                src={passenger.image}
-                alt={passenger.userFn.charAt(0)}
+              <img
+                src={fetchProfileImage(passenger?.userId)}
+                alt={passenger?.userFn.charAt(0)}
                 className="w-12 h-12 rounded-full mb-2"
-              /> */}
-              <h1
-              className="w-12 h-12 rounded-full mb-2 bg-blue-400 flex items-center justify-center" 
-              >
-                {passenger.userFn.charAt(0).toUpperCase()}
-              </h1>
+              />
+              
               <span className="text-sm font-medium text-gray-800">{passenger.userFn}</span>
             </div>
           ))}

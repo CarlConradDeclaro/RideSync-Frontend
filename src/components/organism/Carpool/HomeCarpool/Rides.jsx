@@ -5,6 +5,7 @@ import { HomeCarpoolContext } from "../../../../context/Carpool/HomeCarpool/Home
 import StartCarpoolLoc from '../../../../assets/startCarpoolLoc.png'
 import DropCarpoolLoc from '../../../../assets/dropCarpoolLoc.png'
 import NoRides from '../../../../assets/noRides.gif'
+import DefaultProfile from '../../../../assets/DefaultProfile.png';
 
 
 
@@ -14,12 +15,44 @@ const Rides = () => {
     navigate("/driver/createRide");
   };
 
-  const {carpoolRides,rideInfo,handleSetRideInfo,
+  const {driverInfo,carpoolRides,rideInfo,handleSetRideInfo,
   totalPassenger,carpoolPassengers,filteredCarpoolPassengers,
   handleChats,handleMarkCarpoolCompleted} = useContext(HomeCarpoolContext)
 
  
   const [isModalOpen, setModalOpen] =  useState(false);
+
+  const [profileImages, setProfileImages] = useState({}); // Store user profiles
+
+    
+const fetchProfileImage = (userId) => {
+    if (!userId) return DefaultProfile;
+
+    // Check if the image is already cached
+    if (profileImages[userId]) {
+        return profileImages[userId];
+    }
+
+    // Generate Cloudinary URL
+    const cloudinaryUrl = `https://res.cloudinary.com/drvtezcke/image/upload/v1/${userId}?${new Date().getTime()}`;
+
+    // Use setTimeout to simulate async update and delay setting the image
+    setTimeout(async () => {
+        try {
+            const response = await fetch(cloudinaryUrl, { method: "HEAD" });
+            if (response.ok) {
+                setProfileImages((prev) => ({ ...prev, [userId]: cloudinaryUrl }));
+            } else {
+                throw new Error("Image not found");
+            }
+        } catch (error) {
+            // Fallback to default if the image does not exist
+            setProfileImages((prev) => ({ ...prev, [userId]: DefaultProfile }));
+        }
+    }, 1);
+
+    return DefaultProfile; // Show default image while loading
+};
 
   return (
     <>
@@ -30,7 +63,7 @@ const Rides = () => {
       <div className="border ">
         
       </div>
-      <CarpoolRideModal handleMarkCarpoolCompleted={handleMarkCarpoolCompleted} handleChats={handleChats} totalPassenger={totalPassenger} filteredCarpoolPassengers={filteredCarpoolPassengers} carpoolPassengers={carpoolPassengers} isOpen={isModalOpen} onClose={() => setModalOpen(false)} rideDetails={rideInfo}/>
+      <CarpoolRideModal fetchProfileImage={fetchProfileImage} handleMarkCarpoolCompleted={handleMarkCarpoolCompleted} handleChats={handleChats} totalPassenger={totalPassenger} filteredCarpoolPassengers={filteredCarpoolPassengers} carpoolPassengers={carpoolPassengers} isOpen={isModalOpen} onClose={() => setModalOpen(false)} rideDetails={rideInfo}/>
 
       {/* Rides Grid */}
        <div className="w-full h-[75vh] overflow-y-auto">
@@ -40,11 +73,12 @@ const Rides = () => {
               carpoolRides.length &&
                 carpoolRides.filter(ride => ride.status === 'pending').length > 0 ? (
                   carpoolRides
-                    .filter(ride => ride.status === 'pending')
+                    .filter(ride => ride.status === 'pending' &&  ride.userId == driverInfo?.id)
                     .slice()
                     .reverse()
                     .map((rideDetails, index) => (
                       <CarpoolCardRide
+                      driverInfo={driverInfo}
                         key={index}
                         rideDetails={rideDetails}
                         setModalOpen={setModalOpen}
@@ -75,7 +109,7 @@ const Rides = () => {
   );
 };
 
-const CarpoolCardRide = ({ rideDetails,setModalOpen ,handleSetRideInfo}) => {
+const CarpoolCardRide = ({driverInfo,rideDetails,setModalOpen ,handleSetRideInfo}) => {
   return (
     <div className="mt-3 max-w-[500px] w-full h-auto cursor-pointer bg-white border rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow duration-300"
     onClick={()=>handleSetRideInfo(rideDetails)}
@@ -85,7 +119,7 @@ const CarpoolCardRide = ({ rideDetails,setModalOpen ,handleSetRideInfo}) => {
       <span className="text-sm text-gray-600">
         {rideDetails?.travelDateTime ? new Date(rideDetails.travelDateTime).toLocaleString() : "No Date"}
       </span>
-    </div>
+    </div> 
   
     {/* Card Content */}
     <div className="space-y-4">
@@ -135,10 +169,10 @@ const CarpoolCardRide = ({ rideDetails,setModalOpen ,handleSetRideInfo}) => {
 };
 
 
-const CarpoolRideModal = ({handleMarkCarpoolCompleted,handleChats,totalPassenger, filteredCarpoolPassengers, carpoolPassengers,isOpen, onClose, rideDetails})=>{
+const CarpoolRideModal = ({fetchProfileImage,handleMarkCarpoolCompleted,handleChats,totalPassenger, filteredCarpoolPassengers, carpoolPassengers,isOpen, onClose, rideDetails})=>{
   if (!isOpen) return null; 
   return (
-    <div className="fixed inset-0 z-50 flex justify-end bg-black bg-opacity-50 backdrop-blur-sm ">
+    <div className="fixed inset-0 z-50 flex justify-end bg-black bg-opacity-50  ">
     {/* Modal Content */}
     <div className="bg-white animate-slideRight w-full sm:w-3/4 md:w-1/2 h-full shadow-2xl p-8 overflow-y-auto transition-transform transform translate-x-0 rounded-l-xl">
       {/* Close Button */}
@@ -152,7 +186,7 @@ const CarpoolRideModal = ({handleMarkCarpoolCompleted,handleChats,totalPassenger
   
       {/* Header */}
       <div className="border-b pb-6 mb-6">
-        <h1 className="text-4xl font-extrabold text-gray-900 mb-3">Ride Details id{rideDetails.routeId}</h1>
+        <h1 className="text-4xl font-extrabold text-gray-900 mb-3">Ride Details  </h1>
         {/* {
           (rideDetails?.numSeats-totalPassenger  == 0) &&
        
@@ -217,8 +251,12 @@ const CarpoolRideModal = ({handleMarkCarpoolCompleted,handleChats,totalPassenger
         >
           <div className="flex items-center space-x-4">
             <div className="h-12 w-12 rounded-full bg-gray-100 flex items-center justify-center text-gray-600 font-semibold">
-              {passenger.userFn.charAt(0).toUpperCase()}
-              
+              {/* {passenger.userFn.charAt(0).toUpperCase()} */}
+              <img
+                 src={fetchProfileImage(passenger.userId)}
+                 alt="Avatar"
+                  className="w-12 h-12 rounded-full shadow-md"
+              />
             </div>
             <div>
               <p className="text-lg font-medium text-gray-800">{passenger.userFn}</p>

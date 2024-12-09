@@ -24,7 +24,11 @@ const Components = () => {
         handleCancelBooking,
         cancelledRoutes,
         markBookingAsDone,
-        bookingInfo } = useContext(ViewRidesContext)
+        bookingInfo,
+        rateModal, 
+        setRateModal,
+        handleRateUser
+        } = useContext(ViewRidesContext)
 
     return (
         <div className="flex flex-col items-center pl-5 pr-5 w-full">
@@ -49,6 +53,9 @@ const Components = () => {
                                 destination={destination}
                                 handleRecentRideInfo={handleRecentRideInfo}
                                 passengerInfo={passengerInfo}
+                                rateModal ={rateModal}
+                                setRateModal={setRateModal}
+                                handleRateUser={handleRateUser}
                             />
                         )
                 }

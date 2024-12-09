@@ -292,6 +292,24 @@ const PassengerApproval = ({ }) => {
 
 
 
+     const [profileImage,setProfileImage]= useState()
+     useEffect(() => {
+        if (passenger && passenger?.userId) { 
+            
+                const interval = setTimeout(async() => {
+                const cloudinaryUrl = `https://res.cloudinary.com/drvtezcke/image/upload/v1/${passenger?.userId}?${new Date().getTime()}`;
+                const response = await fetch(cloudinaryUrl)
+                if(response.ok){
+                setProfileImage(cloudinaryUrl);
+                }else{
+                setProfileImage(DefaultProfile) 
+                }
+                },1); 
+                return () => clearInterval(interval);
+            
+        }
+        }, [passenger]);
+
 
 
     return (
@@ -368,14 +386,14 @@ const PassengerApproval = ({ }) => {
                     <div className="flex items-center gap-6 mb-4">
                         {
                             passengerApproval ? <img
-                                src={DefaultProfile}
+                                src={profileImage}
                                 alt="Passenger Profile"
                                 className="w-[90px] h-[90px] rounded-full object-cover border-4 border-white shadow-lg"
                             /> :
 
                                 <Skeleton variant="rounded" width="90px" height="90px" animation="wave" raduis='50%' />
                         }
-                        <div className="flex flex-col">
+                        <div className="flex flex-col"> 
 
                             <h2 className="text-xl font-semibold text-gray-900">{passenger?.userFn} {passenger?.userLn} </h2>
 

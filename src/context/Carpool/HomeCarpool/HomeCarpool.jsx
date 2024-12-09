@@ -380,6 +380,7 @@ export const HomeCarpoolContextProvider = ({children})=>{
    return(
     <HomeCarpoolContext.Provider
     value={{
+      driverInfo,
         mapRef,
         routingControlRef,
         searchInput,

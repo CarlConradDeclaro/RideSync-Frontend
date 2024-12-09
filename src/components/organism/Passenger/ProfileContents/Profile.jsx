@@ -5,9 +5,10 @@ import { ProfileContext } from "../../../../context/PassengerContext/Profile/Pro
 import { AiOutlineCar, AiOutlineStar, AiOutlineMail } from "react-icons/ai";
 import { MdVerified, MdPhone, MdLocationOn } from "react-icons/md";
 import { Ratings } from "../../../atoms/Ratings";
+import { Skeleton } from "../../../atoms/Skeleton";
 
 const Profile = () => {
-  const { userData } = useContext(ProfileContext);
+  const { userData,profileImage} = useContext(ProfileContext);
   const [isEditing, setIsEditing] = useState(false);
 
   return (
@@ -20,12 +21,20 @@ const Profile = () => {
           <div className="flex items-center space-x-6 mb-6 bg-gradient-to-r from-blue-200 to-purple-200 p-6 rounded-lg shadow-md relative">
             {/* Decorative Background Shape */}
            
-            <div className="relative">
-              <img
-                src={DefaultProfile}
-                alt="Profile"
-                className="w-20 h-20 rounded-full border-4 border-blue-500 shadow-lg"
-              />
+             <div className="relative">
+             {
+              profileImage ? (
+                <img
+                  src={profileImage}
+                  alt="Profile"
+                  className="w-20 h-20 rounded-full border-4 border-blue-500 shadow-lg"
+                />
+              ) : (
+                 
+                <Skeleton  variant="Circle"  width="80px" height="80px" animation="pulse" raduis="50%" />
+              )
+            }
+
               <button
                 className="absolute bottom-0 right-0 bg-blue-500 text-white rounded-full p-1"
                 onClick={() => setIsEditing(true)}
@@ -126,6 +135,7 @@ const Profile = () => {
 const EditProfile = ({ userData, onClose }) => {
   
   const {
+    userInfo,
     firstname,
     lastname,
     email,
@@ -134,8 +144,11 @@ const EditProfile = ({ userData, onClose }) => {
     setLastname,
     setEmail,
     setPhoneNum,
-    handleSumitNewProfileInfo
+    handleSumitNewProfileInfo,
+    handleFileUpload
   } = useContext(ProfileContext)
+
+ 
 
 
   return (
@@ -144,6 +157,12 @@ const EditProfile = ({ userData, onClose }) => {
         Edit Profile
       </h2>
       <div>
+        <div>
+          <input 
+          type='file'  
+          onChange={handleFileUpload}
+          ></input>
+        </div>
         <div className="mb-6">
           <label className="block text-gray-700 font-medium mb-2">Firstname</label>
           <input

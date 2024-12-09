@@ -27,14 +27,14 @@ export const RecentList = ({ startLocation, endLocation, status, recentRides, ha
                     <h2 className="font-bold text-gray-700 text-sm md:text-[15px] md:mb-1">{startLocation}</h2>
                     <p className="text-sm text-gray-500 md:text-[14px]">{endLocation}</p>
                     <p className="text-xs text-gray-400 md:mt-1">
-                        <span className='text-[15px]'> 12 October 2024, 2:30 pm / </span><span className="text-green-600 text-[15px] font-semibold">{status}</span>
+                        <span className='text-[15px]'> </span><span className="text-green-600 text-[15px] font-semibold">{status}</span>
                     </p>
                 </div>
             </div>
             {/* Button */}
-            <button className="text-gray-500 text-xl md:text-2xl lg:text-3xl self-start md:self-center">
+            {/* <button className="text-gray-500 text-xl md:text-2xl lg:text-3xl self-start md:self-center">
                 <img src={Dots} alt="dots" className="w-6 h-6 sm:w-7 sm:h-7 md:w-9 md:h-9 lg:w-10 lg:h-10" />
-            </button>
+            </button> */}
         </div>
 
 
@@ -46,7 +46,7 @@ export const RecentList = ({ startLocation, endLocation, status, recentRides, ha
 export const UpComingList = ({ anchorEl, setAnchorEl, options, upcomingRides, handleBookingRide }) => {
     return (
         <Card className="from-white to-gray-50  h-auto w-full md:w-[620px]   p-2 mb-2 rounded-lg  cursor-pointer hover:scale-105 transform transition duration-300 ease-in-out">
-            id{upcomingRides?.routeId}
+            
             <div className="flex flex-col h-full text-gray-800"
                 onClick={() => handleBookingRide(upcomingRides.driverId,upcomingRides.routeId,{ lat: upcomingRides.startLatitude, lon: upcomingRides.startLongitude }, { lat: upcomingRides.endLatitude, lon: upcomingRides.endLongitude },
                     upcomingRides.startLocation, upcomingRides.endLocation, upcomingRides.estimatedDuration, upcomingRides.distance, upcomingRides.totalAmount,
@@ -67,7 +67,8 @@ export const UpComingList = ({ anchorEl, setAnchorEl, options, upcomingRides, ha
                     </div>
                     <div className="flex text-lg items-center font-bold text-green-600 gap-3">
                         ₱{upcomingRides?.totalAmount || "25.00"}
-                        <LongMenu anchorEl={anchorEl} setAnchorEl={setAnchorEl} options={options} />
+                        <div></div>
+                        {/* <LongMenu anchorEl={anchorEl} setAnchorEl={setAnchorEl} options={options} /> */}
                     </div>
                 </div>
 
@@ -107,7 +108,7 @@ export const CancenlledList = ({ startLocation, endLocation, status }) => {
                 <p className="text-sm text-gray-600">{startLocation}</p>
                 <p className="text-xs text-gray-500 mt-1 flex items-center">
                     <span className="inline-block w-2 h-2 rounded-full bg-red-500 mr-2"></span>
-                    12 October 2024, 2:30 pm
+                    {/* 12 October 2024, 2:30 pm */}
                     <span className="ml-1 text-red-500 font-medium">{status}</span>
                 </p>
             </div>

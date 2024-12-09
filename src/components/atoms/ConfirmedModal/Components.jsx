@@ -14,7 +14,7 @@ const BookingConfirmedModal = ({setIsBooking,title,message,handleEvent}) => {
         {/* Booking Confirmation Modal */}
         <div className="flex items-center justify-center">
           {isOpen && (
-            <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-600 backdrop-blur-sm bg-opacity-50">
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-600  bg-opacity-50">
               <div
                 className="relative bg-white p-6 rounded-lg shadow-lg transform transition-transform duration-300 ease-in-out animate-dropIn"
               >

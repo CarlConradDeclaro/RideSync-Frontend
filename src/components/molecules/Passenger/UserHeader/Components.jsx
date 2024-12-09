@@ -1,55 +1,67 @@
-import React, { useEffect, useState } from 'react';
-import { jwtDecode } from 'jwt-decode';  // Use named import instead of default import
-import DefaultProfile from '../../../../assets/DefaultProfile.png';
-import Location from '../../../../assets/HLocationIcon.png';
-import HTime from '../../../../assets/HTime.png';
-import clock from '../../../../assets/clock.png';
-import locationIconHeader from '../../../../assets/locationIconHeader.png';
+ import React, { useEffect, useState } from "react";
+import DefaultProfile from "../../../../assets/DefaultProfile.png";
+import Location from "../../../../assets/HLocationIcon.png";
+import HTime from "../../../../assets/HTime.png";
+import clock from "../../../../assets/clock.png";
+import locationIconHeader from "../../../../assets/locationIconHeader.png";
 
 const Components = () => {
-  const [userProfileImage, setUserProfileImage] = useState();
-  const [time, setTime] = useState('');
+  const [userInfo, setUserInfo] = useState(null);
+  const [userProfileImage, setUserProfileImage] = useState(DefaultProfile);
+  const [time, setTime] = useState("");
 
+  useEffect(() => {
+    const storedUserInfo = localStorage.getItem('User');
+    if (storedUserInfo) {
+      try {
+        const parsedUserInfo = JSON.parse(storedUserInfo);
+        setUserInfo(parsedUserInfo);
+        console.log("User info set:", parsedUserInfo);
+      } catch (error) {
+        console.error("Error parsing user info:", error);
+      }
+    } else {
+      console.log("No user info found in localStorage");
+    }
+  }, []);
+
+  // Update time every second
   useEffect(() => {
     const updateTime = () => {
       const now = new Date();
       const options = {
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit',
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
         hour12: true,
-        timeZoneName: 'short',
+        timeZoneName: "short",
       };
-      setTime(now.toLocaleTimeString('en-US', options));
+      setTime(now.toLocaleTimeString("en-US", options));
     };
 
     updateTime();
     const interval = setInterval(updateTime, 1000);
 
     return () => clearInterval(interval);
-  }, []);  // Keeps updating time every second
+  }, []);
 
+  // Fetch user profile image using "User" from localStorage
   useEffect(() => {
-    const storedToken = localStorage.getItem('Token');  // Get the token from localStorage
-    if (storedToken) {
-      try {
-        const decodedToken = jwtDecode(storedToken);  // Decode the JWT token
-        console.log("Decoded Token", decodedToken);  // Log the decoded token for inspection
+    if (userInfo && userInfo?.id) {
+      const timeout = setTimeout(async() => {
+        const cloudinaryUrl = `https://res.cloudinary.com/drvtezcke/image/upload/v1/${userInfo?.id}?${new Date().getTime()}`;
+        const respnonse  = await fetch(cloudinaryUrl)
+        if(respnonse.ok)
+        setUserProfileImage(cloudinaryUrl);
+        else
+        setUserProfileImage(DefaultProfile)
+        console.log("Updated img:", cloudinaryUrl);
+      }, 1); // 3000ms = 3 seconds
 
-        // Extract the picture URL from the decoded token
-        const picture = decodedToken?.picture;
-
-        if (picture) {
-          console.log("User Picture URL:", picture);
-          setUserProfileImage(picture);  // Set the user profile image
-        } else {
-          console.log("No picture in the token");
-        }
-      } catch (error) {
-        console.error('Error decoding token:', error);  // Log any error during decoding
-      }
+      // Cleanup the timeout when the component is unmounted or userInfo changes
+      return () => clearTimeout(timeout);
     }
-  }, []);  // Empty dependency array to run only once when the component mounts
+  }, [userInfo]);
 
   return (
     <div className="flex justify-between items-center h-[70px] bg-gradient-to-r bg-colorBlue mt-5 mr-5 ml-[60px] lg:ml-[20px] rounded-3xl px-3 md:px-5 shadow-lg">
@@ -73,11 +85,20 @@ const Components = () => {
           <h1 className="text-gray-200 text-sm md:text-base font-medium">Cebu City</h1>
         </div>
 
-        <img
-          src={userProfileImage || DefaultProfile}
-          className="w-10 h-10 md:w-12 md:h-12 rounded-full border-2 border-gray-300 hover:border-white cursor-pointer shadow-md"
-          alt="Profile"
-        />
+        {/* Render the user's profile image or the default image */}
+        {userProfileImage === DefaultProfile ? (
+           <img
+            src={DefaultProfile}
+            className="w-10 h-10 md:w-12 md:h-12 rounded-full border-2 border-gray-300 hover:border-white cursor-pointer shadow-md"
+            alt="Profile"
+          />
+        ) : (
+          <img
+            src={userProfileImage}
+            className="w-10 h-10 md:w-12 md:h-12 rounded-full border-2 border-gray-300 hover:border-white cursor-pointer shadow-md"
+            alt="Profile"
+          />
+        )}
       </div>
     </div>
   );

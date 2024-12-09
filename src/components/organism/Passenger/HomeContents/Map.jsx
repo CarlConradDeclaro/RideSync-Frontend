@@ -2,7 +2,8 @@ import React, { useContext } from 'react'
 import { Card } from '../../../molecules/Card'
 import { FindRouteContext } from '../../../../context/PassengerContext/FindRoute/FindRouteContext'
 import { Map } from '../../../molecules/Map'
-
+import { FaRoute, FaMoneyBillWave } from 'react-icons/fa';
+import { MdLocationOn } from 'react-icons/md'
 
 
 const MapView = () => {
@@ -86,27 +87,37 @@ const MapView = () => {
 
             {/* Map Section with responsive height */}
             <div className="relative w-full h-[75vh]"> {/* Set height explicitly for the map container */}
-                <div className="hidden absolute md:flex items-center gap-2 top-2 left-[60px] p-4 bg-gray-10 z-10 text-center">
-                    <p className="text-[18px] font-bold text-back-500 text-black-500">Route</p>
+                 
+                <div className="hidden absolute md:flex items-center gap-1 top-[0px] right-[330px] p-4 bg-gray-10 z-10 text-center">
+                    {
+                        amount>0 && 
+                <>
+                  {/* <FaRoute className="text-blue-500 text-[22px]" />
+                        <p className="text-[18px] font-bold text-black-500">Route</p> */}
+                        {/* <FaMoneyBillWave className="text-green-500 text-[22px]" /> */}
+                        <p className="text-[20px] font-bold text-black-500">Fare: </p>
+                        <h1 className="text-[24px] font-bold text-green-500">
+                          ₱{amount ? amount : '0.00'}
+                        </h1>
+                         <MdLocationOn className="text-red-500 text-[22px]" />
+                        <h1 className="text-[20px] font-bold text-kmColor">
+                        {totalDistance ? totalDistance : '0 km'} 
+                        </h1>
+                        <p className="text-[20px] text-gray-500">
+                              <span className='text-orange-500 mr-2'>⏱️</span>
+                        (est: {totalDuration ? totalDuration + 's' : '0 min'})
+                        </p>
+                </>
+                    }
+                      
                 </div>
 
                 {/* Amount Information - Positioned at the top right corner */}
-                <div className="md:absolute flex items-center gap-2 top-3 right-[50px] p-2 bg-gray-10 shadow-xl z-10 text-center">
-    
-                  <p className="text-[18px] font-bold text-back-500 text-black-500">Fare:</p>
-                    <h1 className="text-[18px] font-bold text-green-500">
-                        ₱ {amount ? amount : '0.00'}
-                    </h1>
-                    <h1 className="text-[18px] font-bold text-kmColor">
-                        {totalDistance ? totalDistance : '0 km'} (est: {totalDuration ? totalDuration + 's' : '0 min'})
-                    </h1>
-                
-                </div>
-
+               
 
 
                 {/* Map */}
-                <div className="flex justify-center pb-1 max-w-screen" >
+                <div className="flex justify-center  max-w-screen" >
                     <div className="w-full z-0">
                         <Map
                             mapRef={mapRef}
@@ -115,7 +126,7 @@ const MapView = () => {
                             customIcon={customIcon}
                             driverCoordinates={driverCoordinates}
                             isDriverHasArrive={isDriverHasArrive}
-                            height="82vh"
+                            height="85vh"
                         />
                     </div>
                 </div>

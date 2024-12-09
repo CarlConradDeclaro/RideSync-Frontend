@@ -5,9 +5,11 @@ import { AiOutlineCar, AiOutlineStar, AiOutlineMail } from "react-icons/ai";
 import { MdVerified, MdPhone, MdLocationOn } from "react-icons/md";
 import { Ratings } from "../../../atoms/Ratings";
 import { ProfileContext } from "../../../../context/Carpool/Profile/ProfileContext";
+import { Skeleton } from "../../../atoms/Skeleton";
+
 
 const Profile = () => {
-   const { userData } = useContext(ProfileContext);
+   const { userData ,profileImage} = useContext(ProfileContext);
   const [isEditing, setIsEditing] = useState(false);
 
   return (
@@ -21,11 +23,18 @@ const Profile = () => {
             {/* Decorative Background Shape */}
            
             <div className="relative">
-              <img
-                src={DefaultProfile}
-                alt="Profile"
-                className="w-20 h-20 rounded-full border-4 border-blue-500 shadow-lg"
-              />
+              {
+                profileImage ? (
+                  <img
+                    src={profileImage}
+                    alt="Profile"
+                    className="w-20 h-20 rounded-full border-4 border-blue-500 shadow-lg"
+                  />
+                ) : (
+                  
+                  <Skeleton  variant="Circle"  width="80px" height="80px" animation="pulse" raduis="50%" />
+                )
+              }
               <button
                 className="absolute bottom-0 right-0 bg-blue-500 text-white rounded-full p-1"
                 onClick={() => setIsEditing(true)}
@@ -134,7 +143,8 @@ const EditProfile = ({onClose}) => {
     setLastname,
     setEmail,
     setPhoneNum,
-    handleSumitNewProfileInfo
+    handleSumitNewProfileInfo,
+    handleFileUpload,
   } = useContext(ProfileContext)
 
 
@@ -144,6 +154,10 @@ const EditProfile = ({onClose}) => {
         Edit Profile
       </h2>
       <div>
+        <input 
+          type='file'  
+          onChange={handleFileUpload}
+          ></input>
         <div className="mb-6">
           <label className="block text-gray-700 font-medium mb-2">Firstname</label>
           <input

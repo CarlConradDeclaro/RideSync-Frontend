@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect,useState } from 'react';
 import { Card } from '../../../molecules/Card';
 import { Ratings } from '../../../atoms/Ratings';
 import { RecentList } from './List';
@@ -8,6 +8,9 @@ import Dots from '../../../../assets/Dots.png';
 import DefaultProfile from '../../../../assets/DefaultProfile.png';
 import Rating from '@mui/material/Rating';
 import TextField from '@mui/material/TextField';
+import { BookingConfirmedModal as RateConfirmationModal} from '../../../atoms/ConfirmedModal';
+import { useNavigate } from 'react-router-dom';  
+
 
 const RecentRides = ({
     mapRef,
@@ -16,9 +19,27 @@ const RecentRides = ({
     destination,
     handleRecentRideInfo,
     passengerInfo,
-
+    rateModal, 
+    setRateModal,
+    handleRateUser
 
 }) => {
+
+    const navigate = useNavigate(); 
+    const [ratings,setRatings] =useState(5)
+    const handleRatingChange = (event, newValue) => {
+        setRatings(newValue); 
+    };
+     const handleRateSubmit = (userId,rating)=>{
+        console.log('user rating:',ratings);
+        setRateModal(!rateModal)
+        handleRateUser(userId,rating)
+     } 
+     const handleRefresh = ()=>{
+        navigate('/driver/loading?route=/driver/viewRidesContents&active=viewRides');
+     }
+
+
     const firstRoute = currentRoute && currentRoute.length > 0 ? currentRoute[0] : null;
     const customIcon = (src) => L.icon({
         iconUrl: src,
@@ -28,9 +49,29 @@ const RecentRides = ({
     });
 
 
+    const [profileImage,setProfileImage]= useState()
+    const [isTherProfile,setIsThereProfile] = useState(false)
+
     useEffect(() => {
-        console.log('Updated Passenger Info:', passengerInfo?.userFn);
-    }, [passengerInfo]);
+            const interval = setTimeout(() => {
+            try {
+                if (passengerInfo?.userId) {
+                const cloudinaryUrl = `https://res.cloudinary.com/drvtezcke/image/upload/v1/${passengerInfo?.userId}?${new Date().getTime()}`;
+                setProfileImage(cloudinaryUrl);
+                fetch(cloudinaryUrl)
+                    .then(response => {
+                    if (!response.ok) {
+                        setIsThereProfile(false);  
+                    } else 
+                        setIsThereProfile(true);  
+                })}
+            } catch (error) {
+                setIsThereProfile(false);  
+            }
+            }, 1);  
+        return () => clearInterval(interval);
+    }, [passengerInfo?.userId]);
+    
 
 
     return (
@@ -38,9 +79,9 @@ const RecentRides = ({
             {/* Recent Rides Card    */}
             <Card className='w-full md:w-[620px] p-4 overflow-auto h-[70vh] custom-scrollbar'>
                 <h2 className="text-xl font-semibold mb-4">Recent Rides:</h2>
-                {currentRoute?.slice().reverse().map((routes) => (
+                {currentRoute?.slice().reverse().map((routes,index) => (
                     <RecentList
-                        key={routes.routeId}
+                        key={index}
                         startLocation={routes.startLocation}
                         endLocation={routes.endLocation}
                         status={routes.status}
@@ -67,7 +108,7 @@ const RecentRides = ({
                      <p>Passenger details:</p>
                      <div className="flex flex-col items-center">
                          <img
-                             src={DefaultProfile}
+                             src={isTherProfile ? profileImage:DefaultProfile}
                              alt="Passenger"
                              className="w-[80px] h-[80px] rounded-full border-4 border-blue-500 shadow-sm"
                          />
@@ -109,7 +150,7 @@ const RecentRides = ({
                  </Card>
  
                  {/* Map Card */}
-                 <Card className="w-full mt-6 rounded-lg shadow-lg bg-gradient-to-b from-white to-gray-50 border border-gray-200">
+                 <Card className="relative z-0 w-full mt-6 rounded-lg shadow-lg bg-gradient-to-b from-white to-gray-50 border border-gray-200">
                      <Map height="300px" mapRef={mapRef} selectedPosition={pickUp} selectedPositionDest={destination} customIcon={customIcon} />
                  </Card>
  
@@ -119,7 +160,12 @@ const RecentRides = ({
                      <h1 className="text-2xl font-bold">How was the Ride?</h1>
  
                      <div className="flex flex-col gap-2">
-                         <Rating name="size-medium" defaultValue={5} />
+                         <Rating 
+                         name="ride-rating"
+                          value={ratings}
+                          size="large"
+                         onChange={handleRatingChange}
+                          />
                      </div>
  
                      <TextField
@@ -136,7 +182,21 @@ const RecentRides = ({
                          variant="contained"
                          size="small"
                          className="mt-4"
+                        onClick={()=>handleRateSubmit(passengerInfo?.userId,ratings)}
                      />
+                      {
+                       rateModal &&
+                                  
+                            <RateConfirmationModal 
+                                    title='Thank You for Rating!' 
+                                    message="Your feedback helps us improve our service. We appreciate your time!" 
+                                     setIsBooking={setRateModal}
+                                     handleEvent={handleRefresh}
+                                      />
+                                 
+                                
+                                
+                    }
                  </Card>
                 </>
                 }

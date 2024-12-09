@@ -23,7 +23,8 @@ const Components = () => {
     suggestions,
     suggestionsDest,
     handleSelectSuggestion,
-    handleSelectSuggestionDest
+    handleSelectSuggestionDest,
+    profileImage
   } = useContext(PBookCarpoolContext)
   const [isOpen,setIsOpen]= useState(false)
   const handleOpenModal =()=>{
@@ -122,7 +123,7 @@ const Components = () => {
         <div className="w-full lg:w-2/5">
         {
           rideInfo?.startLocation && (
-            <CarpoolCardDetails bookedBa={bookedBa} isBooked={isBooked} handleOpenModal={handleOpenModal} rideInfo={rideInfo} setNumberOfPassengers={setNumberOfPassengers} totalAmount={totalAmount} setTotalAmount={setTotalAmount}/>
+            <CarpoolCardDetails profileImage={profileImage} bookedBa={bookedBa} isBooked={isBooked} handleOpenModal={handleOpenModal} rideInfo={rideInfo} setNumberOfPassengers={setNumberOfPassengers} totalAmount={totalAmount} setTotalAmount={setTotalAmount}/>
           )
         }
         </div>
@@ -172,12 +173,12 @@ const CarpoolCardRides = ({isBooked,rides,handleClickCarpool, startLocation, end
     </div>
   );
 };
-const CarpoolCardDetails = ({bookedBa,isBooked,handleOpenModal,rideInfo,setNumberOfPassengers,totalAmount,setTotalAmount}) => {
+const CarpoolCardDetails = ({bookedBa,profileImage,isBooked,handleOpenModal,rideInfo,setNumberOfPassengers,totalAmount,setTotalAmount}) => {
   return (
     <div className="bg-white p-6 rounded-lg shadow-lg space-y-6 animate-fadeIn">
       <div className="flex items-center space-x-2">
         <span className="text-lg font-medium text-blue-500">📅</span>
-        <span className="text-sm text-gray-700">Travel Date: {rideInfo?.travelDate}</span>
+        <span className="text-sm text-gray-700">Travel Date:{rideInfo?.travelDate}</span>
       
       </div>
 
@@ -195,7 +196,7 @@ const CarpoolCardDetails = ({bookedBa,isBooked,handleOpenModal,rideInfo,setNumbe
 
       <div className="flex gap-5 items-center text-center">
         <img
-          src={DefaultProfile}
+          src={profileImage}
           alt="Driver"
           className="w-24 h-24 rounded-full border-4 border-indigo-500 shadow-xl"
         />

@@ -7,16 +7,47 @@ import { Ratings } from '../../../atoms/Ratings';
 
 const DriverList = () => {
     const { handleCancel, drivers, handelSelectDriver } = useContext(FindRouteContext);
+    const [driverImages, setDriverImages] = useState({});
+     
+            
+    useEffect(() => {
+        const fetchDriverImages = async () => {
+            const images = {};
+            for (const driverId of drivers) {
+                const cloudinaryUrl = `https://res.cloudinary.com/drvtezcke/image/upload/v1/${driverId}?${new Date().getTime()}`;
+                try {
+                    const response = await fetch(cloudinaryUrl);
+                    if (response.ok) {
+                        images[driverId] = cloudinaryUrl;
+                    } else {
+                        images[driverId] = DefaultProfile;
+                    }
+                } catch (error) {
+                    images[driverId] = DefaultProfile;
+                }
+            }
+            setDriverImages(images); // Store all the images in state
+        };
 
+        if (drivers?.length > 0) {
+            fetchDriverImages(); // Call fetch driver images only if there are drivers
+        }
+    }, [drivers]);   
+     
     return (
-        <div className="flex flex-col items-center animate-slideInFromRight  md:w-[600px] ">
-            <Card className="flex flex-col gap-6 sm:w-full w-full max-w-3xl h-[500px] rounded-2xl shadow-lg bg-white p-4">
+        <div className="flex ml-4 flex-col items-center animate-slideInFromRight  md:w-[430px] ">
+            <div className="flex flex-col gap-6 sm:w-full w-full max-w-3xl h-[500px]  rounded  p-4">
                 <h1 className="text-2xl font-semibold text-gray-800">Select a Driver</h1>
                 <div className="w-full  overflow-y-auto overflow-x-hidden flex flex-col gap-4  flex-grow">
                     {
                         drivers?.length > 0 ? (
                         drivers.map((driverId, index) => (
-                            <DriverCard key={index} driverId={driverId} handelSelectDriver={handelSelectDriver} />
+                           <DriverCard
+                                    key={index}
+                                    driverId={driverId}
+                                    profileImage={driverImages[driverId]}
+                                    handelSelectDriver={handelSelectDriver}
+                                />
                         ))
                     )
                     :
@@ -33,12 +64,12 @@ const DriverList = () => {
                 <div className="flex justify-end">
                     <Button name="Cancel" variant="contained" size="large" onClick={() => handleCancel(false)} className="bg-red-500 hover:bg-red-600 text-white" />
                 </div>
-            </Card>
+            </div>
         </div>
     );
 };
 
-const DriverCard = ({ driverId, handelSelectDriver }) => {
+const DriverCard = ({ driverId,profileImage, handelSelectDriver }) => {
     const [driverData, setDriverData] = useState(null); // State to store driver data
     const [loading, setLoading] = useState(true); // State to manage loading status
 
@@ -86,13 +117,16 @@ const DriverCard = ({ driverId, handelSelectDriver }) => {
     if (!driverData) {
         return <div>User not found</div>; // Display error message if user not found
     }
+    
+    
+    
 
     return (
         <>
             <div className="flex items-center justify-between gap-4 p-4 rounded-xl shadow-lg bg-gray-50 hover:bg-gray-100 transition-colors duration-300 animate-slideInFromRight ">
                 <div className='flex gap-4 cursor-pointer ' onClick={() => handleOpenModal(driverData)}>
                     <div className="w-14 h-14 rounded-full overflow-hidden shadow-md">
-                        <img src={driverData.profileImage || DefaultProfile} alt="Driver Profile" className="object-cover w-full h-full" />
+                        <img src={profileImage || DefaultProfile} alt="Driver Profile" className="object-cover w-full h-full" />
                     </div>
                     <div className="flex-1">
                         <h2 className="text-lg font-medium text-gray-800">{driverData?.userLn.toUpperCase()+"  "} {driverData?.userFn.toUpperCase() || "Unknown Driver"}</h2>
@@ -120,8 +154,27 @@ const DriverCard = ({ driverId, handelSelectDriver }) => {
 const DriverModal = ({ driver, isOpen, onClose }) => {
     if (!isOpen) return null;
 
+    const [profilePicture,setProfilePicture]= useState()
+    
+      useEffect(() => {
+        if (driver && driver?.userId) { 
+            
+                const interval = setTimeout(async() => {
+                const cloudinaryUrl = `https://res.cloudinary.com/drvtezcke/image/upload/v1/${driver?.userId}?${new Date().getTime()}`;
+                const response = await fetch(cloudinaryUrl)
+                if(response.ok){
+                setProfilePicture(cloudinaryUrl);
+                }else{
+                setProfilePicture(DefaultProfile) 
+                }
+                },1); 
+                return () => clearInterval(interval);
+            
+        }
+        }, [driver]);
+
     return (
-        <div className="fixed inset-0 flex items-center justify-center bg-gray-600 backdrop-blur-sm bg-opacity-50  z-50">
+        <div className="fixed inset-0 flex items-center justify-center bg-gray-50  bg-opacity-50  z-50">
             <div className="bg-white animate-dropIn rounded-lg shadow-2xl w-full max-w-md mx-4">
                 {/* Modal Header */}
                 <div className="bg-gradient-to-r from-blue-500 to-blue-600 text-white p-6 rounded-t-lg flex items-center justify-between">
@@ -139,7 +192,7 @@ const DriverModal = ({ driver, isOpen, onClose }) => {
                     {/* Driver Info Section */}
                     <div className="flex items-center mb-6">
                         <img
-                            src={driver.profileImage || DefaultProfile}
+                            src={profilePicture || DefaultProfile}
                             alt="Driver Profile"
                             className="w-24 h-24 rounded-full border-4 border-blue-500 shadow-lg"
                         />

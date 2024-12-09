@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Card } from '../../../molecules/Card';
 import { Map } from '../../../molecules/Map';
 import RouteList from './RouteList';
@@ -10,9 +10,11 @@ import Location from '../../../../assets/location.png';
 import DefaultProfile from '../../../../assets/DefaultProfile.png';
 import { RequestContext } from '../../../../context/DriverContext/Request/Request';
 import { Skeleton } from '../../../atoms/Skeleton';
+import { FaMoneyBillAlt, FaMapMarkerAlt, FaStar, FaRoute, FaCreditCard } from 'react-icons/fa'
+
 
 const RequestRides = () => {
-    const { passengerInfo, driverMap, request, setOpenInfoModal, openInfoModal, selectedPosition, isOfferingRide,
+    const {profileImage,setProfileImage, passengerInfo, driverMap, request, setOpenInfoModal, openInfoModal, selectedPosition, isOfferingRide,
         setIsOfferingRide, selectedPositionDest, requestInfo, customIcon, handleOfferRide, setStep1, passengerApproval } = useContext(RequestContext);
     console.log("Request Data:", request);
 
@@ -21,9 +23,11 @@ const RequestRides = () => {
     const handleCancelRequest = () => {
         setOpenInfoModal(false)
         setIsOfferingRide(true)
+        setProfileImage()
     }
     const handleCancelClose = () => {
         setOpenInfoModal(false)
+        setProfileImage()
         
     }
 
@@ -38,6 +42,12 @@ const RequestRides = () => {
             //   return () => clearTimeout(timer);
         }
     }, [passengerApproval]);
+
+
+
+
+    
+  
 
 
     return (
@@ -94,7 +104,7 @@ const RequestRides = () => {
                 {/* Info Drawer */}
                 {
                     openInfoModal && (
-                        <div className="fixed inset-0 flex justify-end bg-black bg-opacity-50 z-50 backdrop-blur-sm">
+                        <div className="fixed inset-0 flex justify-end bg-black bg-opacity-50 z-50 ">
                             <div
                                 className={`relative w-full md:w-[500px] h-screen bg-dRouteBG animate-slideRight transform ${openInfoModal ? 'translate-x-0' : 'translate-x-full'
                                     } transition-transform duration-300 ease-in-out`}
@@ -110,7 +120,7 @@ const RequestRides = () => {
                                             onClick={handleCancelRequest}
                                             className="absolute top-4 right-4 text-white text-xl font-bold bg-gray-800 rounded-full w-8 h-8 flex items-center justify-center"
                                         >
-                                            &times;/
+                                            &times;
                                         </button>
                                         :
                                         <button
@@ -128,8 +138,11 @@ const RequestRides = () => {
 
                                             <div className="flex flex-col gap-6 bg-gradient-to-b from-white to-gray-50 border border-gray-200 p-4 rounded-lg shadow-lg">
                                                 {/* Price Section */}
-                                                <div className="flex justify-between items-center bg-white p-4 rounded-lg shadow">
-                                                    <h1 className="text-xl font-semibold text-gray-800">Price</h1>
+                                                 <div className="flex justify-between items-center bg-white p-4 rounded-lg shadow">
+                                                    <h1 className="text-xl font-semibold text-gray-800 flex items-center">
+                                                        <FaMoneyBillAlt className="w-5 h-5 mr-2" />
+                                                        Fare
+                                                    </h1>
                                                     <span className="text-xl font-bold text-green-600">₱ {requestInfo.price}</span>
                                                 </div>
 
@@ -149,7 +162,7 @@ const RequestRides = () => {
                                                 {/* Passenger Information Section */}
                                                 <div className="flex items-center p-4 shadow rounded-lg bg-gradient-to-b from-white to-gray-50 border border-gray-200">
                                                     <img
-                                                        src={DefaultProfile}
+                                                        src={profileImage}
                                                         alt="Default Profile"
                                                         className="w-12 h-12 rounded-full border-2 border-gray-300 mr-4"
                                                     />
@@ -162,7 +175,10 @@ const RequestRides = () => {
 
                                                 {/* Distance and Duration Section */}
                                                 <div className="flex justify-between items-center p-4 shadow rounded-lg bg-gradient-to-b from-white to-gray-50 border border-gray-200">
-                                                    <h1 className="text-lg font-semibold text-gray-800">Distance</h1>
+                                                    <h1 className="text-lg font-semibold text-gray-800 flex items-center">
+                                                        <FaRoute className="w-5 h-5 mr-2" />
+                                                        Distance
+                                                    </h1>
                                                     <span className="text-xl font-bold text-gray-800">
                                                         {requestInfo?.distance} km <span className="text-sm text-gray-500">({requestInfo?.duration} mins)</span>
                                                     </span>
@@ -170,7 +186,10 @@ const RequestRides = () => {
 
                                                 {/* Payment Method Section */}
                                                 <div className="p-4 shadow rounded-lg bg-gradient-to-b from-white to-gray-50 border border-gray-200">
-                                                    <h1 className="text-lg font-semibold text-gray-800 mb-2">Payment Method</h1>
+                                                    <h1 className="text-lg font-semibold text-gray-800 mb-2 flex items-center">
+                                                        <FaCreditCard className="w-5 h-5 mr-2" />
+                                                        Payment Method
+                                                    </h1>
                                                     <span className="text-base font-bold text-blue-600">{requestInfo?.paymentMethod || 'CASH'}</span>
                                                 </div>
                                             </div>

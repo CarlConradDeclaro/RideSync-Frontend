@@ -10,7 +10,7 @@ export const RecentList = ({ startLocation, endLocation, status, startLatitude, 
 
     return (
         <div className="   p-4 mb-4 hover:shadow-xl cursor-pointer transition-shadow duration-300 bg-gradient-to-b  to-gray-50   rounded-lg shadow-md flex md:flex-nowrap items-center gap-4"
-            onClick={() => handleRecentRideInfo({ lat: startLatitude, lon: startLongitude }, { lat: endLatitude, lon: endLongitude }, routes.userFn, routes.userLn, routes.userPhone, routes.userRating, startLocation, endLocation, routes.totalAmount, routes.estimatedDuration, routes.distance)}
+            onClick={() => handleRecentRideInfo(routes.userId,{ lat: startLatitude, lon: startLongitude }, { lat: endLatitude, lon: endLongitude }, routes.userFn, routes.userLn, routes.userPhone, routes.userRating, startLocation, endLocation, routes.totalAmount, routes.estimatedDuration, routes.distance)}
         >
             
             <div className="flex items-start gap-4">
@@ -26,7 +26,6 @@ export const RecentList = ({ startLocation, endLocation, status, startLatitude, 
                     <h2 className="font-bold text-gray-700 text-sm md:text-[15px] md:mb-1">{startLocation}</h2>
                     <p className="text-sm text-gray-500 md:text-[16px]">{endLocation}</p>
                     <p className="text-xs text-gray-400 md:mt-2">
-                        <span className="text-[15px]">12 October 2024, 2:30 pm / </span>
                         <span className="text-green-600 text-[15px] font-semibold">{status}</span>
                     </p>
                 </div>
@@ -34,7 +33,7 @@ export const RecentList = ({ startLocation, endLocation, status, startLatitude, 
 
             {/* Button */}
             <button className="text-gray-500 text-xl md:text-2xl lg:text-3xl self-start md:self-center">
-                <img src={Dots} alt="dots" className="w-6 h-6 sm:w-7 sm:h-7 md:w-9 md:h-9 lg:w-10 lg:h-10" />
+                {/* <img src={Dots} alt="dots" className="w-6 h-6 sm:w-7 sm:h-7 md:w-9 md:h-9 lg:w-10 lg:h-10" /> */}
             </button>
         </div>
     )
@@ -96,11 +95,11 @@ export const CancenlledList = ({ startLocation, endLocation, status }) => {
             <div>
                 <h2 className="font-medium text-gray-700">{endLocation}</h2>
                 <p className="text-sm text-gray-500">{startLocation}</p>
-                <p className="text-xs text-gray-400">12 October 2024, 2:30 pm /<span className="text-red-600">{status}</span></p>
+                <p className="text-xs text-gray-400"><span className="text-red-600">{status}</span></p>
             </div>
-            <button className="text-gray-500">
+            {/* <button className="text-gray-500">
                 •••
-            </button>
+            </button> */}
         </div>
     )
 }

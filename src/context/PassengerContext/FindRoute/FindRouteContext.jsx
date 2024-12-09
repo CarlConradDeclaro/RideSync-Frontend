@@ -133,7 +133,7 @@ export const FindRouteContextProvider = ({ children }) => {
             L.latLng(selectedPositionDest?.lat, selectedPositionDest?.lon),
           ],
           createMarker: () => null, // Prevent default marker creation
-          show: false,
+          show: true,
           routeWhileDragging: true,
           lineOptions: {
             styles: [{ color: '#00A6CE', opacity: 1, weight: 5 }],
@@ -361,7 +361,7 @@ export const FindRouteContextProvider = ({ children }) => {
       createMarker: function () {
         return null;
       },
-      show: false,
+      show: true,
       routeWhileDragging: true,
       lineOptions: {
         styles: [{ color: '#00A6CE', opacity: 1, weight: 5 }]
@@ -478,7 +478,7 @@ export const FindRouteContextProvider = ({ children }) => {
     if (userInfo && userInfo.id) {
       const userId = userInfo.id;
       try {
-        const data = await updateRequest(`${BASEURL}/selectedDriver`, JSON.stringify({ userId, driverId }));
+        const data = await updateRequest(`${BASEURL}/selectedDriver`, JSON.stringify({ userId, driverId,drivers }));
 
         console.log("Fetched route data:", data); // Check the structure here
         if (data.error) {
