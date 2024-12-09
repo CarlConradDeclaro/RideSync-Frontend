@@ -40,7 +40,7 @@ const RootNavigators = () => {
                     <Route path="/CarpoolProfile" element={<CarpoolProfile />} />
 
                     <Route path="/loading" element={<DummyLoading />} />
-                    <Route path="/Carpoollooading" element={<CarpoolLoading />} />
+                    <Route path="/CarpoolLoading" element={<CarpoolLoading />} />
 
                     
 
