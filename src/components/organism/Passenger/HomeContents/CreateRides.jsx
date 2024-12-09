@@ -12,7 +12,7 @@ import {useNavigate} from 'react-router-dom'
 import { WarningModal } from '../../../atoms/WarningModal';
 import CarpoolAnimation from '../../../../assets/carpool.gif'
 import ScheduleAnimation from '../../../../assets/calendar.gif'
-
+import { FaCarSide, FaCalendarAlt } from 'react-icons/fa';
 
 const CreateRides = () => {
     const navigate = useNavigate();
@@ -42,25 +42,22 @@ const CreateRides = () => {
     }
 
     return (
-        <div className="flex flex-col md:w-[500px]">
-             
-            <div className="flex flex-row gap-6 items-center justify-start w-full max-w-md ml-5 mb-6">
+        <div className="flex flex-col  bg md:w-[430px]"> 
+            <div className="flex flex-row gap-6 items-center justify-start w-full max-w-md ml-5 mb-3">
                     {/* Carpool Section */}
                     <div 
                         className="flex flex-col items-center cursor-pointer hover:scale-105 transition-transform duration-300"
                         onClick={handleCarpoolClick}
                     >
-                        <img
-                        src={CarpoolAnimation}
-                        alt="Carpool Animation"
-                        className="w-14 h-14"
-                        />
+                        <div className="flex items-center justify-center w-14 h-14 bg-blue-100 text-blue-600 rounded-full shadow-lg">
+                            <FaCarSide size={28} /> {/* Carpool Icon */}
+                        </div>
                         <h1 className="mt-2 text-lg font-bold text-gray-800 hover:text-blue-600">
-                        Carpool
+                            Carpool
                         </h1>
                     </div>
 
-                    {/* Divider (Optional for better separation) */}
+                    {/* Divider */}
                     <div className="w-1 h-12 bg-gray-300"></div>
 
                     {/* Schedule Ride Section */}
@@ -68,18 +65,16 @@ const CreateRides = () => {
                         className="flex flex-col items-center cursor-pointer hover:scale-105 transition-transform duration-300"
                         onClick={handleBookRideClick}
                     >
-                        <img
-                        src={ScheduleAnimation}
-                        alt="Schedule Animation"
-                        className="w-14 h-14"
-                        />
+                        <div className="flex items-center justify-center w-14 h-14 bg-green-100 text-green-600 rounded-full shadow-lg">
+                            <FaCalendarAlt size={28} /> {/* Schedule Icon */}
+                        </div>
                         <h1 className="mt-2 text-lg font-bold text-gray-800 hover:text-green-600">
-                        Schedule a Ride
+                            Schedule a Ride
                         </h1>
                     </div>
-                    </div>
+                </div>
 
-            <Card className="flex flex-col gap-5  items-start w-full md:w-[400px] h-[300px] md:h-[300px] rounded-2xl p-5">
+            <div className="flex  flex-col gap-5 border-2 shadow-lg  items-start w-full md:w-[450px] h-[300px] md:h-[300px] rounded-2xl p-5">
 
                 <div className="flex items-center mb-5 space-x-4">
 
@@ -146,15 +141,10 @@ const CreateRides = () => {
                             <Button name="Find Route" variant="contained" size="large" onClick={handleRouteDirection} />
                             <Button name="Procced" variant="contained" size="large" onClick={() => handleProceed(true)} />
                         </div>
-                        {
-                            warning && 
-                            <WarningModal 
-                            message="Please Enter Pickup Location And Destination to continue! "
-                            setWarning={setWarning}/>
-                        }
+                       
                     </div>
                 </div>
-            </Card>
+            </div>
 
         </div>
     )

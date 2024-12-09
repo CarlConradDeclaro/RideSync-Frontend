@@ -5,6 +5,24 @@ import HTime from '../../../../assets/HTime.png';
 
 const Components = () => {
     const [time, setTime] = useState('');
+    const [userProfileImage, setUserProfileImage] = useState(DefaultProfile);
+
+    const [userInfo, setUserInfo] = useState(null);
+
+    useEffect(() => {
+        const storedUserInfo = localStorage.getItem('User');
+        if (storedUserInfo) {
+        try {
+            const parsedUserInfo = JSON.parse(storedUserInfo);
+            setUserInfo(parsedUserInfo);
+            console.log("User info set:", parsedUserInfo);
+        } catch (error) {
+            console.error("Error parsing user info:", error);
+        }
+        } else {
+        console.log("No user info found in localStorage");
+        }
+    }, []);
 
     useEffect(() => {
         const updateTime = () => {
@@ -19,13 +37,28 @@ const Components = () => {
             setTime(now.toLocaleTimeString('en-US', options));
         };
 
-        // Update time immediately and set interval for continuous update
         updateTime();
         const interval = setInterval(updateTime, 1000);
 
-        // Cleanup interval on component unmount
         return () => clearInterval(interval);
     }, []);
+
+
+     useEffect(() => {
+    if (userInfo && userInfo?.id) {
+      const timeout = setTimeout(async() => {
+        const cloudinaryUrl = `https://res.cloudinary.com/drvtezcke/image/upload/v1/${userInfo?.id}?${new Date().getTime()}`;
+        const response = await fetch(cloudinaryUrl)
+        if(response.ok)
+        setUserProfileImage(cloudinaryUrl);
+        else
+        setUserProfileImage(DefaultProfile)
+      }, 1); // 3000ms = 3 seconds
+
+      // Cleanup the timeout when the component is unmounted or userInfo changes
+      return () => clearTimeout(timeout);
+    }
+  }, [userInfo]);
 
 
 
@@ -59,11 +92,19 @@ const Components = () => {
                 </div>
 
                 {/* Profile */}
-                <img
+            {userProfileImage === DefaultProfile ? (
+                  <img
                     src={DefaultProfile}
                     className="w-10 h-10 md:w-12 md:h-12 rounded-full border-2 border-gray-300 hover:border-white cursor-pointer shadow-md"
                     alt="Profile"
                 />
+                ) : (
+                <img
+                    src={userProfileImage}
+                    className="w-10 h-10 md:w-12 md:h-12 rounded-full border-2 border-gray-300 hover:border-white cursor-pointer shadow-md"
+                    alt="Profile"
+                />
+                )}
             </div>
         </div>
 

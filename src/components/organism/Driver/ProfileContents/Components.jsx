@@ -13,7 +13,7 @@ const Components = () => {
     return (
         <div className="flex space-x-6 p-6">
             {/* Left Sidebar */}
-            <Card className="w-1/4 h-[250px] bg-white shadow-lg rounded-lg">
+            <Card className="w-1/4 h-[200px] bg-white shadow-lg rounded-lg">
                 <div className="p-6">
                     <h2 className="text-lg font-semibold mb-4">Account Settings</h2>
                     <ul className="space-y-4">
@@ -30,13 +30,13 @@ const Components = () => {
                             <span className="material-icons text-lg mr-2">Password</span>
                             <div className="absolute top-0 right-0 h-full w-[5px] bg-blue-600 scale-y-0 group-hover:scale-y-100 transition-transform origin-top"></div>
                         </li>
-                        <li className="flex items-center text-gray-600 hover:bg-gray-100 hover:shadow-md relative transition-colors cursor-pointer p-2 rounded-md group"
+                        {/* <li className="flex items-center text-gray-600 hover:bg-gray-100 hover:shadow-md relative transition-colors cursor-pointer p-2 rounded-md group"
                             onClick={() => handleAccountSettings('address')}
 
                         >
                             <span className="material-icons text-lg mr-2">Address</span>
                             <div className="absolute top-0 right-0 h-full w-[5px] bg-blue-600 scale-y-0 group-hover:scale-y-100 transition-transform origin-top"></div>
-                        </li>
+                        </li> */}
                     </ul>
                 </div>
             </Card>

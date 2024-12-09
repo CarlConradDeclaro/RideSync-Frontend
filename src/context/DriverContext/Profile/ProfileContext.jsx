@@ -1,6 +1,8 @@
 import { createContext, useState,useEffect} from "react";
 import { BASEURL, postRequest } from "../../../utils/Service";
 import { useNavigate } from 'react-router-dom';  
+import DefaultProfile from "../../../assets/DefaultProfile.png";
+
 
 export const ProfileContext = createContext()
 export const ProfileContextProvider = ({ children }) => {
@@ -13,6 +15,8 @@ export const ProfileContextProvider = ({ children }) => {
     const [lastname,setLastname]=useState()
     const [email,setEmail]= useState()
     const [phonNum,setPhoneNum]=useState()
+    const [profilePicture,setProfilePricture] =useState()
+
 
 
 
@@ -80,7 +84,75 @@ export const ProfileContextProvider = ({ children }) => {
              console.error('Error updating profile:', error);
         }
 
+
+
+        const publicId = userInfo.id; // Assuming this holds the user's image public ID
+
+        try {
+            // Step 1: Call backend to delete the existing image
+            const deleteResponse = await fetch("http://localhost:8000/api/users/deleteProfile", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ public_id: publicId }),
+            });
+
+            const deleteResult = await deleteResponse.json();
+            console.log("Delete result:", deleteResult);
+
+            // Check if deletion was successful or image doesn't exist
+            if (deleteResult.result !== "ok" && deleteResult.result !== "not found") {
+            console.error("Error deleting image");
+           return
+            }
+
+            // Step 2: Upload the new image
+            const data = new FormData();
+            data.append("file", profilePicture);
+            data.append("upload_preset", "ridesync");
+            data.append("cloud_name", "drvtezcke");
+            data.append("public_id", publicId); // Use the same public ID for the new image
+
+            const res = await fetch("https://api.cloudinary.com/v1_1/drvtezcke/image/upload", {
+            method: "POST",
+            body: data,
+            });
+
+            const uploadedImage = await res.json();
+            console.log("Uploaded Image URL:", uploadedImage.url);
+        } catch (error) {
+            console.error("Error handling file upload:", error);
+        }
+
     }
+
+
+    const handleFileUpload = async (event) => {
+        const val = event.target.files[0];
+        if (!val) return;
+        setProfilePricture(val)    
+    };
+
+    
+    const [profileImage,setProfileImage]= useState()
+    useEffect(() => {
+        if (userInfo && userInfo?.id) {
+            const interval = setTimeout(async() => {
+            const cloudinaryUrl = `https://res.cloudinary.com/drvtezcke/image/upload/v1/${userInfo?.id}?${new Date().getTime()}`;
+            const response = await fetch(cloudinaryUrl)
+            if(response.ok)
+            setProfileImage(cloudinaryUrl);  
+            else
+            setProfileImage(DefaultProfile)
+             
+            },1); // 3000ms = 3 seconds
+
+            // Cleanup the interval when component is unmounted or userInfo changes
+            return () => clearInterval(interval);
+        }
+    }, [userInfo]);
+
 
 
 
@@ -98,7 +170,9 @@ export const ProfileContextProvider = ({ children }) => {
                 setLastname,
                 setEmail,
                 setPhoneNum,
-                handleSumitNewProfileInfo
+                handleSumitNewProfileInfo,
+                profileImage,
+                handleFileUpload,
             }}
         >
             {children}

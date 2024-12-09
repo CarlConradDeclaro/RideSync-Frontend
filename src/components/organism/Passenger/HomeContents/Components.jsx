@@ -1,74 +1,116 @@
-import React, { useContext, useEffect, useState } from 'react'
-import CreateRides from './CreateRides'
-import MapView from './Map'
-import DriverList from './DriverList'
-import { FindRouteContext } from '../../../../context/PassengerContext/FindRoute/FindRouteContext'
-import SelectedDriver from './SelectedDriver'
-import { BASEURL, getRequest, postRequest } from '../../../../utils/Service'
+ import React, { useContext, useEffect, useState } from "react";
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa";  // Import the icons
+import CreateRides from "./CreateRides";
+import MapView from "./Map";
+import DriverList from "./DriverList";
+import { FindRouteContext } from "../../../../context/PassengerContext/FindRoute/FindRouteContext";
+import SelectedDriver from "./SelectedDriver";
+import { BASEURL, postRequest } from "../../../../utils/Service";
+import { WarningModal } from '../../../atoms/WarningModal';
+
 
 
 const Components = () => {
+  const { userInfo, step1, setStep1, step2, setStep2, setStep3, step3,
+    setWarning,
+        warning,
+  } = useContext(FindRouteContext);
+  const [currentRequest, setCurrenRequest] = useState(false);
+  const [isPanelOpen, setIsPanelOpen] = useState(false);  
 
-  const { userInfo, step1, setStep1, step2, setStep2, setStep3, step3 } = useContext(FindRouteContext)
-
-  const [currentRequest, setCurrenRequest] = useState(false)
 
   const fetchRequestRide = async () => {
     if (userInfo && userInfo.id) {
-
       const userId = userInfo.id;
       const routeRequest = await postRequest(`${BASEURL}/getRouteRequest`, JSON.stringify({ userId }));
 
-      const potentialDriversInfo1 = JSON.stringify({ userId, status: 'waiting' });
+      const potentialDriversInfo1 = JSON.stringify({ userId, status: "waiting" });
       const potentialDrivers1 = await postRequest(`${BASEURL}/getPotentialRide`, potentialDriversInfo1);
 
-      const potentialDriversInfo2 = JSON.stringify({ userId, status: 'matched' });
+      const potentialDriversInfo2 = JSON.stringify({ userId, status: "matched" });
       const potentialDrivers2 = await postRequest(`${BASEURL}/getPotentialRide`, potentialDriversInfo2);
 
       if (routeRequest.error) {
-        console.error('Error fetching route:', data.message);
+        console.error("Error fetching route:", data.message);
         return;
       }
 
       if (routeRequest.length > 0) {
-        setStep1(true)
-        setStep2(false)
-        setStep3(true)
+        setStep1(true);
+        setStep2(false);
+        setStep3(true);
       }
 
       if (potentialDrivers1.length > 0) {
-        setStep1(true)
-        setStep2(false)
-        setStep3(true)
+        setStep1(true);
+        setStep2(false);
+        setStep3(true);
       }
 
       if (potentialDrivers2.length > 0) {
-        setStep1(true)
-        setStep2(true)
-        setStep3(false)
+        setStep1(true);
+        setStep2(true);
+        setStep3(false);
       }
     }
-  }
+  };
 
   useEffect(() => {
-    fetchRequestRide()
+    fetchRequestRide();
+  }, []);
 
-  }, [])
+
+  const togglePanel = () => {
+    setIsPanelOpen((prev) => !prev);  
+  };
+  
 
   return (
-    <div className="p-5 md:pl-3 md:pt-4  animate-fadeIn ">
+    <div className="md:pl-3 animate-fadeIn">
+      <div className="relative w-full h-[80vh]">
+        {/* MapView */}
+        <div className="z-0">
+          <MapView />
+        </div>
 
-      <div className="flex flex-col  md:flex-row  gap-5">
+        {/* Sliding Panel */}
+        <div
+          className={`absolute top-2 h-[86vh] backdrop-blur-sm rounded-lg shadow-xl transform ${
+            isPanelOpen ? "translate-x-0" : "-translate-x-full"
+          } transition-transform duration-300 ease-in-out w-[470px] pointer-events-auto`}
+        >
+          {/* Close/Open Button */}
+          <button
+            onClick={togglePanel}
+            className="absolute top-[300px] right-[-40px] bg-gray-200 rounded-full shadow-md p-2 focus:outline-none"
+          >
+            {isPanelOpen ? (
+              <FaChevronLeft className="text-xl text-gray-600" />
+            ) : (
+              <FaChevronRight className="text-xl text-gray-600" />
+            )}
+          </button>
 
-        {
-          !step1 ? <CreateRides /> : !step2 ? <DriverList /> : !step3 ? <SelectedDriver /> : null
-        }
-        <MapView />
-
-
+          {/* Content */}
+          <div className="p-2 overflow-y-auto h-full">
+            {!step1 ? (
+              <CreateRides />
+            ) : !step2 ? (
+              <DriverList />
+            ) : !step3 ? (
+              <SelectedDriver />
+            ) : null}
+          </div>
+        </div>
       </div>
+       {
+           warning && 
+           <WarningModal 
+          message="Please Enter Pickup Location And Destination to continue! "
+          setWarning={setWarning}/>
+        }
     </div>
-  )
-}
+  );
+};
 
-export default Components
+export default Components;

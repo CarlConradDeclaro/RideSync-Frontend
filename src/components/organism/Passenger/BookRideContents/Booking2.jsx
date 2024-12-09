@@ -10,6 +10,10 @@ import 'leaflet-routing-machine/dist/leaflet-routing-machine.css';
 import DefaultProfile from '../../../../assets/DefaultProfile.png'
 import { WarningModal } from '../../../atoms/WarningModal';
 import { BookingConfirmedModal } from '../../../atoms/ConfirmedModal';
+ import { FaRoute, FaMoneyBillWave } from 'react-icons/fa';
+import { MdLocationOn } from 'react-icons/md'
+
+
 
 
 const Booking2 = ({
@@ -61,6 +65,38 @@ const Booking2 = ({
 
 
     }, [selectedPosition, selectedPositionDest]);
+
+     const [profileImages, setProfileImages] = useState({}); // Store user profiles
+
+    
+    const fetchProfileImage = (userId) => {
+        if (!userId) return DefaultProfile;
+
+        // Check if the image is already cached
+        if (profileImages[userId]) {
+            return profileImages[userId];
+        }
+
+        // Generate Cloudinary URL
+        const cloudinaryUrl = `https://res.cloudinary.com/drvtezcke/image/upload/v1/${userId}?${new Date().getTime()}`;
+
+        // Use setTimeout to simulate async update and delay setting the image
+        setTimeout(async () => {
+            try {
+                const response = await fetch(cloudinaryUrl, { method: "HEAD" });
+                if (response.ok) {
+                    setProfileImages((prev) => ({ ...prev, [userId]: cloudinaryUrl }));
+                } else {
+                    throw new Error("Image not found");
+                }
+            } catch (error) {
+                // Fallback to default if the image does not exist
+                setProfileImages((prev) => ({ ...prev, [userId]: DefaultProfile }));
+            }
+        }, 1);
+
+        return DefaultProfile; // Show default image while loading
+    };
 
     return (
         <div className='w-full flex flex-col md:flex md:flex-row mt-11 md:mt-0'>
@@ -176,6 +212,7 @@ const Booking2 = ({
                                 .slice(0, 5)
                                 .map((driver) => (
                                     <DriverCard
+                                        fetchProfileImage={fetchProfileImage}
                                         driverName={`${driver.userFn} ${driver.userLn}`}
                                         plateNo={driver.plateNo || "Not Available"}
                                         ratings={driver.userRating || 0}
@@ -203,13 +240,15 @@ const Booking2 = ({
             </div>
             <div className='relative w-full h-screen z-0 '>
                     {/* Fare Estimates Section */}
-                    <div className='md:absolute flex  top-5 pt-5 pb-5 pr-5 left-[65px] shadow-lg   z-20'>
+                    <div className='md:absolute flex  gap-4 top-5 pt-5 pb-5 pr-5 left-[75px]    z-20'>
+                         <FaRoute className="text-blue-500 text-[22px]" />
+                        <p className="text-[18px] font-bold text-black-500">Route</p>
                         <h1 className='text-large font-semibold flex items-center'>
-                            <span className='text-green-500 mr-2'>💸</span> {/* Icon for Fare */}
+                             <FaMoneyBillWave className="text-green-500 text-[22px]" />
                             Fare: <span className='ml-2 text-blue-500'>{amt ? amt : '0'}</span>
                         </h1>
                         <h1 className='text-large font-semibold flex items-center'>
-                            <span className='text-yellow-500 mr-2'>📍</span> {/* Icon for Distance */}
+                           <MdLocationOn className="text-red-500 text-[22px]" />
                             Total Distance: <span className='ml-2 text-gray-700'>{totalDistance ? totalDistance+" km" : '0 km'}</span>
                         </h1>
                         <h1 className='text-large font-semibold flex items-center'>
@@ -235,11 +274,11 @@ const Booking2 = ({
 }
 
 
-const DriverCard = ({ driverName, plateNo, ratings, handleSelectedDriver, driverId }) => {
+const DriverCard = ({ fetchProfileImage,driverName, plateNo, ratings, handleSelectedDriver, driverId }) => {
     return (
         <div className="   p-1 flex gap-4 bg-white w-full rounded-lg shadow-md justify-between items-center cursor-pointer transition-transform hover:scale-105">
             <div className="flex items-center gap-4">
-                <img src={DefaultProfile} className="w-16 h-16 rounded-full object-cover border border-gray-200" alt="Driver Profile" />
+                <img src={fetchProfileImage(driverId)} className="w-16 h-16 rounded-full object-cover border border-gray-200" alt="Driver Profile" />
                 <div>
                     <h1 className="text-sm md:text-md font-semibold text-gray-800">{driverName}</h1>
                     <p className="text-sm text-gray-500">Plate No: <span className="font-medium">{plateNo}</span></p>

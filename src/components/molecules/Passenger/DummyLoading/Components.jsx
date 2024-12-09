@@ -19,7 +19,7 @@ const Components = () => {
             const timer = setTimeout(() => {
                 setLoading(false);
                 navigate(route); // Navigate after loading is false
-            }, 1000);
+            }, 3000);
     
             return () => clearTimeout(timer);
         }, [navigate, route]);
@@ -30,7 +30,7 @@ const Components = () => {
                 <Sidebar active={active}/>
             </div>
             <div className='w-full '>
-                <UserHeader />
+                {/* <UserHeader /> */}
                 <div>
                 {loading && <Loading />}
                 </div>

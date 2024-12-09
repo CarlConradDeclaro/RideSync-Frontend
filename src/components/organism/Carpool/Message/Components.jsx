@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useLayoutEffect, useRef } from 'react'
+import React, { useContext, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import DefaultProfile from '../../../../assets/DefaultProfile.png'
 import { MessageCarpoolContext } from '../../../../context/Carpool/MessageCarpool/MessageCarpool'
 import { FiPhone, FiVideo } from "react-icons/fi";
@@ -19,6 +19,35 @@ const Components = ( ) => {
         }
     };
 
+    const [profileImages, setProfileImages] = useState({}); // Store user profiles
+    const fetchProfileImage = (userId) => {
+        if (!userId) return DefaultProfile;
+
+        // Check if the image is already cached
+        if (profileImages[userId]) {
+            return profileImages[userId];
+        }
+
+        // Generate Cloudinary URL
+        const cloudinaryUrl = `https://res.cloudinary.com/drvtezcke/image/upload/v1/${userId}?${new Date().getTime()}`;
+
+        // Use setTimeout to simulate async update and delay setting the image
+        setTimeout(async () => {
+            try {
+                const response = await fetch(cloudinaryUrl, { method: "HEAD" });
+                if (response.ok) {
+                    setProfileImages((prev) => ({ ...prev, [userId]: cloudinaryUrl }));
+                } else {
+                    throw new Error("Image not found");
+                }
+            } catch (error) {
+                // Fallback to default if the image does not exist
+                setProfileImages((prev) => ({ ...prev, [userId]: DefaultProfile }));
+            }
+        }, 1);
+
+        return DefaultProfile; // Show default image while loading
+    };
  
 
 
@@ -42,7 +71,7 @@ const Components = ( ) => {
                                 key={index}
                             >
                                 <img
-                                    src={DefaultProfile}
+                                    src={fetchProfileImage(chat.user1_Id)}
                                     alt="Avatar"
                                     className="w-12 h-12 rounded-full shadow-md"
                                 />
@@ -66,7 +95,7 @@ const Components = ( ) => {
                         <div className="flex items-center justify-between p-6 border-b">
                             <div className="flex items-center">
                                 <img
-                                    src={DefaultProfile}
+                                    src={fetchProfileImage(driverId)}
                                     alt="Avatar"
                                     className="w-12 h-12 rounded-full shadow-md"
                                 />
@@ -106,7 +135,7 @@ const Components = ( ) => {
                                                 {message.message}
                                             </div>
                                             <img
-                                                src={DefaultProfile}
+                                                src={fetchProfileImage(userInfo?.id)}
                                                 alt="Avatar"
                                                 className="w-8 h-8 rounded-full ml-3 shadow-md"
                                             
@@ -118,7 +147,7 @@ const Components = ( ) => {
                                             key={index}
                                         >
                                             <img
-                                                src={DefaultProfile}
+                                                src={fetchProfileImage(message.sender_Id)}
                                                 alt="Avatar"
                                                 className="w-8 h-8 rounded-full mr-3 shadow-md"
                                             />

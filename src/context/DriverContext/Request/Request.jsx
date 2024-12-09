@@ -8,6 +8,9 @@ import 'leaflet-control-geocoder'; // Geocoder JS
 import { io } from 'socket.io-client';
 import { BASEURL, BASEURLDrivers, postRequest } from "../../../utils/Service";
 import { useNavigate } from 'react-router-dom';
+import DefaultProfile from '../../../assets/DefaultProfile.png';
+
+
 
 export const RequestContext = createContext();
 export const RequestContextProvider = ({ children }) => {
@@ -38,6 +41,8 @@ export const RequestContextProvider = ({ children }) => {
     const [offerRide, setOfferRide] = useState(false);
     const [routeId, setRouteId] = useState()
     const [currentRide, setCurrentRide] = useState()
+    const [profileImage, setProfileImage] = useState(DefaultProfile);
+
 
     const fetchRequest = async () => {
         if (driverInfo && driverInfo.id) {
@@ -238,6 +243,7 @@ export const RequestContextProvider = ({ children }) => {
         } catch (error) {
             console.error("Error fetching passenger information:", error);
         }
+        fetchUserProfile(passengerId)
     }
     const clearPassengerInfo = () => {
         setPassengerInfo(null); // or setPassengerInfo([]) if it was initially an empty array
@@ -354,6 +360,20 @@ const handleChats = async (passengerId) => {
 
 
 
+ const fetchUserProfile = async(id)=>{
+        const cloudinaryUrl = `https://res.cloudinary.com/drvtezcke/image/upload/v1/${id}?${new Date().getTime()}`;
+        const response = await fetch(cloudinaryUrl)
+                if(response.ok){
+                    setProfileImage(cloudinaryUrl) 
+                }else{
+                    setProfileImage(DefaultProfile)
+                }
+    }
+    
+   
+  
+
+
 
 
 
@@ -390,7 +410,10 @@ const handleChats = async (passengerId) => {
                 getPassengerInfo,
                 setRequest,
                 setCurrentRide,
-                handleChats
+                handleChats,
+                profileImage,
+                setProfileImage
+            
 
 
             }}

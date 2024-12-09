@@ -2,6 +2,7 @@ import { createContext, useEffect, useState } from "react";
 import { BASEURL, getRequest, postRequest } from "../../../utils/Service";
 import { io } from 'socket.io-client'
 import { useNavigate } from 'react-router-dom';
+import DefaultProfile from '../../../assets/DefaultProfile.png';
 
 
 export const PBookCarpoolContext = createContext()
@@ -23,6 +24,7 @@ export const PBookCarpoolContextProvider = ({children})=>{
     const [selectedDate, setSelectedDate] = useState('');
     const [suggestions, setSuggestions] = useState([]);
     const [suggestionsDest, setSuggestionsDest] = useState([]);
+    const [profileImage,setProfileImage]= useState()
    
     useEffect(() => {
         const newSocket = io("http://localhost:8000")
@@ -181,7 +183,7 @@ export const PBookCarpoolContextProvider = ({children})=>{
     const handleClickCarpool = async (rideInfo) => {
           const driverData =  getDriverData(rideInfo?.userId);
           isCarpoolBooked(rideInfo?.routeId,passengerInfo?.id)
-       
+          fetchUserProfile(rideInfo?.userId)
           
           setRideInfo({
             routeId:rideInfo?.routeId,
@@ -201,6 +203,17 @@ export const PBookCarpoolContextProvider = ({children})=>{
           });
           setTotalAmount(rideInfo?.pricePerPerson)
       };
+
+    
+    const fetchUserProfile = async(id)=>{
+        const cloudinaryUrl = `https://res.cloudinary.com/drvtezcke/image/upload/v1/${id}?${new Date().getTime()}`;
+        const response = await fetch(cloudinaryUrl)
+                if(response.ok){
+                    setProfileImage(cloudinaryUrl) 
+                }else{
+                    setProfileImage(DefaultProfile)
+                }
+    }
       
     const handleConfirmBooking = async()=>{
             const bookingInfo  = {
@@ -289,7 +302,8 @@ export const PBookCarpoolContextProvider = ({children})=>{
             suggestions,
             suggestionsDest,
             handleSelectSuggestion,
-            handleSelectSuggestionDest
+            handleSelectSuggestionDest,
+            profileImage
         }}
         >
             {children}

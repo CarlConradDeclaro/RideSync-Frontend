@@ -22,7 +22,7 @@ const WarningModal = ({setWarning,message}) => {
         <div className="flex items-center justify-center">
         {/* Modal */}
         {isOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-600 backdrop-blur-sm bg-opacity-50">
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-600  bg-opacity-50">
             <div
               className={`relative bg-gradient-to-br from-blue-50 to-white p-6 rounded-xl shadow-xl border-t-4 border-red-500 transform transition-transform 
                 duration-300 ease-in-out ${

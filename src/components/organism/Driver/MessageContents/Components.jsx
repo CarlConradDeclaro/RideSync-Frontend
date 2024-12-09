@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef } from 'react'
+import React, { useContext,useState, useEffect, useRef } from 'react'
 import DefaultProfile from '../../../../assets/DefaultProfile.png'
 import { MessageContext } from '../../../../context/DriverContext/Message/MessageContext';
 import { FiPhone, FiVideo } from "react-icons/fi";
@@ -9,6 +9,9 @@ const Components = () => {
         message, openChatContainer, conversation, driverName } = useContext(MessageContext)
 
     const messagesEndRef = useRef(null);
+    const [profileImages, setProfileImages] = useState({}); // Store user profiles
+    const [profileImageDriver,setProfileImageDriver]= useState()
+    const [profileImagePassenger,setProfileImagePassenger]= useState()
 
     const scrollToBottom = () => {
         if (messagesEndRef.current) {
@@ -19,6 +22,76 @@ const Components = () => {
     useEffect(() => {
         scrollToBottom();
     }, [conversation]);
+
+
+    const fetchProfileImage = (userId) => {
+    if (!userId) return DefaultProfile;
+
+    // Check if the image is already cached
+    if (profileImages[userId]) {
+        return profileImages[userId];
+    }
+
+    // Generate Cloudinary URL
+    const cloudinaryUrl = `https://res.cloudinary.com/drvtezcke/image/upload/v1/${userId}?${new Date().getTime()}`;
+
+    // Use setTimeout to simulate async update and delay setting the image
+    setTimeout(async () => {
+        try {
+            const response = await fetch(cloudinaryUrl, { method: "HEAD" });
+            if (response.ok) {
+                setProfileImages((prev) => ({ ...prev, [userId]: cloudinaryUrl }));
+            } else {
+                throw new Error("Image not found");
+            }
+        } catch (error) {
+            // Fallback to default if the image does not exist
+            setProfileImages((prev) => ({ ...prev, [userId]: DefaultProfile }));
+        }
+    }, 1);
+
+    return DefaultProfile; // Show default image while loading
+};
+
+     useEffect(() => {
+    if (driverId) {
+        const fetchDriverProfileImage = async () => {
+            try {
+                const cloudinaryUrl = `https://res.cloudinary.com/drvtezcke/image/upload/v1/${driverId}?${new Date().getTime()}`;
+                const response = await fetch(cloudinaryUrl);
+                if (response.ok) {
+                    setProfileImageDriver(cloudinaryUrl); // Update image if it exists
+                } else {
+                    setProfileImageDriver(DefaultProfile); // Fallback to default if 404 or other error
+                }
+                console.log("Image updated:", cloudinaryUrl);
+            } catch (error) {
+                console.error("Error fetching driver profile image:", error);
+                setProfileImageDriver(DefaultProfile); // Handle network errors
+            }
+        };
+
+        fetchDriverProfileImage();
+    }
+    }, [driverId]);
+
+    useEffect(() => {
+        if (userInfo?.id ) {
+            const fetchUserProfile = async()=>{
+                const cloudinaryUrl = `https://res.cloudinary.com/drvtezcke/image/upload/v1/${userInfo?.id }?${new Date().getTime()}`;
+                const response = await fetch(cloudinaryUrl)
+                if(response.ok){
+                    setProfileImagePassenger(cloudinaryUrl)
+                }else{
+                    setProfileImagePassenger(DefaultProfile)
+                }
+            }
+            fetchUserProfile()
+        }
+    }, [userInfo]);
+
+
+
 
     return (
         <Card className="flex flex-wrap w-full h-[87vh] p-5 ">
@@ -36,7 +109,7 @@ const Components = () => {
                                 key={index}
                             >
                                 <img
-                                    src={DefaultProfile}
+                                    src={fetchProfileImage(chat.user1_Id)}
                                     alt="Avatar"
                                     className="w-12 h-12 rounded-full shadow-md"
                                 />
@@ -60,7 +133,7 @@ const Components = () => {
                         <div className="flex items-center justify-between p-6 border-b">
                             <div className="flex items-center">
                                 <img
-                                    src={DefaultProfile}
+                                    src={profileImageDriver}
                                     alt="Avatar"
                                     className="w-12 h-12 rounded-full shadow-md"
                                 />
@@ -100,7 +173,7 @@ const Components = () => {
                                                 {message.message}
                                             </div>
                                             <img
-                                                src={DefaultProfile}
+                                                src={profileImagePassenger}
                                                 alt="Avatar"
                                                 className="w-8 h-8 rounded-full ml-3 shadow-md"
                                             />
@@ -111,7 +184,7 @@ const Components = () => {
                                             key={index}
                                         >
                                             <img
-                                                src={DefaultProfile}
+                                                src={profileImageDriver}
                                                 alt="Avatar"
                                                 className="w-8 h-8 rounded-full mr-3 shadow-md"
                                             />

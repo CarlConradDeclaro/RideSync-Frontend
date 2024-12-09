@@ -7,6 +7,7 @@ import L from 'leaflet';
 import 'leaflet-routing-machine';
 import 'leaflet-control-geocoder/dist/Control.Geocoder.css'; // Geocoder CSS
 import 'leaflet-control-geocoder'; // Geocoder JS
+import { Card } from '../../../molecules/Card';
 
 const Carpools = () => {
   const { bookedCarpools,customIcon } = useContext(ViewRidesContext);
@@ -53,10 +54,10 @@ const Carpools = () => {
    
 }
   return (
-    <div className="flex flex-col md:flex-row p-6 min-h-screen gap-4 ">
+    <Card className="flex flex-col md:flex-row p-6 mt-5 rounded-lg min-h-screen gap-4 ">
       {/* Left Section: Booking List */}
       <div className="flex-1 h-[100vh] w-[900px] bg-white shadow-lg rounded-lg p-6 overflow-y-auto transition-all duration-500 ease-in-out transform hover:shadow-2xl">
-        <h2 className="text-2xl font-semibold mb-6 text-blue-700">Your Carpools</h2>
+        <h2 className="text-2xl font-semibold mb-6 text-gray-700">Your Carpools</h2>
         <div className="space-y-4">
           {
           bookedCarpools ?  
@@ -82,14 +83,14 @@ const Carpools = () => {
 
       {/* Right Section: Booking Details */}
       <div className="flex-1 h-[100vh] overflow-y-auto bg-white shadow-xl rounded-lg p-6 transition-all duration-500 ease-in-out transform hover:shadow-2xl">
-        <h2 className="text-2xl font-semibold mb-6 text-blue-700">Carpool Details</h2>
+        <h2 className="text-2xl font-semibold mb-6 text-gray-700">Carpool Details</h2>
         {selectedBooking !== null ? (
           <BookingDetails mapRef={mapRef}   booking={bookedCarpools[selectedBooking]}  customIcon={customIcon} />
         ) : (
           <p className="text-gray-500">Select a booking to view details.</p>
         )}
       </div>
-    </div>
+    </Card>
   );
 };
 

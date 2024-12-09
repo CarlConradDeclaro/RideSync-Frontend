@@ -25,6 +25,7 @@ export const ViewRidesContextProvider = ({ children }) => {
     const [isInBooking, setIsInBooking] = useState(false);
     const [isInInCancelledRides, setIsInCancelledRides] = useState(false);
     const [passengerInfo, setPassengerInfo] = useState({
+        userId:null,
         userFn: 'John Doe',
         userLn: null,
         phoneNum: null,
@@ -57,6 +58,8 @@ export const ViewRidesContextProvider = ({ children }) => {
 
     const [pickUp, setPickUp] = useState()
     const [destination, setDestination] = useState()
+        const [rateModal,setRateModal] = useState(false)
+
 
 
     useEffect(() => {
@@ -186,9 +189,10 @@ export const ViewRidesContextProvider = ({ children }) => {
 
 
 
-    const handleRecentRideInfo = (pickUp, destination, userFn, userLn, phoneNum, userRatings, pickup, dropOff, fare, duration, distance) => {
+    const handleRecentRideInfo = (userId,pickUp, destination, userFn, userLn, phoneNum, userRatings, pickup, dropOff, fare, duration, distance) => {
         // Update passenger info
         setPassengerInfo({
+            userId:userId,
             userFn: userFn,
             userLn: userLn,
             phoneNum: phoneNum,
@@ -280,6 +284,15 @@ export const ViewRidesContextProvider = ({ children }) => {
         }
     };
 
+    const handleRateUser= async(user_id,rating)=>{
+            try {
+                await postRequest(`${BASEURL}/rateUser`,JSON.stringify({user_id,rating}))
+            } catch (error) {
+                console.log("Error rating user");
+                
+            }
+      }
+
     return (
         <ViewRidesContext.Provider
             value={{
@@ -300,7 +313,10 @@ export const ViewRidesContextProvider = ({ children }) => {
                 bookingInfo,
                 cancelledRoutes,
                 handleCancelBooking,
-                markBookingAsDone
+                markBookingAsDone,
+                rateModal, 
+                setRateModal,
+                handleRateUser
             }}
         >
             {children}
