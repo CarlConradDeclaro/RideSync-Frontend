@@ -12,6 +12,14 @@ const Components = ({ isDriver = false }) => {
     navigate('/')
   }
 
+  const handleToServices = () => {
+    navigate("/#services"); // Navigate to home with #services
+  };
+
+  const handleToAboutUs = ()=> {
+    navigate('/about-us')
+  }
+
   return (
     <div className="flex flex-col md:flex-row justify-around items-center bg-homeHeaderBg h-auto md:h-[70px] w-full p-4 md:p-6">
       <div className="flex items-center text-textColorHeader cursor-pointer">
@@ -26,10 +34,10 @@ const Components = ({ isDriver = false }) => {
         onClick={handleToHomePage}
           >Home</span>
           <span className="text-sm p-1 md:p-10 cursor-pointer text-textColorHeader"
-        onClick={handleToHomePage}
-          >Our Service</span>
+        onClick={handleToServices}
+          >Our Services</span>
           <span className="text-sm p-1 md:p-10 cursor-pointer text-textColorHeader"
-        onClick={handleToHomePage}
+        onClick={handleToAboutUs}
           >About Us</span>
         </div>
         {
