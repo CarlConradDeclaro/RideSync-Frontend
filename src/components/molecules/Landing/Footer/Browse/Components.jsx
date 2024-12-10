@@ -3,7 +3,7 @@ import { Title } from "../../../../atoms/Title";
 const Components = () => {
     const data = [
         { id: 1, name: 'Home' ,link: "/"},
-        { id: 2, name: 'Services' ,link: "/"},
+        { id: 2, name: 'Services' ,link: "/#services"},
         { id: 3, name: 'About Us' ,link: "/about-us"},
     ];
 

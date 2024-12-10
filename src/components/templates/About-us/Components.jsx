@@ -10,10 +10,14 @@ import sustainability from '../../../assets/sustainability.png'
 import community from '../../../assets/community.png'
 import transparency from '../../../assets/transparency.png'
 import meeting from '../../../assets/meeting.jpg'
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { useInView, motion } from "motion/react";
 
 const Components = ()=> {
+    useEffect(()=>{
+        window.scrollTo(0,0);
+    },[])
+
     const sectionRef = useRef(null)
     const isInView = useInView(sectionRef,{
         once: true,
@@ -46,9 +50,11 @@ const Components = ()=> {
 
     return (
         <div>
+            <div className="sticky top-0">
             <HomeHeader />
+            </div>
             <Hero text={'Our Journey Begins with You'} imgSrc={img} />
-            <motion.div ref={sectionRef} className="flex flex-col lg:flex-row justify-center bg-colorBlue text-white p-8 lg:p-32 rounded-tl-2xl rounded-br-2xl"
+            <motion.div ref={sectionRef} className="flex flex-col lg:flex-row justify-center bg-colorBlue text-white p-8 lg:p-32 rounded-tl-[150px] rounded-br-[150px]"
                 initial={{opacity: 0, y: 100}}
                 animate={{
                     y: isInView ? 0 : 100,
@@ -101,7 +107,7 @@ const Components = ()=> {
                                         delay: 0.2
                                     }}
                                 >
-                                    <h2 className="text-2xl md:text-4xl pb-4 text-center lg:text-left">{item.headline}</h2>
+                                    <h2 className="text-2xl md:text-4xl pb-4 text-center lg:text-left font-bold">{item.headline}</h2>
                                     <p className="text-lg md:text-2xl leading-relaxed text-center lg:text-left">
                                         {item.description}
                                     </p>
