@@ -24,7 +24,8 @@ const Components = () => {
     suggestionsDest,
     handleSelectSuggestion,
     handleSelectSuggestionDest,
-    profileImage
+    profileImage,
+    handleChats
   } = useContext(PBookCarpoolContext)
   const [isOpen,setIsOpen]= useState(false)
   const handleOpenModal =()=>{
@@ -35,7 +36,7 @@ const Components = () => {
   return (
     <div className="flex w-auto flex-col items-center justify-center p-5 animate-fadeIn">
         {/* Main Card with Inputs */}
-          <img src={carpoolBg} className='md:h-[400px] md:w-[1100px]' />
+          {/* <img src={carpoolBg} className='md:h-[450px] md:w-[1100px]' /> */}
      
         <div className="mb-3 border  flex flex-col md:flex-row md:w-[1000px] w-full rounded-xl shadow-lg p-5 gap-4 md:items-center">
           <div className='md:w-[90%]'>
@@ -94,7 +95,7 @@ const Components = () => {
       <div className="flex flex-col lg:flex-row gap-8 w-full">
         {/* Carpool List */}
         <div className="w-full lg:w-3/5 space-y-6">
-          <h2 className="text-2xl font-bold text-gray-800">Available Carpool:</h2>
+          <h2 className="text-2xl font-bold text-gray-800">Carpools:</h2>
           <div className="overflow-y-auto max-h-[600px] p-4 overflow-x-hidden custom-scrollbar space-y-5">
             {
               filteredRides  && 
@@ -102,7 +103,13 @@ const Components = () => {
                 const today = new Date();
                 today.setHours(0,0,0,0)
                 const rideDateTime = new Date(rides.travelDateTime)
-                return rideDateTime>=today
+                return rides.status !== 'completed' && rideDateTime >= today;
+              }).length > 0 ?
+              filteredRides.filter((rides)=>{
+                const today = new Date();
+                today.setHours(0,0,0,0)
+                const rideDateTime = new Date(rides.travelDateTime)
+                return rides.status !== 'completed' && rideDateTime >= today;
               }).slice().reverse().map((rides,index)=>(
                 <CarpoolCardRides
                 isBooked={isBooked}
@@ -116,14 +123,20 @@ const Components = () => {
                 dateTime={rides?.travelDateTime && new Date(rides.travelDateTime).toLocaleString() }
               />
               ))
+              :
+                <div className="flex ">
+                    <h2 className="text-xl font-semibold text-gray-500">No carpool available</h2>
+                
+                  </div>
             }
+           
           </div>
         </div>
         {/* Carpool Details */}
         <div className="w-full lg:w-2/5">
         {
           rideInfo?.startLocation && (
-            <CarpoolCardDetails profileImage={profileImage} bookedBa={bookedBa} isBooked={isBooked} handleOpenModal={handleOpenModal} rideInfo={rideInfo} setNumberOfPassengers={setNumberOfPassengers} totalAmount={totalAmount} setTotalAmount={setTotalAmount}/>
+            <CarpoolCardDetails handleChats={handleChats} profileImage={profileImage} bookedBa={bookedBa} isBooked={isBooked} handleOpenModal={handleOpenModal} rideInfo={rideInfo} setNumberOfPassengers={setNumberOfPassengers} totalAmount={totalAmount} setTotalAmount={setTotalAmount}/>
           )
         }
         </div>
@@ -173,7 +186,7 @@ const CarpoolCardRides = ({isBooked,rides,handleClickCarpool, startLocation, end
     </div>
   );
 };
-const CarpoolCardDetails = ({bookedBa,profileImage,isBooked,handleOpenModal,rideInfo,setNumberOfPassengers,totalAmount,setTotalAmount}) => {
+const CarpoolCardDetails = ({handleChats,bookedBa,profileImage,isBooked,handleOpenModal,rideInfo,setNumberOfPassengers,totalAmount,setTotalAmount}) => {
   return (
     <div className="bg-white p-6 rounded-lg shadow-lg space-y-6 animate-fadeIn">
       <div className="flex items-center space-x-2">
@@ -205,7 +218,9 @@ const CarpoolCardDetails = ({bookedBa,profileImage,isBooked,handleOpenModal,ride
           <span className="text-sm text-gray-500">Ratings: ⭐(5/5)</span>
         </div>
 
-        <div className="bg-gradient-to-r from-blue-400 to-blue-500 text-white rounded-full w-12 h-12 flex items-center justify-center cursor-pointer">
+        <div className="bg-gradient-to-r from-blue-400 to-blue-500 text-white rounded-full w-12 h-12 flex items-center justify-center cursor-pointer"
+        onClick={()=>handleChats(rideInfo?.userId)}
+        >
           <span className="text-xl">💬</span>
         </div>
       </div>

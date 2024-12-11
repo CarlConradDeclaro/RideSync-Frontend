@@ -71,7 +71,7 @@ const fetchProfileImage = (userId) => {
             {/* Example rides */}
            {
               carpoolRides.length &&
-                carpoolRides.filter(ride => ride.status === 'pending').length > 0 ? (
+                carpoolRides.filter(ride => ride.status === 'pending'  &&  ride.userId == driverInfo?.id).length > 0 ? (
                   carpoolRides
                     .filter(ride => ride.status === 'pending' &&  ride.userId == driverInfo?.id)
                     .slice()
@@ -96,10 +96,9 @@ const fetchProfileImage = (userId) => {
                       No pending rides available
                     </h1>
                   </div>
-
                 )
-              
             }
+         
 
 
           

@@ -11,6 +11,8 @@ import Logout from '../../../../assets/Logout.png';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
 import { LoginContext } from '../../../../context/PassengerContext/Auth/LoginContext';
 
+
+
 const Sidebar = ({ active }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
@@ -24,8 +26,7 @@ const Sidebar = ({ active }) => {
     navigate(route);
   };
   return (
-    <div className="relative max-h-svh ">
-      {/* Sidebar Toggle Icon */}
+    <div className="relative max-h-svh  ">
       <button
         onClick={toggleSidebar}
         className="lg:hidden fixed top-4 left-4 z-50 p-2 bg-blue-500 rounded-full text-white"
@@ -33,7 +34,6 @@ const Sidebar = ({ active }) => {
         <MenuIcon />
       </button>
 
-      {/* Backdrop overlay for closing sidebar on outside click */}
       {isSidebarOpen && (
         <div
           onClick={handleOutsideClick}
@@ -41,10 +41,10 @@ const Sidebar = ({ active }) => {
         ></div>
       )}
 
-      {/* Sidebar */}
-      <Card
-        className={`w-[240px] pl-2 pr-2 flex flex-col fixed lg:static bg-white lg:translate-x-0 transition-transform duration-300 transform ${isSidebarOpen ? 'translate-x-0 shadow-2xl' : '-translate-x-full'
-          } z-50 h-screen`} // Sidebar with high z-index
+      <div
+   className={`bg-white w-[240px] pl-2 pr-2 flex flex-col fixed lg:static shadow-xl  border lg:translate-x-0 transition-transform duration-300 transform ${
+  isSidebarOpen ? 'translate-x-0 shadow-2xl' : '-translate-x-full'
+} z-50 h-screen text-black`}
 
       >
         {/* Close Button inside Sidebar */}
@@ -57,6 +57,7 @@ const Sidebar = ({ active }) => {
 
         <div>
           <h1 className="p-3 flex justify-center text-colorBlue font-bold text-[30px] rounded-2xl">RideSync</h1>
+          <div className='w-full h-[0.5px] bg-gray-500'></div>
         </div>
 
         <div className="flex-grow flex flex-col overflow-y-auto">
@@ -74,7 +75,7 @@ const Sidebar = ({ active }) => {
               key={key}
               onClick={() => handleNavigation(route)}
               className={`flex gap-5 p-3 mb-2 rounded-xl cursor-pointer w-[95%]  
-                ${active === key ? 'bg-sidebarBg shadow-2xl font-bold' : 'hover:bg-sidebarBg hover:shadow-2xl'} 
+                ${active === key ? 'bg-[#00a6ce] border shadow-2xl font-bold' : 'hover:bg-sidebarBg hover:shadow-2xl'} 
                 transition-all duration-300 transform hover:scale-105`}
 
             >
@@ -83,24 +84,27 @@ const Sidebar = ({ active }) => {
                 className="w-[25px] h-[25px] transition-transform duration-300"
                 alt={`${name} icon`}
               />
-              <h1 className={`text-sidebarTxtOff ${active === key ? 'text-black' : 'group-hover:text-black'} font-semibold hover:font-bold hover:text-black`}>
+              <h1 className={`text-sidebarTxtOff ${active === key ? 'text-white' : 'group-hover:text-white'} font-semibold hover:font-bold hover:text-black`}>
                 {name}
               </h1>
             </div>
           ))}
+         
         </div>
-
+  {/* <div className='w-full h-[1px] bg-gray-500'></div> */}
         <div className={`flex gap-5 p-3 mb-2 rounded-xl cursor-pointer 
             ${active === 'logout' ? 'bg-sidebarBg shadow-2xl font-bold' : 'hover:bg-sidebarBg hover:shadow-2xl'} 
             transition-all duration-300 transform hover:scale-105 mt-auto`}
           onClick={logoutUser}
         >
+          
           <img src={Logout} className="w-[25px] h-[25px]" alt="Logout icon" />
           <h1 className={`text-sidebarTxtOff hover:font-bold hover:text-black ${active === 'logout' ? 'text-black' : 'group-hover:text-black'} font-semibold`}>
+            
             Logout
           </h1>
         </div>
-      </Card>
+      </div>
     </div>
   );
 };

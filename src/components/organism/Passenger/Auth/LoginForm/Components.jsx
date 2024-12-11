@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+ import React, { useContext, useState } from 'react';
 import { Card } from '../../../../molecules/Card';
 import RideSyncImage from '../../../../../assets/RideSync.png';
 import { TextInput } from '../../../../atoms/TextInput';
@@ -8,8 +8,7 @@ import { LoginContext } from '../../../../../context/PassengerContext/Auth/Login
 import Alert from '@mui/material/Alert';
 import { Loading } from '../../../../molecules/Loading'; // Import loading component
 import { GoogleLogin } from '@react-oauth/google';
-
-
+import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai'; // Import eye icons
 
 const Components = () => {
   const navigate = useNavigate();
@@ -18,6 +17,9 @@ const Components = () => {
   };
 
   const { loginUser, loginInfo, setLogInInfo, isError, errorMsg, loading, handleGoogleLoginSuccess } = useContext(LoginContext);
+
+  // State to toggle password visibility
+  const [showPassword, setShowPassword] = useState(false);
 
   return (
     <div className='flex justify-center mt-5 pt-10'>
@@ -42,14 +44,26 @@ const Components = () => {
               value={loginInfo.userEmail}
               onChange={(e) => setLogInInfo({ ...loginInfo, userEmail: e.target.value })}
             />
-            <TextInput
-              label="Password*"
-              variant="outlined"
-              size="small"
-              type="password"
-              value={loginInfo.userPassword}
-              onChange={(e) => setLogInInfo({ ...loginInfo, userPassword: e.target.value })}
-            />
+            <div className="relative">
+              <TextInput
+                label="Password*"
+                variant="outlined"
+                size="small"
+                type={showPassword ? "text" : "password"}
+                value={loginInfo.userPassword}
+                onChange={(e) => setLogInInfo({ ...loginInfo, userPassword: e.target.value })}
+              />
+              <div
+                className="absolute inset-y-0 right-3 flex items-center cursor-pointer"
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                {showPassword ? (
+                  <AiOutlineEye size={20} className="text-gray-500" />
+                ) : (
+                  <AiOutlineEyeInvisible size={20} className="text-gray-500" />
+                )}
+              </div>
+            </div>
           </div>
           <div className='pt-5 w-full mb-3'>
             {loading ? ( // Show loading spinner while logging in

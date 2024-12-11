@@ -96,7 +96,7 @@ const Components = () => {
     return (
         <Card className="flex flex-wrap w-full h-[87vh] p-5 ">
             {/* Left Section - Chat List */}
-            <div className="w-full lg:w-1/4 p-4 bg-white shadow-lg rounded-lg mb-4 lg:mb-0 h-full">
+            <div className="w-full lg:w-1/4 p-4 border bg-white shadow-lg rounded-lg mb-4 lg:mb-0 h-full">
                 <h2 className="text-2xl font-bold text-gray-800 mb-6">Chats</h2>
                 <div className="space-y-4 h-[calc(87vh-5rem)] overflow-y-auto">
                     {chats && chats.length > 0 ? (
@@ -126,12 +126,12 @@ const Components = () => {
             </div>
 
             {/* Right Section - Chat Window */}
-            <div className="w-full lg:w-3/4 bg-white shadow-lg rounded-lg flex flex-col h-full">
+            <div className="w-full lg:w-3/4 bg-gray-100 shadow-lg border flex flex-col h-full">
                 {openChatContainer ? (
                     <>
                         {/* Header */}
-                        <div className="flex items-center justify-between p-6 border-b">
-                            <div className="flex items-center">
+                        <div className="flex items-center bg-gray-50 justify-between p-6 border-b">
+                            <div className="flex items-center ">
                                 <img
                                     src={profileImageDriver}
                                     alt="Avatar"
@@ -141,7 +141,7 @@ const Components = () => {
                                     <h2 className="text-lg font-bold text-gray-800">
                                         {driverName && driverName}
                                     </h2>
-                                    <p className="text-sm text-gray-500">Driver</p>
+                                    <p className="text-sm text-gray-500">Passenger</p>
                                 </div>
                             </div>
                             <div className="flex items-center space-x-4">

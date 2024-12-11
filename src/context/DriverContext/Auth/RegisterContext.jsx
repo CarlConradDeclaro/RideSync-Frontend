@@ -1,7 +1,7 @@
 import React, { createContext, useState } from 'react'
 import { BASEURLDrivers, postRequest } from '../../../utils/Service/index.jsx'
 import { nameRegex, emailRegex, phoneRegex } from "../../../constant/regexConstants.jsx";
-
+import { useNavigate } from 'react-router-dom'
 
 
 export const RegisterContext = createContext()
@@ -55,6 +55,7 @@ export const RegisterContextProvider = ({ children }) => {
     const handlVehicleNumSets = (e) => setVehicleNumSets(e.target.value);
     const handlVehicleColor = (e) => setVehicleColor(e.target.value);
     const handlTypeRide = (e) => setTypeRide(e.target.value);
+     const navigate = useNavigate();
  
    
 
@@ -129,12 +130,45 @@ export const RegisterContextProvider = ({ children }) => {
             console.log(response.error);
         } else {
             console.log("Succesfully registered");
-
+            loginUser(userInfo.userEmail,userInfo.userPassword)
         }
 
 
         setErrors({});
     };
+
+
+      const loginUser = async (email,pass) => {
+         
+        try {
+            const response = await postRequest(`${BASEURLDrivers}/login`, JSON.stringify({userEmail:email,userPassword:pass}));
+            if (response && response.user && response.token && response.user.userType == "D") {
+                localStorage.setItem("User", JSON.stringify(response.user));
+                localStorage.setItem("Token", response.token);
+                if(response.user.typeRide == 'carpool'){
+                    navigate('/driver/homeCarpool');
+                    console.log("Login successful, navigating to homeCarpool");
+                }else if(response.user.typeRide == 'rideSharing'){
+                    navigate('/driver/requestContents');
+                    console.log("Login successful, navigating to requestContents");
+                }
+
+            } else if (response.user.userType != "D") {
+                throw new Error(response.message || "You have no access to this page");
+            }
+            else {
+                throw new Error(response.message || "Login failed");
+            }
+        } catch (error) {
+            console.error("Error during login:", error);
+        } 
+    };
+
+
+
+
+
+
 
     return (
         <RegisterContext.Provider

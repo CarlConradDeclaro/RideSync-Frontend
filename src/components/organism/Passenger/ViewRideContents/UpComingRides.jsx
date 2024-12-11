@@ -25,9 +25,9 @@ const UpComingRides = ({ upcomingRides, anchorEl, setAnchorEl, options,
         return currentTime < cancelDeadline;
     };
     return (
-        <Card className="mt-5 p-4 flex flex-col md:flex-col gap-6 items-start w-full shadow-lg rounded-lg md:justify-center">
+        <Card className="mt-5 border bg-gradient-to-b from-white to-gray-50  p-4 flex flex-col md:flex-col gap-6 items-start w-full shadow-lg rounded-lg md:justify-center">
             <div className="flex flex-col w-full md:flex-row md:justify-center gap-5">
-                <Card className="h-[70vh] w-full md:w-[700px] p-2 md:p-5 rounded-lg shadow-md bg-white overflow-hidden">
+                <Card className="h-[70vh] border w-full md:w-[700px] p-2 md:p-5 rounded-lg shadow-md bg-gradient-to-b from-white to-gray-50  overflow-hidden">
                    <div className='flex justify-between'>
                     <h1 className="text-lg font-semibold text-gray-700 mb-4">
                         Booking
@@ -54,7 +54,7 @@ const UpComingRides = ({ upcomingRides, anchorEl, setAnchorEl, options,
                     </div>
 
                 </Card>
-                <Card className="w-full hidden md:block mt-[20px] md:mt-0 md:w-[500px] p-6 md:h-[70vh] overflow-auto custom-scrollbar rounded-xl shadow-lg bg-gradient-to-b from-white to-gray-50 border border-gray-200">
+                <Card className="w-full hidden   md:block mt-[20px] md:mt-0 md:w-[500px] p-6 md:h-[70vh] overflow-auto custom-scrollbar rounded-xl shadow-lg bg-gradient-to-b from-white to-gray-50 border border-gray-200">
                     {
                         upComingRidesInfo?.startLocation
                         &&
@@ -68,7 +68,7 @@ const UpComingRides = ({ upcomingRides, anchorEl, setAnchorEl, options,
                         {/* Trip Details */}
                         <div className="mb-6">
                             <h3 className="text-lg font-semibold text-gray-700 mb-3">🛣️ Trip Information</h3>
-                            id {upComingRidesInfo?.routeId}
+                           
                             <div className="space-y-4">
                                 <div className="flex flex-col">
                                     <span className="text-sm text-gray-500">Start Location:</span>
@@ -106,7 +106,7 @@ const UpComingRides = ({ upcomingRides, anchorEl, setAnchorEl, options,
                         {/* User Details */}
                         <div className="mb-6">
                             <h3 className="text-lg font-semibold text-gray-700 mb-3">👤 Driver Details</h3>
-                            id {upComingRidesInfo?.userId}
+                           
                             <div className="space-y-4">
                                 <div className="flex justify-between items-center">
                                     <span className="text-sm text-gray-500">Name:</span>

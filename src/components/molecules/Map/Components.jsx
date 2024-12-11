@@ -7,9 +7,9 @@ import 'leaflet-routing-machine';
 import 'leaflet-control-geocoder/dist/Control.Geocoder.css'; // Geocoder CSS
 import 'leaflet-control-geocoder';
 import DestMarker from '../../../assets/location.png'
-import Driver from '../../../assets/Driver.png'
+import Driver from '../../../assets/driver2.png'
 import Location from '../../../assets/startLocation.png'
-import otwIcon from '../../../assets/otwIcon.png'
+import otwIcon from '../../../assets/MotorCycle.png'
 
 const Components = ({
   selectedPositionDest,
@@ -28,16 +28,17 @@ const Components = ({
       <div className='ml-3 mr-3 mt-3 '>
         <MapContainer
           center={selectedPosition ? [selectedPosition?.lat, selectedPosition?.lon] : [10.3157, 123.8854]} // Default center
-          zoom={13}
+          zoom={15}
           scrollWheelZoom={true}
           style={{ height, borderRadius }}
           ref={mapRef}
         >
-          <TileLayer
-            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-            url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
-          />
+<TileLayer
+  attribution='&copy; <a href="https://carto.com/">CARTO</a>'
+  url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
+/>
 
+ 
           {selectedPosition && (
             <Marker
               position={[selectedPosition?.lat, selectedPosition?.lon]}

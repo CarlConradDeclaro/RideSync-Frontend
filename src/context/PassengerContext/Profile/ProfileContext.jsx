@@ -125,9 +125,9 @@ export const ProfileContextProvider = ({ children }) => {
 
     }
 
-    const handleFileUpload = async (event) => {
-        const val = event.target.files[0];
-        if (!val) return;
+    const handleFileUpload = async (val) => {
+        // const val = event.target.files[0];
+        // if (!val) return;
         setProfilePricture(val)    
     };
 

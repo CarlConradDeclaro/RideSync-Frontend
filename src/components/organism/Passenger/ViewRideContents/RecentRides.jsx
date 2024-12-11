@@ -77,9 +77,9 @@ const RecentRides = ({ mapRef, currentRoute }) => {
 
     return (
        
-       <Card className=" mt-5 p-4 flex flex-col md:flex-col gap-6 items-start w-full shadow-lg rounded-lg md:justify-center ">
+       <Card className="border bg-gradient-to-b from-white to-gray-50 mt-5 p-4 flex flex-col md:flex-col gap-6 items-start w-full shadow-xl rounded-lg md:justify-center ">
             <div className="flex flex-col w-full md:flex-row md:justify-center gap-5 ">
-                <Card className="h-[70vh]  w-full md:w-[700px] p-2 md:p-5 rounded-lg shadow-md bg-white overflow-hidden">
+                <Card className="h-[70vh] border w-full md:w-[700px] p-2 md:p-5 rounded-lg shadow-2xl bg-gradient-to-b from-white to-gray-50 overflow-hidden">
                     <h1 className="text-lg font-semibold text-gray-700 mb-4">
                         Recent Rides
                     </h1>
@@ -156,7 +156,7 @@ const RecentRides = ({ mapRef, currentRoute }) => {
                         </Card>
                         :
                          
-                         <Card className=" h-[70vh]  w-full md:w-[500px] p-4 rounded-xl shadow-lg bg-gradient-to-b from-white to-gray-50   overflow-y-auto space-y-4 custom-scrollbar ">
+                         <Card className="border h-[70vh]  w-full md:w-[500px] p-4 rounded-xl shadow-lg bg-gradient-to-b from-white to-gray-50   overflow-y-auto space-y-4 custom-scrollbar ">
                             {
                                 recentRides?.userFn &&
                                 <>
