@@ -66,16 +66,17 @@ const Components = () => {
   
 
   return (
-    <div className="md:pl-3 animate-fadeIn">
-      <div className="relative w-full h-[80vh]">
+    <div className="md:pl-3  animate-fadeIn " >
+
+      <div className="relative  w-full h-[80vh]">
         {/* MapView */}
-        <div className="z-0">
+        <div className="z-0   ">
           <MapView />
         </div>
 
         {/* Sliding Panel */}
         <div
-          className={`absolute top-2 h-[86vh] backdrop-blur-sm rounded-lg shadow-xl transform ${
+          className={`absolute top-2 h-[86vh]  bg-gradient-to-b backdrop-blur-xl  rounded-lg shadow-xl transform ${
             isPanelOpen ? "translate-x-0" : "-translate-x-full"
           } transition-transform duration-300 ease-in-out w-[470px] pointer-events-auto`}
         >

@@ -6,6 +6,8 @@ import { AiOutlineCar, AiOutlineStar, AiOutlineMail } from "react-icons/ai";
 import { MdVerified, MdPhone, MdLocationOn } from "react-icons/md";
 import { Ratings } from "../../../atoms/Ratings";
 import { Skeleton } from "../../../atoms/Skeleton";
+import { FaUser,FaEdit, FaEnvelope, FaPhoneAlt } from 'react-icons/fa';
+
 
 const Profile = () => {
   const { userData,profileImage} = useContext(ProfileContext);
@@ -14,7 +16,7 @@ const Profile = () => {
   return (
     <>
       {isEditing ? (
-        <EditProfile userData={userData} onClose={() => setIsEditing(false)} />
+        <EditProfile profileImage={profileImage} userData={userData} onClose={() => setIsEditing(false)} />
       ) : (
         <>
           {/* Profile Header */}
@@ -132,8 +134,7 @@ const Profile = () => {
 };
 
 
-const EditProfile = ({ userData, onClose }) => {
-  
+ const EditProfile = ({ profileImage,userData, onClose }) => {
   const {
     userInfo,
     firstname,
@@ -145,82 +146,122 @@ const EditProfile = ({ userData, onClose }) => {
     setEmail,
     setPhoneNum,
     handleSumitNewProfileInfo,
-    handleFileUpload
-  } = useContext(ProfileContext)
+    handleFileUpload,
+  } = useContext(ProfileContext);
 
- 
+  const [previewImage, setPreviewImage] = useState(profileImage); // State to hold the preview image
 
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        setPreviewImage(reader.result); // Set the preview image
+      };
+      reader.readAsDataURL(file);
+      handleFileUpload(file); // Call your existing function
+    }
+  };
 
   return (
-    <div className="p-6 bg-gradient-to-br from-white to-blue-50 rounded-lg shadow-xl relative">
-      <h2 className="text-2xl font-extrabold text-gray-800 mb-6">
-        Edit Profile
-      </h2>
-      <div>
-        <div>
-          <input 
-          type='file'  
-          onChange={handleFileUpload}
-          ></input>
-        </div>
-        <div className="mb-6">
-          <label className="block text-gray-700 font-medium mb-2">Firstname</label>
-          <input
-            type="text"
-            value={firstname}
-            onChange={(e)=>setFirstname(e.target.value)}
-            className="w-full border border-gray-300 rounded-lg p-3 text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-400"
-            placeholder="Enter your first name"
+    
+
+<div className="p-8 bg-gradient-to-br from-white to-blue-50 rounded-xl shadow-xl relative max-w-3xl mx-auto">
+  <h2 className="text-3xl font-extrabold text-gray-800 mb-8 text-center">Edit Profile</h2>
+
+  <div>
+    <div className="mb-8 flex justify-center items-center">
+      <div className="relative">
+        {/* Profile Image */}
+        {previewImage && (
+          <img
+            src={previewImage}
+            alt="Profile Preview"
+            className="w-32 h-32 rounded-full object-cover shadow-lg"
           />
-        </div>
-        <div className="mb-6">
-          <label className="block text-gray-700 font-medium mb-2">Lastname</label>
-          <input
-            type="text"
-            value={lastname}
-            onChange={(e)=>setLastname(e.target.value)}
-            className="w-full border border-gray-300 rounded-lg p-3 text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-400"
-            placeholder="Enter your last name"
-          />
-        </div>
-        <div className="mb-6">
-          <label className="block text-gray-700 font-medium mb-2">Email</label>
-          <input
-            type="email"
-            value={email}
-            onChange={(e)=>setEmail(e.target.value)}
-            className="w-full border border-gray-300 rounded-lg p-3 text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-400"
-            placeholder="Enter your email address"
-          />
-        </div>
-         <div className="mb-6">
-          <label className="block text-gray-700 font-medium mb-2">Phone</label>
-          <input
-            type="text"
-            value={phonNum}
-            onChange={(e)=>setPhoneNum(e.target.value)}
-            className="w-full border border-gray-300 rounded-lg p-3 text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-400"
-            placeholder="Enter your email address"
-          />
-        </div>
-        <div className="flex justify-end space-x-4">
-          <button
-            type="button"
-            onClick={onClose}
-            className="px-6 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 focus:outline-none"
-          >
-            Cancel
-          </button>
-          <button
-           
-            className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none"
-           onClick={handleSumitNewProfileInfo}
-          >
-            Save
-          </button>
-        </div>
+        )}
+        
+        {/* Edit Icon */}
+        <label
+          htmlFor="file-input"
+          className="absolute bottom-0 right-0 bg-blue-500 text-white rounded-full p-2 cursor-pointer flex items-center"
+        >
+          <FaEdit className="text-xl" /> {/* React Icon Edit */}
+        </label>
       </div>
     </div>
+
+    {/* Hidden File Input */}
+    <input
+      type="file"
+ 
+      onChange={handleFileChange}
+      id="file-input"
+      className="hidden"
+    />
+
+    {/* Form Fields */}
+    <div className="space-y-6">
+      <div className="flex items-center border border-gray-300 rounded-lg p-4">
+        <FaUser className="text-gray-500 mr-3" />
+        <input
+          type="text"
+          value={firstname}
+          onChange={(e) => setFirstname(e.target.value)}
+          className="w-full text-gray-800    outline-none"
+          placeholder="Enter your first name"
+        />
+      </div>
+      <div className="flex items-center border border-gray-300 rounded-lg p-4">
+        <FaUser className="text-gray-500 mr-3" />
+        <input
+          type="text"
+          value={lastname}
+          onChange={(e) => setLastname(e.target.value)}
+          className="w-full  text-gray-800   outline-none"
+          placeholder="Enter your last name"
+        />
+      </div>
+      {/* <div className="flex items-center border border-gray-300 rounded-lg p-4">
+        <FaEnvelope className="text-gray-500 mr-3" />
+        <input
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          className="w-full text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-400"
+          placeholder="Enter your email address"
+        />
+      </div> */}
+      <div className="flex items-center border border-gray-300 rounded-lg p-4">
+        <FaPhoneAlt className="text-gray-500 mr-3" />
+        <input
+          type="text"
+          value={phonNum}
+          onChange={(e) => setPhoneNum(e.target.value)}
+          className="w-full text-gray-800    outline-none"
+          placeholder="Enter your phone number"
+        />
+      </div>
+    </div>
+
+    {/* Action Buttons */}
+    <div className="flex justify-end space-x-6 mt-8">
+      <button
+        type="button"
+        onClick={onClose}
+        className="px-8 py-3 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 focus:outline-none transition duration-200"
+      >
+        Cancel
+      </button>
+      <button
+        onClick={handleSumitNewProfileInfo}
+        className="px-8 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none transition duration-200"
+      >
+        Save
+      </button>
+    </div>
+  </div>
+</div>
   );
 };
 

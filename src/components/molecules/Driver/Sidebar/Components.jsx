@@ -73,9 +73,10 @@ const Components = ({ active }) => {
                         <div
                             key={key}
                             onClick={() => handleNavigation(route)}
-                            className={`flex gap-5 p-3 mb-2 rounded-xl cursor-pointer w-[95%]  
-                ${active === key ? 'bg-sidebarBg shadow-2xl font-bold' : 'hover:bg-sidebarBg hover:shadow-2xl'} 
+                             className={`flex gap-5 p-3 mb-2 rounded-xl cursor-pointer w-[95%]  
+                ${active === key ? 'bg-[#00a6ce] border shadow-2xl font-bold' : 'hover:bg-sidebarBg hover:shadow-2xl'} 
                 transition-all duration-300 transform hover:scale-105`}
+
 
                         >
                             <img
@@ -83,7 +84,7 @@ const Components = ({ active }) => {
                                 className="w-[25px] h-[25px] transition-transform duration-300"
                                 alt={`${name} icon`}
                             />
-                            <h1 className={`text-sidebarTxtOff ${active === key ? 'text-black' : 'group-hover:text-black'} font-semibold hover:font-bold hover:text-black`}>
+                            <h1 className={`text-sidebarTxtOff ${active === key ? 'text-white' : 'group-hover:text-white'} font-semibold hover:font-bold hover:text-black`}>
                                 {name}
                             </h1>
                         </div>

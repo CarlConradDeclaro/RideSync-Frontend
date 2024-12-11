@@ -20,7 +20,7 @@ import 'leaflet-control-geocoder'; // Geocoder JS
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import DestMarker from '../../../../assets/location.png'
 import Driver from '../../../../assets/driver2.png'
-import otwIcon from '../../../../assets/otwIcon.png'
+import otwIcon from '../../../../assets/MotorCycle.png'
 import StartLocation from '../../../../assets/startLocation.png'
 import Payment from './Payment';
 import { BASEURL, updateRequest } from '../../../../utils/Service';

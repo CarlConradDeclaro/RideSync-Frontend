@@ -4,11 +4,18 @@ import Location from "../../../../assets/HLocationIcon.png";
 import HTime from "../../../../assets/HTime.png";
 import clock from "../../../../assets/clock.png";
 import locationIconHeader from "../../../../assets/locationIconHeader.png";
+import { useNavigate } from "react-router-dom";
 
 const Components = () => {
   const [userInfo, setUserInfo] = useState(null);
   const [userProfileImage, setUserProfileImage] = useState(DefaultProfile);
   const [time, setTime] = useState("");
+  const navigate = useNavigate()
+  const handelNavigateProfile=()=>{
+    navigate('/passenger/profileContents')
+    console.log("naviget");
+    
+  }
 
   useEffect(() => {
     const storedUserInfo = localStorage.getItem('User');
@@ -93,11 +100,14 @@ const Components = () => {
             alt="Profile"
           />
         ) : (
-          <img
+      <div onClick={handelNavigateProfile}>
+         <img
             src={userProfileImage}
             className="w-10 h-10 md:w-12 md:h-12 rounded-full border-2 border-gray-300 hover:border-white cursor-pointer shadow-md"
             alt="Profile"
+           
           />
+      </div>
         )}
       </div>
     </div>

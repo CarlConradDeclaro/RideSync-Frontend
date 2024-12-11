@@ -1,6 +1,7 @@
 import { createContext, useCallback, useState } from "react";
 import { nameRegex, emailRegex, phoneRegex } from "../../../constant/regexConstants.JSX";
 import { BASEURL, postRequest } from "../../../utils/Service";
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 
 export const RegisterContext = createContext()
 
@@ -38,6 +39,10 @@ export const RegisterContextProvider = ({ children }) => {
     const handleMouseUpConfPassword = (event) => event.preventDefault();
 
     const [errors, setErrors] = useState({});
+    const navigate = useNavigate();
+    const handleLogin = () => {
+        navigate('/passenger/login');
+    };
 
 
 
@@ -107,10 +112,31 @@ export const RegisterContextProvider = ({ children }) => {
             console.log(response.error);
         } else {
             console.log("Succesfully registered");
+            loginUser(userInfo.userEmail,userInfo.userPassword)
         }
-
-
         setErrors({});
+    };
+
+
+      const loginUser = async (email,pass) => {
+       
+        
+        try {
+            const response = await postRequest(`${BASEURL}/login`, JSON.stringify({userEmail:email,userPassword:pass}));
+            if (response && response.user && response.token && response.user?.userType == "P") {
+                localStorage.setItem("User", JSON.stringify(response.user));
+                localStorage.setItem("Token", response.token);
+                navigate('/passenger/homeContents');
+                console.log("Login successful, navigating to homeContents");
+            } else if (response.user?.userType != "P") {
+                throw new Error(response.message || "You have no access to this page");
+            }
+            else {
+                throw new Error(response.message || "Login failed");
+            }
+        } catch (error) {
+            console.error("Error during login:", error);
+        }  
     };
 
 

@@ -82,7 +82,7 @@ const SelectedDriver = () => {
 
 
     return (
-        <div className="flex flex-col items-center animate-slideInFromRight">
+        <div className="flex flex-col items-center  animate-slideInFromRight">
             <div className="flex   flex-col gap-6 sm:w-full md:w-[450px] rounded p-5">
                 <h1 className="text-2xl font-semibold text-gray-800">Driver</h1>
                 <span>

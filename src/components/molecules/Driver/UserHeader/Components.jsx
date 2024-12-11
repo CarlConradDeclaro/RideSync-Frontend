@@ -2,6 +2,9 @@ import React, { useEffect, useState } from 'react';
 import DefaultProfile from '../../../../assets/DefaultProfile.png';
 import Location from '../../../../assets/HLocationIcon.png';
 import HTime from '../../../../assets/HTime.png';
+import clock from "../../../../assets/clock.png";
+import locationIconHeader from "../../../../assets/locationIconHeader.png";
+
 
 const Components = () => {
     const [time, setTime] = useState('');
@@ -74,7 +77,7 @@ const Components = () => {
                 {/* Time */}
                 <div className="hidden sm:flex items-center space-x-2">
                     <img
-                        src={HTime}
+                        src={clock}
                         className="w-5 h-5 md:w-6 md:h-6 rounded-full object-cover"
                         alt="Time Icon"
                     />
@@ -84,7 +87,7 @@ const Components = () => {
                 {/* Location */}
                 <div className="hidden sm:flex items-center space-x-2">
                     <img
-                        src={Location}
+                        src={locationIconHeader}
                         className="w-5 h-5 md:w-6 md:h-6 rounded-full object-cover"
                         alt="Location Icon"
                     />

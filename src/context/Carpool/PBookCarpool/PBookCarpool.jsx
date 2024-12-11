@@ -273,6 +273,18 @@ export const PBookCarpoolContextProvider = ({children})=>{
             setBookedBa(result); 
         }
     }
+
+    const handleChats = async (driverId) => {
+    const user1_Id = passengerInfo?.id;
+    const user2_Id = driverId;
+    try {
+      const response = await postRequest(`${BASEURL}/createChat`, JSON.stringify({ user1_Id, user2_Id }))
+      console.log("handle chat response", response);
+      navigate('/passenger/messageContents');
+    } catch (error) {
+      console.error(error);
+    }
+  }
  
 
  
@@ -303,7 +315,8 @@ export const PBookCarpoolContextProvider = ({children})=>{
             suggestionsDest,
             handleSelectSuggestion,
             handleSelectSuggestionDest,
-            profileImage
+            profileImage,
+            handleChats
         }}
         >
             {children}

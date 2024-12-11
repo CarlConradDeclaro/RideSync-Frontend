@@ -42,7 +42,7 @@ const CreateRides = () => {
     }
 
     return (
-        <div className="flex flex-col  bg md:w-[430px]"> 
+        <div className="flex backdrop-blur-2xl   flex-col  bg md:w-[430px]"> 
             <div className="flex flex-row gap-6 items-center justify-start w-full max-w-md ml-5 mb-3">
                     {/* Carpool Section */}
                     <div 
@@ -74,7 +74,7 @@ const CreateRides = () => {
                     </div>
                 </div>
 
-            <div className="flex  flex-col gap-5 border-2 shadow-lg  items-start w-full md:w-[450px] h-[300px] md:h-[300px] rounded-2xl p-5">
+            <div className="flex  flex-col gap-5 border-2 shadow-lg bg-gray-50 items-start w-full md:w-[450px] h-[300px] md:h-[300px] rounded-2xl p-5">
 
                 <div className="flex items-center mb-5 space-x-4">
 
