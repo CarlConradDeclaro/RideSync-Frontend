@@ -25,9 +25,11 @@ export const PBookCarpoolContextProvider = ({children})=>{
     const [suggestions, setSuggestions] = useState([]);
     const [suggestionsDest, setSuggestionsDest] = useState([]);
     const [profileImage,setProfileImage]= useState()
+    const hostname = window.location.hostname;
+
    
     useEffect(() => {
-        const newSocket = io("http://localhost:8000")
+        const newSocket = io(`http://${hostname}:8000`)
         setSocket(newSocket)
         newSocket.on("connect", () => {
           console.log("from frontend: " + newSocket.id);
@@ -90,7 +92,7 @@ export const PBookCarpoolContextProvider = ({children})=>{
         setLeavingFrom(query);
 
         if (query.length > 2) {
-            const response = await fetch(`http://localhost:8000/api/users/search?query=${encodeURIComponent(query)}`);
+            const response = await fetch(`http://${hostname}:8000/api/users/search?query=${encodeURIComponent(query)}`);
 
             if (!response.ok) {
                 console.error('Failed to fetch suggestions');
@@ -110,7 +112,7 @@ export const PBookCarpoolContextProvider = ({children})=>{
         setGoingTo(query);
 
         if (query.length > 2) {
-            const response = await fetch(`http://localhost:8000/api/users/search?query=${encodeURIComponent(query)}`);
+            const response = await fetch(`http://${hostname}:8000/api/users/search?query=${encodeURIComponent(query)}`);
 
             if (!response.ok) {
                 console.error('Failed to fetch suggestions');

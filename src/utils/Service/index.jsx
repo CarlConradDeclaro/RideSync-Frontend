@@ -1,5 +1,8 @@
-export const BASEURL = 'http://localhost:8000/api/users'
-export const BASEURLDrivers = 'http://localhost:8000/api/drivers'
+const hostname = window.location.hostname;
+
+export const BASEURL = `http://${hostname}:8000/api/users`;
+export const BASEURLDrivers = `http://${hostname}:8000/api/drivers`;
+
 
 export const postRequest = async (url, body) => {
     const response = await fetch(url, {

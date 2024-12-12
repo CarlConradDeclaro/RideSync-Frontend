@@ -40,11 +40,12 @@ export const HomeCarpoolContextProvider = ({children})=>{
     const [socketID, setSocketID] = useState()
     const [onlineUsers, setOnlineUsers] = useState([])
     const [registeredVehicle,setRegisterdVehicle] = useState()
+    const hostname = window.location.hostname;
 
   
 
     useEffect(() => {
-      const newSocket = io("http://localhost:8000")
+      const newSocket = io(`http://${hostname}:8000`)
       setSocket(newSocket)
       newSocket.on("connect", () => {
         console.log("from frontend: " + newSocket.id);
@@ -83,7 +84,7 @@ export const HomeCarpoolContextProvider = ({children})=>{
     const getDriverVehicle =async()=>{
         try { 
             if(driverInfo && driverInfo.id){
-                const result  = await fetch("http://localhost:8000/api/users")
+                const result  = await fetch(`http://${hostname}:8000/api/users`)
                 const users = await result.json()
                 const filtered = users.filter((u)=> u.userId == driverInfo?.id)
                 setRegisterdVehicle(filtered[0].modelName)
@@ -118,7 +119,7 @@ export const HomeCarpoolContextProvider = ({children})=>{
         const query = e.target.value;
         setSearchInput(query);
         if (query.length > 2) {
-          const response = await fetch(`http://localhost:8000/api/users/search?query=${encodeURIComponent(query)}`);
+          const response = await fetch(`http://${hostname}:8000/api/users/search?query=${encodeURIComponent(query)}`);
           if (!response.ok) {
             console.error('Failed to fetch suggestions');
             return;
@@ -135,7 +136,7 @@ export const HomeCarpoolContextProvider = ({children})=>{
         const query = e.target.value;
         setSearchInputDest(query);
         if (query.length > 2) {
-          const response = await fetch(`http://localhost:8000/api/users/search?query=${encodeURIComponent(query)}`);
+          const response = await fetch(`http://${hostname}:8000/api/users/search?query=${encodeURIComponent(query)}`);
           if (!response.ok) {
             console.error('Failed to fetch suggestions');
             return;

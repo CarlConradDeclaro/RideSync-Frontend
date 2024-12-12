@@ -14,6 +14,8 @@ export const MessageContextProvider = ({ children }) => {
     const [driverName, setDriverName] = useState()
     const [conversation, setConversation] = useState([])
     const [driverId, setDriverId] = useState()
+    const hostname = window.location.hostname;
+
 
     useEffect(() => {
         const storedUserInfo = localStorage.getItem("User")
@@ -32,7 +34,7 @@ export const MessageContextProvider = ({ children }) => {
 
 
     useEffect(() => {
-        const newSokcet = io("http://localhost:8000")
+        const newSokcet = io(`http://${hostname}:8000`)
         setSocket(newSokcet)
         newSokcet.on("connect", () => {
             console.log("from frontend message page", newSokcet.id);

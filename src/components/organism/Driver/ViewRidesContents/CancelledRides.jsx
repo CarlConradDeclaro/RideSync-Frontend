@@ -5,7 +5,7 @@ import { CancenlledList } from './List'
 
 const CancelledRides = ({cancelledRoutes}) => {
     return (
-        <div className='flex flex-col gap-5 p-3 h-[75vh] md:flex md:flex-row'>
+        <div className='flex flex-col gap-5 p-3 h-[75vh] md:flex md:flex-row bg-gradient-to-b border from-white to-gray-50 rounded-lg'>
             <Card className='w-[630px] p-2  overflow-y-auto h-[400xp]'>
                 <h2 className='p-2'>Cancelled Rides:</h2>
 

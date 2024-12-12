@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Sidebar } from '../../../molecules/Carpool/Sidebar'
-import { UserHeader } from '../../../molecules/Driver/UserHeader'
+import { UserHeader } from '../../../molecules/Carpool/UserHeader'
 import { Loading } from '../../../molecules/Loading';
 import CreateRides from '../../../organism/Carpool/HomeCarpool/CreateRides'
 
@@ -18,8 +18,8 @@ const Components = () => {
 
 
     return (
-        <div className='flex h-full'>
-            <div className='max-h-screen '>
+        <div className='flex h-full '>
+            <div className='max-h-screen  sticky top-0 z-50'>
                 <Sidebar active="request" />
             </div>
             <div className='w-full '>

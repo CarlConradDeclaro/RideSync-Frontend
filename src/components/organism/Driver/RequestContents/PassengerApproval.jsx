@@ -186,6 +186,11 @@ const PassengerApproval = ({ }) => {
                 (error) => {
                     console.error("Error getting location:", error);
                     alert("Unable to retrieve your location. Please ensure location services are enabled.");
+                },
+                  {
+                    enableHighAccuracy: true,
+                    timeout: 10000,
+                    maximumAge: 0
                 }
             );
         } else {

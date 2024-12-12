@@ -22,7 +22,7 @@ const Booking = ({markBookingAsDone, handleCancelBooking,mapRefBooking, pickUp, 
 
 
     return (
-        <div className='flex flex-col gap-5 p-4 h-[75vh] md:flex md:flex-row'>
+        <div className='flex flex-col gap-5 p-4 h-[75vh] md:flex md:flex-row bg-gradient-to-b border from-white to-gray-50 rounded-lg'>
             <Card className='w-full   md:w-[630px] p-4  overflow-y-auto custom-scrollbar '>
                 <h2 className='text-xl font-semibold mb-4'>Upcoming Rides:</h2>
                 {

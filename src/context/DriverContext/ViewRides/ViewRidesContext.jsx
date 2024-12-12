@@ -58,7 +58,9 @@ export const ViewRidesContextProvider = ({ children }) => {
 
     const [pickUp, setPickUp] = useState()
     const [destination, setDestination] = useState()
-        const [rateModal,setRateModal] = useState(false)
+    const [rateModal,setRateModal] = useState(false)
+    const hostname = window.location.hostname;
+
 
 
 
@@ -78,7 +80,7 @@ export const ViewRidesContextProvider = ({ children }) => {
     }, [])
 
     useEffect(() => {
-        const newSocket = io("http://localhost:8000");
+        const newSocket = io(`http://${hostname}:8000`);
         setSocket(newSocket);
 
         newSocket.on("connect", () => {

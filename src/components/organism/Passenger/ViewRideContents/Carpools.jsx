@@ -54,9 +54,9 @@ const Carpools = () => {
    
 }
   return (
-    <Card className="flex border flex-col md:flex-row p-6 mt-5 rounded-lg min-h-screen gap-4 ">
+    <Card className="flex border flex-col md:flex-row p-6 mt-5 rounded-lg min-h-screen gap-4 bg-gradient-to-b  from-white to-gray-50">
       {/* Left Section: Booking List */}
-      <div className="flex-1 h-[100vh] w-[900px] bg-white shadow-lg rounded-lg p-6 border overflow-y-auto transition-all duration-500 ease-in-out transform hover:shadow-2xl">
+      <div className="flex-1 h-[100vh] w-[900px] bg-gradient-to-b  from-white to-gray-50 shadow-lg rounded-lg p-6 border overflow-y-auto transition-all duration-500 ease-in-out transform hover:shadow-2xl">
         <h2 className="text-2xl font-semibold mb-6 text-gray-700">Your Carpools</h2>
         <div className="space-y-4">
           {
@@ -99,17 +99,17 @@ const Carpools = () => {
   return (
     <div
       onClick={() => handleMapRoute(booking)}
-      className="focus:outline-none" // Removes the blue glow when clicked
+      className="focus:outline-none " // Removes the blue glow when clicked
     >
       <div
-        className={`p-6 rounded-lg border cursor-pointer shadow-md transition duration-300 ease-in-out transform ${
+        className={`bg-gradient-to-b  from-white to-gray-50 p-6 rounded-lg border cursor-pointer shadow-md transition duration-300 ease-in-out transform ${
           isSelected
             ? "border-blue-500   scale-105 shadow-xl"
             : "border-gray-200 bg-white hover:bg-gray-50"
         } hover:shadow-2xl hover:scale-105`}
         onClick={onSelect}
       >
-        <div className="flex justify-between items-center">
+        <div className="flex justify-between items-center ">
           <p className="text-gray-700 font-semibold">
             <span role="img" aria-label="calendar">📅</span>
             <strong>Date:</strong>{" "}

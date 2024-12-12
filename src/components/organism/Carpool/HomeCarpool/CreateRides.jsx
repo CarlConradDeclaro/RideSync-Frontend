@@ -77,7 +77,7 @@ const CreateRides = () => {
   };
 
   return (
-    <div className="pl-6 pr-6 pt-4">
+    <div className="pl-6 pr-6 pt-4 ">
       {/* Header Section */}
       <div className="flex justify-between items-center mb-6">
         <Button name="Back" variant="outlined" onClick={handleNavigation} />
@@ -87,9 +87,9 @@ const CreateRides = () => {
       </div>
 
       {/* Content Section */}
-      <div className="flex flex-wrap lg:flex-nowrap gap-6">
+      <div className="flex flex-wrap b lg:flex-nowrap gap-6">
         {/* Ride Details Form */}
-        <div className="flex flex-col bg-white shadow-lg rounded-lg p-6 w-full lg:w-[50%] space-y-5">
+        <div className="flex border flex-col bg-gradient-to-b from-white to-gray-50 shadow-lg rounded-lg p-6 w-full lg:w-[50%] space-y-5">
           {/* Pickup Location */}
           <div className="w-full relative">
             <TextInput
@@ -210,9 +210,9 @@ const CreateRides = () => {
         />
 
         {/* Map Section */}
-        <div className="relative bg-white shadow-lg rounded-lg w-full overflow-hidden">
+        <div className="relative   rounded-lg w-full overflow-hidden">
           {/* Text Above the Map */}
-          <div className="flex gap-5 absolute top-4 left-[55px] shadow-lg right-0 z-10 px-4 mr-[55px]">
+          <div className="flex gap-5 absolute top-4 left-[55px] right-0 z-10 px-4 mr-[55px]">
             <h1 className="text-sm md:text-2xl font-bold text-gray-800">
               {totalDuration ? `${totalDuration} mins` : "0 min"}
             </h1>
