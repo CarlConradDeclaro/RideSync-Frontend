@@ -71,7 +71,7 @@ const AdditionalDetails = () => {
                     <h2 className='text-textPI font-semibold p-3 text-sm md:text-lg'>Vehicle Information</h2>
                     <div className='grid grid-cols-1 md:grid-cols-2 gap-4 p-4'>
                         <TextInput
-                            label="Car Type*"
+                            label="Type*"
                             variant="outlined"
                             size="small"
                             className="w-full"

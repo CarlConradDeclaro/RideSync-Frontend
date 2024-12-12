@@ -47,6 +47,8 @@ export const FindRouteContextProvider = ({ children }) => {
   const [warning,setWarning]= useState(false);
   const [isRidesCompleted, setIsRideCompleted] = useState(false)
   const navigate = useNavigate();
+  const hostname = window.location.hostname;
+
 
 
 
@@ -183,7 +185,7 @@ export const FindRouteContextProvider = ({ children }) => {
 
 
   useEffect(() => {
-    const newSocket = io("http://localhost:8000")
+    const newSocket = io(`http://${hostname}:8000`)
     setSocket(newSocket)
 
     newSocket.on("connect", () => {
@@ -276,7 +278,7 @@ export const FindRouteContextProvider = ({ children }) => {
     setSearchInput(query);
 
     if (query.length > 2) {
-      const response = await fetch(`http://localhost:8000/api/users/search?query=${encodeURIComponent(query)}`);
+      const response = await fetch(`http://${hostname}:8000/api/users/search?query=${encodeURIComponent(query)}`);
 
       if (!response.ok) {
         console.error('Failed to fetch suggestions');
@@ -312,7 +314,7 @@ export const FindRouteContextProvider = ({ children }) => {
     setSearchInputDest(query);
 
     if (query.length > 2) {
-      const response = await fetch(`http://localhost:8000/api/users/search?query=${encodeURIComponent(query)}`);
+      const response = await fetch(`http://${hostname}:8000/api/users/search?query=${encodeURIComponent(query)}`);
 
       if (!response.ok) {
         console.error('Failed to fetch suggestions');

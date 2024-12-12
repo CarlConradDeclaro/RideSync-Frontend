@@ -53,10 +53,10 @@ const RequestRides = () => {
     return (
         <div className="m-5">
 
-            <div className="md:flex gap-5 md:justify-center grid grid-cols-1">
+            <div className="md:flex gap-1  md:justify-center grid grid-cols-1">
                 {/* Left Card */}
                 <div className="w-full md:max-w-[370px] h-[400px]">
-                    <Card className="h-full rounded-2xl shadow-lg overflow-y-auto p-5 bg-white">
+                    <Card className="h-full rounded-2xl shadow-lg overflow-y-auto p-5 bg-gradient-to-b border from-white to-gray-50">
                         <h1 className="text-xl font-semibold mb-3">Requests Rides</h1>
                         <div className="flex flex-col space-y-4">
                             {
@@ -92,13 +92,12 @@ const RequestRides = () => {
                 </div>
 
                 {/* Map Card */}
-                <div className="w-full  z-0">
-                    <Card className="h-full rounded-2xl shadow-lg overflow-hidden">
-                        <h1 className="pl-1 text-xl font-semibold text-gray-800">Route:</h1>
+                <div className="w-full  z-0  border rounded-md">
+                    <div className="h-full rounded-2xl   overflow-hidden">
                         <div className="h-full">
-                            <Map mapRef={driverMap} height="80vh" selectedPosition={selectedPosition} selectedPositionDest={selectedPositionDest} customIcon={customIcon} />
+                            <Map mapRef={driverMap} height="85vh" selectedPosition={selectedPosition} selectedPositionDest={selectedPositionDest} customIcon={customIcon} />
                         </div>
-                    </Card>
+                    </div>
                 </div>
 
                 {/* Info Drawer */}

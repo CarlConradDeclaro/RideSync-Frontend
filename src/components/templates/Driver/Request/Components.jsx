@@ -19,7 +19,7 @@ const Components = () => {
 
     return (
         <div className='flex h-full'>
-            <div className='max-h-screen '>
+            <div className='max-h-screen sticky top-0 z-50'>
                 <Sidebar active="request" />
             </div>
             <div className='w-full '>

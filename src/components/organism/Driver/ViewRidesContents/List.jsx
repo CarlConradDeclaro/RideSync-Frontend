@@ -9,7 +9,7 @@ import Location from '../../../../assets/Location.png';
 export const RecentList = ({ startLocation, endLocation, status, startLatitude, startLongitude, endLatitude, endLongitude, handleRecentRideInfo, routes }) => {
 
     return (
-        <div className="   p-4 mb-4 hover:shadow-xl cursor-pointer transition-shadow duration-300 bg-gradient-to-b  to-gray-50   rounded-lg shadow-md flex md:flex-nowrap items-center gap-4"
+        <div className=" border from-white   p-4 mb-4 hover:shadow-xl cursor-pointer transition-shadow duration-300 bg-gradient-to-b  to-gray-50   rounded-lg shadow-md flex md:flex-nowrap items-center gap-4"
             onClick={() => handleRecentRideInfo(routes.userId,{ lat: startLatitude, lon: startLongitude }, { lat: endLatitude, lon: endLongitude }, routes.userFn, routes.userLn, routes.userPhone, routes.userRating, startLocation, endLocation, routes.totalAmount, routes.estimatedDuration, routes.distance)}
         >
             
@@ -42,13 +42,13 @@ export const RecentList = ({ startLocation, endLocation, status, startLatitude, 
 
 export const BookingList = ({ travelDate, totalAmount, startLocation, endLocation, bookings, handleBookingRideInfo }) => {
     return (
-        <Card className=" from-white to-gray-50  h-auto w-full md:w-auto p-4 mb-4 rounded-lg hover:shadow-2xl transition-shadow duration-300 ease-in-out cursor-pointer">
+        <Card className=" bg-gradient-to-b border from-white to-gray-50  h-auto w-full md:w-auto p-4 mb-4 rounded-lg hover:shadow-2xl transition-shadow duration-300 ease-in-out cursor-pointer">
             <div className="flex flex-col  text-gray-800"
                 onClick={() => handleBookingRideInfo(bookings.userId,bookings.routeId,{ lat: bookings.startLatitude, lon: bookings.startLongitude }, { lat: bookings.endLatitude, lon: bookings.endLongitude }, bookings.startLocation,
                     bookings.endLocation, bookings.estimatedDuration, bookings.distance, bookings.totalAmount, bookings.travelDate, bookings.userFn, bookings.userLn, bookings.userEmail, bookings.userRating
                 )}
             >
-                id{bookings?.routeId}
+                
                 <div className="flex justify-between items-center  ">
                     <div className="text-sm font-semibold text-gray-600">
                         <span className="text-gray-400 mr-2">Trip Date:</span>
@@ -91,7 +91,7 @@ export const BookingList = ({ travelDate, totalAmount, startLocation, endLocatio
 
 export const CancenlledList = ({ startLocation, endLocation, status }) => {
     return (
-        <div className="p-4 mb-4  from-white to-gray-50 border border-gray-200  rounded-lg shadow flex items-center justify-between">
+        <div className="p-4 mb-4   bg-gradient-to-b border from-white to-gray-50  rounded-lg shadow flex items-center justify-between">
             <div>
                 <h2 className="font-medium text-gray-700">{endLocation}</h2>
                 <p className="text-sm text-gray-500">{startLocation}</p>

@@ -42,6 +42,8 @@ export const RequestContextProvider = ({ children }) => {
     const [routeId, setRouteId] = useState()
     const [currentRide, setCurrentRide] = useState()
     const [profileImage, setProfileImage] = useState(DefaultProfile);
+    const hostname = window.location.hostname;
+
 
 
     const fetchRequest = async () => {
@@ -129,7 +131,7 @@ export const RequestContextProvider = ({ children }) => {
     }, [])
 
     useEffect(() => {
-        const newSocket = io("http://localhost:8000");
+        const newSocket = io(`http://${hostname}:8000`);
         setSocket(newSocket);
 
         newSocket.on("connect", () => {
@@ -152,7 +154,7 @@ export const RequestContextProvider = ({ children }) => {
 
     const fetchRequestData = async () => {
         try {
-            const response = await fetch("http://localhost:8000/api/drivers/passengerRequest");
+            const response = await fetch(`http://${hostname}:8000/api/drivers/passengerRequest`);
             const data = await response.json();
             setRequest(data);
             console.log("reeequest: ", data);
@@ -236,7 +238,7 @@ export const RequestContextProvider = ({ children }) => {
 
     const getPassengerInfo = async (passengerId) => {
         try {
-            const response = await fetch('http://localhost:8000/api/users')
+            const response = await fetch(`http://${hostname}:8000/api/users`)
             const data = await response.json()
             const passenger = data.find((p) => p.userId == passengerId)
             setPassengerInfo(passenger)

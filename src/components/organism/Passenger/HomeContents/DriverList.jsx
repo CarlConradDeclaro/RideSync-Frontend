@@ -8,6 +8,8 @@ import { Ratings } from '../../../atoms/Ratings';
 const DriverList = () => {
     const { handleCancel, drivers, handelSelectDriver } = useContext(FindRouteContext);
     const [driverImages, setDriverImages] = useState({});
+    const hostname = window.location.hostname;
+
      
             
     useEffect(() => {
@@ -85,11 +87,12 @@ const DriverCard = ({ driverId,profileImage, handelSelectDriver }) => {
         setModalOpen(false);
         setSelectedDriver(null);
     };
+    const hostname = window.location.hostname;
 
     useEffect(() => {
         const fetchDriver = async () => {
             try {
-                const response = await fetch('http://localhost:8000/api/users'); // Fetch all users
+                const response = await fetch(`http://${hostname}:8000/api/users`); // Fetch all users
                 if (!response.ok) {
                     throw new Error('Failed to fetch users');
                 }

@@ -14,7 +14,7 @@ const Components = () => {
     const [userInfo, setUserInfo] = useState(null);
      const navigate = useNavigate()
   const handelNavigateProfile=()=>{
-    navigate('/driver/profileContents')
+    navigate('/driver/CarpoolProfile')
     console.log("navigate");
     
   }

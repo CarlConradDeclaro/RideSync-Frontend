@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { UserHeader } from '../../../molecules/Driver/UserHeader'
+import { UserHeader } from '../../../molecules/Carpool/UserHeader'
 import { ViewRides } from '../../../organism/Carpool/ViewRides'
 import { Sidebar } from '../../../molecules/Carpool/Sidebar'
 import { Loading } from '../../../molecules/Loading'

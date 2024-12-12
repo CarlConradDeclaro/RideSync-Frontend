@@ -11,9 +11,9 @@ const Components = () => {
   const [userProfileImage, setUserProfileImage] = useState(DefaultProfile);
   const [time, setTime] = useState("");
   const navigate = useNavigate()
-  const handelNavigateProfile=()=>{
+  const handelNavigateProfile=(route)=>{
     navigate('/passenger/profileContents')
-    console.log("naviget");
+    console.log("navigate");
     
   }
 
@@ -94,18 +94,20 @@ const Components = () => {
 
         {/* Render the user's profile image or the default image */}
         {userProfileImage === DefaultProfile ? (
-           <img
+         <div  onClick={handelNavigateProfile}>
+            <img
             src={DefaultProfile}
             className="w-10 h-10 md:w-12 md:h-12 rounded-full border-2 border-gray-300 hover:border-white cursor-pointer shadow-md"
             alt="Profile"
           />
+         </div>
         ) : (
-      <div onClick={handelNavigateProfile}>
+      <div  onClick={handelNavigateProfile}>
          <img
             src={userProfileImage}
             className="w-10 h-10 md:w-12 md:h-12 rounded-full border-2 border-gray-300 hover:border-white cursor-pointer shadow-md"
             alt="Profile"
-           
+          
           />
       </div>
         )}

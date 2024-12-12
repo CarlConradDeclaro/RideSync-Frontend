@@ -50,11 +50,11 @@ const Components = () => {
     };
 
   return (
-    <div className="flex flex-col items-center px-5 w-full">
+    <div className="flex bg-gradient-to-b from-white to-gray-50 flex-col items-center px-5 w-full">
       <Card className="m-5 md:h-[85vh] rounded-xl w-full shadow-lg ">
         <h1 className="text-2xl font-semibold text-gray-800 mb-4 p-4 border-b border-gray-300">Completed Carpools</h1>
 
-        <Card className='flex  flex-col md:flex-row gap-5 m-5 h-[85%]'>
+        <Card className='flex bg-gradient-to-b from-white to-gray-50 flex-col md:flex-row gap-5 m-5 h-[85%]'>
           <div className="h-full w-full md:w-[600px] overflow-y-auto overflow-x-hidden border rounded p-3">
             <div>
               <h2 className="text-xl font-semibold text-gray-800 mb-3"></h2>
@@ -124,7 +124,7 @@ const CarpoolList = ({ fetchProfileImage,carpoolPassengers, users, ride, setCarp
   };
 
   return (
-    <Card className="mb-5 w-full  cursor-pointer h-auto rounded-lg p-4 shadow-lg bg-white border border-gray-200 transition-all ease-in-out transform hover:scale-105">
+    <Card className="mb-5 w-full  cursor-pointer h-auto rounded-lg p-4 shadow-lg bg-gradient-to-b from-white to-gray-50 border border-gray-200 transition-all ease-in-out transform hover:scale-105">
       <div className="space-y-4" onClick={handleRideDetails}>
         {/* Status Indicator */}
         <div className="flex justify-between items-center">

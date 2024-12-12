@@ -64,6 +64,8 @@ export const ViewRidesContextProvider = ({ children }) => {
         userRatings: null,
         vPlateNum:null,
     })
+    const hostname = window.location.hostname;
+
 
 
     useEffect(() => {
@@ -100,7 +102,7 @@ export const ViewRidesContextProvider = ({ children }) => {
 
     
     useEffect(() => {
-        const newSokcet = io("http://localhost:8000")
+        const newSokcet = io(`http://${hostname}:8000`)
         setSocket(newSokcet)
         newSokcet.on("connect", () => {
             console.log("from frontend message page", newSokcet.id);

@@ -9,6 +9,8 @@ export const ViewRideCarpoolContextProvider = ({children})=>{
     const [users,setUsers]= useState()
     const [carpoolPassengers,setCarpoolPassenger] = useState()
     const [passengersByCarpool,setPassengersByCarpool]= useState()
+    const hostname = window.location.hostname;
+
 
     useEffect(() => {
             const storedUserInfo = localStorage.getItem('User');
@@ -38,7 +40,7 @@ export const ViewRideCarpoolContextProvider = ({children})=>{
     useEffect(()=>{
         const fetchPassengers = async () => {
         try {
-            const response = await fetch("http://localhost:8000/api/users/")
+            const response = await fetch(`http://${hostname}:8000/api/users/`)
             const data = await response.json()
             console.log("drivers",data);
             setUsers(data)
@@ -47,7 +49,7 @@ export const ViewRideCarpoolContextProvider = ({children})=>{
         }
     }
     const getCarpoolPassengers = async()=>{
-        const response = await fetch("http://localhost:8000/api/drivers/getCarpoolPassengers")
+        const response = await fetch(`http://${hostname}:8000/api/drivers/getCarpoolPassengers`)
         const data = await response.json()
         console.log("Carpool passengers",data);
         setCarpoolPassenger(data)

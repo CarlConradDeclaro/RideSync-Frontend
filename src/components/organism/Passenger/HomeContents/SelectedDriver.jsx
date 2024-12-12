@@ -16,6 +16,8 @@ const SelectedDriver = () => {
     const [driverInfo, setDriverInfo] = useState(null);
     const [val, setVal] = useState(3)
     const [route, setRoute] = useState()
+    const hostname = window.location.hostname;
+
     useEffect(() => {
         const fetchRequestRide = async () => {
             if (userInfo && userInfo.id) {
@@ -42,7 +44,7 @@ const SelectedDriver = () => {
         const fetchDriver = async () => {
             if (driverId) {
                 try {
-                    const response = await fetch('http://localhost:8000/api/users');
+                    const response = await fetch(`http://${hostname}:8000/api/users`);
 
                     if (!response.ok) throw new Error('Failed to fetch users');
 
