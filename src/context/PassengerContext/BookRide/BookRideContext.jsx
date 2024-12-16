@@ -85,7 +85,7 @@ export const BookRideContextProvider = ({ children }) => {
         setSearchInput(query);
 
         if (query.length > 2) {
-            const response = await fetch(`http://${hostname}:8000/api/users/search?query=${encodeURIComponent(query)}`);
+            const response = await fetch(`${BASEURL}/search?query=${encodeURIComponent(query)}`);
 
             if (!response.ok) {
                 console.error('Failed to fetch suggestions');
@@ -105,7 +105,7 @@ export const BookRideContextProvider = ({ children }) => {
         setSearchInputDest(query);
 
         if (query.length > 2) {
-            const response = await fetch(`http://${hostname}:8000/api/users/search?query=${encodeURIComponent(query)}`);
+            const response = await fetch(`${BASEURL}/search?query=${encodeURIComponent(query)}`);
 
             if (!response.ok) {
                 console.error('Failed to fetch suggestions');
@@ -290,7 +290,7 @@ export const BookRideContextProvider = ({ children }) => {
 
     const fetchDrivers = async () => {
         try {
-            const response = await fetch(`http://${hostname}:8000/api/users/`)
+            const response = await fetch(BASEURL)
             const data = await response.json()
             console.log("drivers",data);
             

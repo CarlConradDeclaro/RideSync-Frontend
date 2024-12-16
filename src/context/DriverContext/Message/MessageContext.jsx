@@ -1,6 +1,6 @@
 import { createContext, useEffect, useState } from "react";
 import { io } from 'socket.io-client'
-import { BASEURL, postRequest } from "../../../utils/Service";
+import { BASEURL, postRequest, SocketUrl } from "../../../utils/Service";
 
 export const MessageContext = createContext()
 export const MessageContextProvider = ({ children }) => {
@@ -34,7 +34,8 @@ export const MessageContextProvider = ({ children }) => {
 
 
     useEffect(() => {
-        const newSokcet = io(`http://${hostname}:8000`)
+        const newSokcet = io(SocketUrl)
+        //const newSokcet = io(`https://ridesync-backend.onrender.com`)
         setSocket(newSokcet)
         newSokcet.on("connect", () => {
             console.log("from frontend message page", newSokcet.id);

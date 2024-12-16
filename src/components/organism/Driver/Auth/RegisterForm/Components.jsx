@@ -71,7 +71,7 @@ const Components = () => {
 
 
     return (
-        <div className='flex justify-center mt-4'>
+        <div className='flex justify-center mt-16'>
             {
                 !additionalDetails ? 
                 <Card className="flex flex-col md:flex-row w-full max-w-[95%] md:max-w-[70%] rounded overflow-hidden animate-fadeIn">
@@ -142,18 +142,16 @@ const Components = () => {
                             {!!errors.gender && <FormHelperText style={{ color: '#DB2F2F' }}>{errors.gender}</FormHelperText>}
                         </FormControl>
 
-                        <FormControl>
+                        {/* <FormControl>
                             <SelectCountries handleCountry={handleCountry} />
                             {!!errors.country && <FormHelperText style={{ color: '#DB2F2F' }}>{errors.country}</FormHelperText>}
-                        </FormControl>
-                        <div>
+                        </FormControl> */}
 
-                        </div>
                         <FormControl size='small' variant="outlined">
                             <InputLabel htmlFor="outlined-adornment-password">Password*</InputLabel>
                             <OutlinedInput
                                 id="outlined-adornment-password"
-                                type={'password'}
+                                type={showPassword ? 'text' : 'password'}
                                 endAdornment={
                                     <InputAdornment position="end">
                                         <IconButton
@@ -179,7 +177,7 @@ const Components = () => {
                             <InputLabel htmlFor="outlined-adornment-password">Confirm Password*</InputLabel>
                             <OutlinedInput
                                 id="outlined-adornment-password"
-                                type={'password'}
+                                type={showConfirmPassword ? 'text' : 'password'}
                                 endAdornment={
                                     <InputAdornment position="end">
                                         <IconButton
@@ -205,7 +203,7 @@ const Components = () => {
                     <div className='pl-3'>
                         <Button name="Next" variant="contained" size="large" onClick={handleNextAdditionalDetails} />
                     </div>
-                    <div className='pl-3 mt-3'>
+                    <div className='pl-3 mt-3 mb-12'>
                         <p className='text-termsText text-xs md:text-sm'>Already have an account? <span className='text-colorBlue ml-1 cursor-pointer underline' onClick={handleSignin}>Login</span></p>
                     </div>
                 </div>

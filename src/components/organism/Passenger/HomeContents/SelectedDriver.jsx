@@ -44,7 +44,7 @@ const SelectedDriver = () => {
         const fetchDriver = async () => {
             if (driverId) {
                 try {
-                    const response = await fetch(`http://${hostname}:8000/api/users`);
+                    const response = await fetch(BASEURL);
 
                     if (!response.ok) throw new Error('Failed to fetch users');
 
@@ -88,7 +88,7 @@ const SelectedDriver = () => {
             <div className="flex   flex-col gap-6 sm:w-full md:w-[450px] rounded p-5">
                 <h1 className="text-2xl font-semibold text-gray-800">Driver</h1>
                 <span>
-                    {isDriverComming ? "Your driver is comming!" :
+                    {isDriverComming ? "Your driver is coming!" :
                         isDriverHasArrive ? "Your driver has arrived!" : ""
                     }
 

@@ -63,8 +63,8 @@ const Components = () => {
 
 
   return (
-    <div className='flex justify-center mt-9'>
-      <Card className="flex flex-col md:flex-row w-full max-w-[95%] md:max-w-[70%] rounded overflow-hidden animate-fadeIn">
+    <div className='flex justify-center mt-[50px]'>
+      <Card className="flex md:p-5 flex-col md:flex-row w-full max-w-[95%] md:max-w-[70%] rounded overflow-hidden animate-fadeIn">
         {/* Form Section */}
         <div className='w-full md:w-[60%] p-5'>
           <h1 className='p-5 text-lg md:text-2xl font-bold'>Sign Up Now</h1>
@@ -193,7 +193,7 @@ const Components = () => {
             </FormControl>
           </div>
 
-          <div className='m-3'>
+          {/* <div className='m-3'>
             <div className='flex items-center text-termsText text-[10px] md:text-[14px]'>
               <Checkbox />
               <span>I have read, understand, and agree to the</span>
@@ -205,12 +205,12 @@ const Components = () => {
               <span className='text-colorBlue cursor-pointer'>Privacy Policy</span> and the
               <span className='text-colorBlue cursor-pointer'>Terms of Service</span>.
             </div>
-          </div>
+          </div> */}
 
           <div className='pl-3'>
             <Button name="Sign in" variant="contained" size="large" onClick={handleRegister} />
           </div>
-          <div className='pl-3'>
+          <div className='pl-3 mb-10 mt-5'>
             <p className='text-termsText text-xs md:text-sm'>Already have an account? <span className='text-colorBlue ml-1 cursor-pointer underline' onClick={handleSignin}>Login</span></p>
           </div>
         </div>

@@ -1,5 +1,5 @@
 import { Children, createContext, useEffect, useRef, useState } from "react";
-import { BASEURL, BASEURLDrivers, postRequest } from "../../../utils/Service";
+import { BASEURL, BASEURLDrivers, postRequest, SocketUrl } from "../../../utils/Service";
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-routing-machine/dist/leaflet-routing-machine.css';
 import L from 'leaflet';
@@ -80,7 +80,9 @@ export const ViewRidesContextProvider = ({ children }) => {
     }, [])
 
     useEffect(() => {
-        const newSocket = io(`http://${hostname}:8000`);
+       const newSocket = io(SocketUrl)
+
+        // const newSocket = io(`https://ridesync-backend.onrender.com`);
         setSocket(newSocket);
 
         newSocket.on("connect", () => {

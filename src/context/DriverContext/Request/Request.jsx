@@ -6,7 +6,7 @@ import 'leaflet-routing-machine';
 import 'leaflet-control-geocoder/dist/Control.Geocoder.css'; // Geocoder CSS
 import 'leaflet-control-geocoder'; // Geocoder JS
 import { io } from 'socket.io-client';
-import { BASEURL, BASEURLDrivers, postRequest } from "../../../utils/Service";
+import { BASEURL, BASEURLDrivers, postRequest, SocketUrl } from "../../../utils/Service";
 import { useNavigate } from 'react-router-dom';
 import DefaultProfile from '../../../assets/DefaultProfile.png';
 
@@ -131,7 +131,8 @@ export const RequestContextProvider = ({ children }) => {
     }, [])
 
     useEffect(() => {
-        const newSocket = io(`http://${hostname}:8000`);
+        const newSocket = io(SocketUrl)
+        // const newSocket = io(`https://ridesync-backend.onrender.com`);
         setSocket(newSocket);
 
         newSocket.on("connect", () => {
@@ -154,7 +155,7 @@ export const RequestContextProvider = ({ children }) => {
 
     const fetchRequestData = async () => {
         try {
-            const response = await fetch(`http://${hostname}:8000/api/drivers/passengerRequest`);
+            const response = await fetch(`${BASEURLDrivers}/passengerRequest`);
             const data = await response.json();
             setRequest(data);
             console.log("reeequest: ", data);
@@ -238,7 +239,7 @@ export const RequestContextProvider = ({ children }) => {
 
     const getPassengerInfo = async (passengerId) => {
         try {
-            const response = await fetch(`http://${hostname}:8000/api/users`)
+            const response = await fetch(BASEURL)
             const data = await response.json()
             const passenger = data.find((p) => p.userId == passengerId)
             setPassengerInfo(passenger)

@@ -1,6 +1,6 @@
 import { createContext, useEffect, useState } from "react";
 import { io } from 'socket.io-client'
-import { BASEURL, postRequest } from "../../../utils/Service";
+import { BASEURL, postRequest, SocketUrl } from "../../../utils/Service";
 
 
 
@@ -38,7 +38,9 @@ export const MessageCarpoolContextProvider = ({children})=>{
 
 
     useEffect(() => {
-        const newSokcet = io(`http://${hostname}:8000`)
+        // const newSokcet = io(`https://ridesync-backend.onrender.com`)
+        const newSokcet = io(SocketUrl)
+
         setSocket(newSokcet)
         newSokcet.on("connect", () => {
             console.log("from frontend message page", newSokcet.id);

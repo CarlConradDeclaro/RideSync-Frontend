@@ -1,5 +1,5 @@
 import { createContext, useState ,useEffect} from "react";
-import { BASEURLDrivers, postRequest } from "../../../utils/Service";
+import { BASEURL, BASEURLDrivers, postRequest } from "../../../utils/Service";
 
 export const ViewRideCarpoolContext = createContext()
 export const ViewRideCarpoolContextProvider = ({children})=>{
@@ -40,7 +40,7 @@ export const ViewRideCarpoolContextProvider = ({children})=>{
     useEffect(()=>{
         const fetchPassengers = async () => {
         try {
-            const response = await fetch(`http://${hostname}:8000/api/users/`)
+            const response = await fetch(BASEURL)
             const data = await response.json()
             console.log("drivers",data);
             setUsers(data)
@@ -49,7 +49,7 @@ export const ViewRideCarpoolContextProvider = ({children})=>{
         }
     }
     const getCarpoolPassengers = async()=>{
-        const response = await fetch(`http://${hostname}:8000/api/drivers/getCarpoolPassengers`)
+        const response = await fetch(`${BASEURLDrivers}/getCarpoolPassengers`)
         const data = await response.json()
         console.log("Carpool passengers",data);
         setCarpoolPassenger(data)

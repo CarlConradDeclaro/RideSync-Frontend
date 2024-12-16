@@ -15,7 +15,11 @@ export const LoginContextProvider = ({ children }) => {
     const [errorMsg, setErrorMsg] = useState('');
     const [loading, setLoading] = useState(false);
 
+
+    
+
     const loginUser = async (e) => {
+        console.log("BASEURL",BASEURL)
         e.preventDefault();
         setLoading(true);
         setIsError(false);
@@ -39,7 +43,9 @@ export const LoginContextProvider = ({ children }) => {
             console.error("Error during login:", error);
         } finally {
             setLoading(false);
+            
         }
+        
     };
 
 
