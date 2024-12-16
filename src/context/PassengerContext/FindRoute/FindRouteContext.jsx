@@ -5,7 +5,7 @@ import L from 'leaflet';
 import 'leaflet-routing-machine';
 import 'leaflet-control-geocoder/dist/Control.Geocoder.css'; // Geocoder CSS
 import 'leaflet-control-geocoder'; // Geocoder JS
-import { BASEURL, getRequest, postRequest, updateRequest } from "../../../utils/Service";
+import { BASEURL, getRequest, postRequest, SocketUrl, updateRequest } from "../../../utils/Service";
 import { io } from 'socket.io-client'
 import { useNavigate } from 'react-router-dom';
 
@@ -185,7 +185,8 @@ export const FindRouteContextProvider = ({ children }) => {
 
 
   useEffect(() => {
-    const newSocket = io(`http://${hostname}:8000`)
+    const newSocket = io(SocketUrl)
+    //const newSocket= io(`https://ridesync-backend.onrender.com`)
     setSocket(newSocket)
 
     newSocket.on("connect", () => {
@@ -278,7 +279,7 @@ export const FindRouteContextProvider = ({ children }) => {
     setSearchInput(query);
 
     if (query.length > 2) {
-      const response = await fetch(`http://${hostname}:8000/api/users/search?query=${encodeURIComponent(query)}`);
+      const response = await fetch(`${BASEURL}/search?query=${encodeURIComponent(query)}`);
 
       if (!response.ok) {
         console.error('Failed to fetch suggestions');
@@ -314,7 +315,7 @@ export const FindRouteContextProvider = ({ children }) => {
     setSearchInputDest(query);
 
     if (query.length > 2) {
-      const response = await fetch(`http://${hostname}:8000/api/users/search?query=${encodeURIComponent(query)}`);
+      const response = await fetch(`${BASEURL}/search?query=${encodeURIComponent(query)}`);
 
       if (!response.ok) {
         console.error('Failed to fetch suggestions');

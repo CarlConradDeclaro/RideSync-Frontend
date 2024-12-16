@@ -43,7 +43,7 @@ export const ProfileContextProvider = ({ children }) => {
     const fetchUser = async()=>{
         try { 
             if(userInfo && userInfo.id){
-                const result  = await fetch(`http://${hostname}:8000/api/users`)
+                const result  = await fetch(BASEURL)
                 const users = await result.json()
                 const filtered = users.filter((u)=> u.userId == userInfo?.id)
                 console.log(filtered);
@@ -88,7 +88,7 @@ export const ProfileContextProvider = ({ children }) => {
 
         try {
             // Step 1: Call backend to delete the existing image
-            const deleteResponse = await fetch(`http://${hostname}:8000/api/users/deleteProfile`, {
+            const deleteResponse = await fetch(`${BASEURL}/deleteProfile`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -154,6 +154,7 @@ export const ProfileContextProvider = ({ children }) => {
     return (
         <ProfileContext.Provider
             value={{
+                userInfo,
                 openProfileSettings,
                 handleAccountSettings,
                 userData,

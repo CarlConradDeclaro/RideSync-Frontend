@@ -1,5 +1,5 @@
 import { createContext, useEffect, useRef, useState } from "react";
-import { BASEURL, postRequest } from "../../../utils/Service";
+import { BASEURL, postRequest, SocketUrl } from "../../../utils/Service";
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-routing-machine/dist/leaflet-routing-machine.css';
 import L from 'leaflet';
@@ -102,7 +102,7 @@ export const ViewRidesContextProvider = ({ children }) => {
 
     
     useEffect(() => {
-        const newSokcet = io(`http://${hostname}:8000`)
+        const newSokcet = io(SocketUrl)
         setSocket(newSokcet)
         newSokcet.on("connect", () => {
             console.log("from frontend message page", newSokcet.id);

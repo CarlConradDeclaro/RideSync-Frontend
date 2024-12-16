@@ -64,10 +64,10 @@ const AdditionalDetails = () => {
 
   return (
     
-            <Card className="flex flex-col md:flex-row w-full max-w-[95%] md:max-w-[70%] rounded overflow-hidden animate-fadeIn">
+            <Card className="mt-3 md:p-8 flex flex-col md:flex-row w-full max-w-[95%] md:max-w-[70%] rounded overflow-hidden animate-fadeIn">
                 <div className='w-full md:w-[60%] p-5'> 
                     <Button name="Go back"  size="small" onClick={handelGoBack} />
-                    <h1 className='text-lg md:text-2xl font-bold'>Become Driver Now</h1>
+                    {/* <h1 className='text-lg md:text-2xl font-bold'>Become Driver Now</h1> */}
                     <h2 className='text-textPI font-semibold p-3 text-sm md:text-lg'>Vehicle Information</h2>
                     <div className='grid grid-cols-1 md:grid-cols-2 gap-4 p-4'>
                         <TextInput
@@ -111,7 +111,7 @@ const AdditionalDetails = () => {
                             onChange={handlVehiclePlateNum}
                         />
                           <TextInput
-                            label="V ehicle No. Sets*"
+                            label="Vehicle No. Sets*"
                             variant="outlined"
                             size="small"
                             type="number"
@@ -144,7 +144,7 @@ const AdditionalDetails = () => {
                 
 
                     </div>
-                    <div className='m-3'>
+                    {/* <div className='m-3'>
                         <div className='flex items-center text-termsText text-[10px] md:text-[14px]'>
                             <Checkbox />
                             <span>I have read, understand, and agree to the</span>
@@ -156,12 +156,12 @@ const AdditionalDetails = () => {
                             <span className='text-colorBlue cursor-pointer'>Privacy Policy</span> and the
                             <span className='text-colorBlue cursor-pointer'>Terms of Service</span>.
                         </div>
-                    </div>
+                    </div> */}
 
                     <div className='pl-3'>
                         <Button name="Create Account" variant="contained" size="large"  onClick={handleRegisterDriver}/>
                     </div>
-                    <div className='pl-3'>
+                    <div className='pl-3 mt-5'>
                         <p className='text-termsText text-xs md:text-sm'>Already have an account? <span className='text-colorBlue ml-1 cursor-pointer underline' onClick={handleSignin}>Login</span></p>
                     </div>
                 </div>

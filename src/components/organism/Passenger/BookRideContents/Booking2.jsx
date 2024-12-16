@@ -98,6 +98,13 @@ const Booking2 = ({
         return DefaultProfile; // Show default image while loading
     };
 
+      const [selectedDriverId, setSelectedDriverId] = useState(null); // Store the selected driver's ID
+
+    const handleDriverClick = (driverId) => {
+        setSelectedDriverId(driverId); // Update the selected driver's ID
+        handleSelectedDriver(driverId); // Call the parent handler
+    };
+
     return (
         <div className='w-full flex flex-col md:flex md:flex-row mt-11 md:mt-0'>
 
@@ -218,7 +225,9 @@ const Booking2 = ({
                                         ratings={driver.userRating || 0}
                                         key={driver.userId}
                                         driverId={driver.userId}
+                                        isSelected={selectedDriverId === driver.userId}
                                         handleSelectedDriver={handleSelectedDriver}
+                                        handleDriverClick={handleDriverClick}
                                     />
                                 ))
                         }
@@ -273,10 +282,16 @@ const Booking2 = ({
     )
 }
 
-
-const DriverCard = ({ fetchProfileImage,driverName, plateNo, ratings, handleSelectedDriver, driverId }) => {
+ 
+const DriverCard = ({handleDriverClick, isSelected, fetchProfileImage,driverName, plateNo, ratings, handleSelectedDriver, driverId }) => {
+   
     return (
-        <div className="   p-1 flex gap-4 bg-white w-full rounded-lg shadow-md justify-between items-center cursor-pointer transition-transform hover:scale-105">
+        <div
+         onClick={() => handleDriverClick(driverId)}
+         className={` ${isSelected ? 'border-2 border-blue-500' : 'border border-transparent'
+            }  p-1 flex gap-4 bg-white w-full rounded-lg shadow-md justify-between items-center cursor-pointer transition-transform hover:scale-105`}
+         
+         >
             <div className="flex items-center gap-4">
                 <img src={fetchProfileImage(driverId)} className="w-16 h-16 rounded-full object-cover border border-gray-200" alt="Driver Profile" />
                 <div>
@@ -288,7 +303,9 @@ const DriverCard = ({ fetchProfileImage,driverName, plateNo, ratings, handleSele
                     </div>
                 </div>
             </div>
-            <Button name="Ride" variant="contained" size="small" borderRadius="20px" className="text-white bg-blue-500 hover:bg-blue-600 px-4 py-1 text-sm font-medium rounded-full" onClick={() => handleSelectedDriver(driverId)} />
+            <Button 
+           
+            name="Ride" variant="contained" size="small" borderRadius="20px" className="text-white bg-blue-500 hover:bg-blue-600 px-4 py-1 text-sm font-medium rounded-full" onClick={() => handleSelectedDriver(driverId)} />
         </div>
 
     )

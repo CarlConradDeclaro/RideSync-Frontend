@@ -19,6 +19,13 @@ export default function BasicTextFields({ type, label, variant, size, isError, e
         '& .MuiInputBase-root': {
           height: height, // Set the height here
         },
+        '& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button': {
+      '-webkit-appearance': 'none',
+        margin: 0,
+      },
+      '& input[type=number]': {
+        '-moz-appearance': 'textfield', // Hide arrows in Firefox
+      },
       }}
       slotProps={{
         input: {

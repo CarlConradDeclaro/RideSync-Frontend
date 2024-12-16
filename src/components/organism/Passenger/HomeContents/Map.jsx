@@ -97,15 +97,15 @@ const MapView = () => {
                         {/* <FaMoneyBillWave className="text-green-500 text-[22px]" /> */}
                         <p className="text-[20px] font-bold text-black-500">Fare: </p>
                         <h1 className="text-[24px] font-bold text-green-500">
-                          ₱{amount ? amount : '0.00'}
+                          ₱{amount && amount }
                         </h1>
                          <MdLocationOn className="text-red-500 text-[22px]" />
                         <h1 className="text-[20px] font-bold text-kmColor">
-                        {totalDistance ? totalDistance : '0 km'} 
+                        {totalDistance && totalDistance } 
                         </h1>
                         <p className="text-[20px] text-gray-500">
                               <span className='text-orange-500 mr-2'>⏱️</span>
-                        (est: {totalDuration ? totalDuration + 's' : '0 min'})
+                        (est: {totalDuration && totalDuration })
                         </p>
                 </>
                     }

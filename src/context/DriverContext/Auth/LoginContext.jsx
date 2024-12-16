@@ -22,22 +22,29 @@ export const LoginDriverContextProvider = ({ children }) => {
         setLoading(true);
         setIsError(false);
         setErrorMsg('');
+            console.log('1navigate to driver/homeCarpool')
+
         try {
             const response = await postRequest(`${BASEURLDrivers}/login`, JSON.stringify(loginInfo));
-            if (response && response.user && response.token && response.user.userType == "D") {
+            console.log("User data",response.user);
+            
+            if (response && response.user && response.token && response.user?.userType == "D") {
+                console.log('2navigate to driver/homeCarpool')
                 localStorage.setItem("User", JSON.stringify(response.user));
                 localStorage.setItem("Token", response.token);
                 if(response.user.typeRide == 'carpool'){
+                    console.log('3carpoolnavigate to driver/homeCarpool')
                     navigate('/driver/homeCarpool');
                     console.log("Login successful, navigating to homeCarpool");
                 }else if(response.user.typeRide == 'rideSharing'){
+                    console.log('3ridesharenavigate to driver/homeCarpool')
                     navigate('/driver/requestContents');
                     console.log("Login successful, navigating to requestContents");
                 }
                
              
 
-            } else if (response.user.userType != "D") {
+            } else if (response.user?.userType != "D") {
                 throw new Error(response.message || "You have no access to this page");
             }
             else {

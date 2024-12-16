@@ -6,7 +6,7 @@ import 'leaflet-routing-machine';
 import 'leaflet-control-geocoder/dist/Control.Geocoder.css'; // Geocoder CSS
 import 'leaflet-control-geocoder';
 import dayjs from "dayjs";
-import {  BASEURL, BASEURLDrivers, postRequest } from "../../../utils/Service";
+import {  BASEURL, BASEURLDrivers, postRequest, SocketUrl } from "../../../utils/Service";
 import { io } from 'socket.io-client'
 import { useNavigate } from "react-router-dom";
 // testing
@@ -45,7 +45,9 @@ export const HomeCarpoolContextProvider = ({children})=>{
   
 
     useEffect(() => {
-      const newSocket = io(`http://${hostname}:8000`)
+      const newSocket = io(SocketUrl)
+
+      // const newSocket = io(`https://ridesync-backend.onrender.com`)
       setSocket(newSocket)
       newSocket.on("connect", () => {
         console.log("from frontend: " + newSocket.id);
@@ -84,7 +86,7 @@ export const HomeCarpoolContextProvider = ({children})=>{
     const getDriverVehicle =async()=>{
         try { 
             if(driverInfo && driverInfo.id){
-                const result  = await fetch(`http://${hostname}:8000/api/users`)
+                const result  = await fetch(BASEURL)
                 const users = await result.json()
                 const filtered = users.filter((u)=> u.userId == driverInfo?.id)
                 setRegisterdVehicle(filtered[0].modelName)
@@ -119,7 +121,7 @@ export const HomeCarpoolContextProvider = ({children})=>{
         const query = e.target.value;
         setSearchInput(query);
         if (query.length > 2) {
-          const response = await fetch(`http://${hostname}:8000/api/users/search?query=${encodeURIComponent(query)}`);
+          const response = await fetch(`${BASEURL}/search?query=${encodeURIComponent(query)}`);
           if (!response.ok) {
             console.error('Failed to fetch suggestions');
             return;
@@ -136,7 +138,7 @@ export const HomeCarpoolContextProvider = ({children})=>{
         const query = e.target.value;
         setSearchInputDest(query);
         if (query.length > 2) {
-          const response = await fetch(`http://${hostname}:8000/api/users/search?query=${encodeURIComponent(query)}`);
+          const response = await fetch(`${BASEURL}/search?query=${encodeURIComponent(query)}`);
           if (!response.ok) {
             console.error('Failed to fetch suggestions');
             return;

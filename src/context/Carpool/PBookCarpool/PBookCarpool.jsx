@@ -1,5 +1,5 @@
 import { createContext, useEffect, useState } from "react";
-import { BASEURL, getRequest, postRequest } from "../../../utils/Service";
+import { BASEURL, getRequest, postRequest, SocketUrl } from "../../../utils/Service";
 import { io } from 'socket.io-client'
 import { useNavigate } from 'react-router-dom';
 import DefaultProfile from '../../../assets/DefaultProfile.png';
@@ -29,7 +29,9 @@ export const PBookCarpoolContextProvider = ({children})=>{
 
    
     useEffect(() => {
-        const newSocket = io(`http://${hostname}:8000`)
+        const newSocket = io(SocketUrl)
+        
+        // const newSocket = io(`https://ridesync-backend.onrender.com`)
         setSocket(newSocket)
         newSocket.on("connect", () => {
           console.log("from frontend: " + newSocket.id);
@@ -92,7 +94,7 @@ export const PBookCarpoolContextProvider = ({children})=>{
         setLeavingFrom(query);
 
         if (query.length > 2) {
-            const response = await fetch(`http://${hostname}:8000/api/users/search?query=${encodeURIComponent(query)}`);
+            const response = await fetch(`${BASEURL}/search?query=${encodeURIComponent(query)}`);
 
             if (!response.ok) {
                 console.error('Failed to fetch suggestions');
@@ -112,7 +114,7 @@ export const PBookCarpoolContextProvider = ({children})=>{
         setGoingTo(query);
 
         if (query.length > 2) {
-            const response = await fetch(`http://${hostname}:8000/api/users/search?query=${encodeURIComponent(query)}`);
+            const response = await fetch(`${BASEURL}/search?query=${encodeURIComponent(query)}`);
 
             if (!response.ok) {
                 console.error('Failed to fetch suggestions');

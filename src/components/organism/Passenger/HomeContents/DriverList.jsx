@@ -4,6 +4,7 @@ import { Button } from '../../../atoms/Button';
 import { FindRouteContext } from '../../../../context/PassengerContext/FindRoute/FindRouteContext';
 import DefaultProfile from '../../../../assets/DefaultProfile.png';
 import { Ratings } from '../../../atoms/Ratings';
+import { BASEURL } from '../../../../utils/Service';
 
 const DriverList = () => {
     const { handleCancel, drivers, handelSelectDriver } = useContext(FindRouteContext);
@@ -92,7 +93,7 @@ const DriverCard = ({ driverId,profileImage, handelSelectDriver }) => {
     useEffect(() => {
         const fetchDriver = async () => {
             try {
-                const response = await fetch(`http://${hostname}:8000/api/users`); // Fetch all users
+                const response = await fetch(BASEURL); // Fetch all users
                 if (!response.ok) {
                     throw new Error('Failed to fetch users');
                 }

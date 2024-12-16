@@ -121,7 +121,7 @@ const Profile = () => {
               <label className="block text-gray-700 mb-1 text-sm">Location</label>
               <div className="flex items-center space-x-2">
                 <MdLocationOn className="text-red-500" />
-                <span>{userData?.Country || "Unknown"}</span>
+                <span>{userData?.Country || "Philippines"}</span>
               </div>
             </div>
           </div>
