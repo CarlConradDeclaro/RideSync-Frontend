@@ -12,6 +12,7 @@ const Components = () => {
         const searchParams = new URLSearchParams(location.search);
         const route = searchParams.get('route');
         const active = searchParams.get('active');
+        
     
         const [loading, setLoading] = useState(true);
     

@@ -1,7 +1,7 @@
 const hostname = window.location.hostname;
 console.log("hostname",hostname)
 
-export const BASEURL = `http://${hostname}:8000/api/users`;
+export const BASEURL = `http://${hostname}:3000/api/users`;
 export const BASEURLDrivers = `http://${hostname}:8000/api/drivers`;
 export const SocketUrl = `http://${hostname}:8000` // your backend url 
 
