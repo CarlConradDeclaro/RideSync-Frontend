@@ -108,5 +108,3 @@ To run this project locally, make sure you have the following installed:
 
 
 [Visit RideSync Website](https://ridesync.netlify.app/)
-
-s
