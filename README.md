@@ -76,6 +76,7 @@ To run this project locally, make sure you have the following installed:
 
 # Preview 
 
+
 ### Rideshare
 *(passenger)*
 ![Image](https://github.com/user-attachments/assets/d488f554-9347-4c44-b193-b2a0419e1d30)
