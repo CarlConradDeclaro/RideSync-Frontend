@@ -1,5 +1,22 @@
- # RideSync
+# Preview 
 
+
+### Rideshare
+*(passenger)*
+![Image](https://github.com/user-attachments/assets/d488f554-9347-4c44-b193-b2a0419e1d30)
+
+*(driver)*
+![Image](https://github.com/user-attachments/assets/3d0bc1ef-d6d0-4d6c-8f47-27867cbf3e4e)
+
+
+### Carpooling
+![Image](https://github.com/user-attachments/assets/07ac1bf1-e9a1-440a-a09c-e05445f53042)
+
+
+
+ 
+ # Prodject introduction
+ 
 RideSync highlights **Carpooling** and **Ridesharing** options. RideSync revolutionize the way vehicle owners and drivers connect and coordinate for their journeys. With real-time location sharing, direct messaging, and smart trip management, RideSync ensures seamless trip coordination, reduces wait times, enhances operational efficiency, and fosters safer, more efficient travel experiences. 
 
 
@@ -74,19 +91,6 @@ To run this project locally, make sure you have the following installed:
         ```
 
 
-# Preview 
-
-
-### Rideshare
-*(passenger)*
-![Image](https://github.com/user-attachments/assets/d488f554-9347-4c44-b193-b2a0419e1d30)
-
-*(driver)*
-![Image](https://github.com/user-attachments/assets/3d0bc1ef-d6d0-4d6c-8f47-27867cbf3e4e)
-
-
-### Carpooling
-![Image](https://github.com/user-attachments/assets/07ac1bf1-e9a1-440a-a09c-e05445f53042)
 
 ## Team Members
 
