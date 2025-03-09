@@ -15,7 +15,7 @@
 
 
  
- # Prodject introduction
+ # Project introduction
  
 RideSync highlights **Carpooling** and **Ridesharing** options. RideSync revolutionize the way vehicle owners and drivers connect and coordinate for their journeys. With real-time location sharing, direct messaging, and smart trip management, RideSync ensures seamless trip coordination, reduces wait times, enhances operational efficiency, and fosters safer, more efficient travel experiences. 
 
